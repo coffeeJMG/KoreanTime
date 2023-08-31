@@ -1,14 +1,11 @@
 "use client";
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { useRouter } from "next/navigation";
-
-interface IFormInput {
-    email: string;
-    password: string;
-}
+import { signIn } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 const LoginForm = () => {
     const router = useRouter();
@@ -16,15 +13,28 @@ const LoginForm = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormInput>({
+    } = useForm<FieldValues>({
         defaultValues: {
             email: "",
             password: "",
         },
     });
 
-    const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        signIn("credentials", {
+            ...data,
+            redirect: false,
+        }).then((callback) => {
+            if (callback?.ok) {
+                toast.success("Loggend in");
+                router.refresh();
+            }
 
+            if (callback?.error) {
+                toast.error(callback.error);
+            }
+        });
+    };
     return (
         <>
             <div
@@ -40,10 +50,10 @@ const LoginForm = () => {
                 border-amber-500
             "
             >
-                <h2 className="text-amber-500 m-auto mt-10 mb-10 text-2xl">
-                    당신은 오늘도 지각입니까?
+                <h2 className="text-amber-500 m-auto mt-10 text-2xl hidden lg:block">
+                    코리안타임에 오신 것을 환영합니다.
                 </h2>
-                <p className="text-amber-500 text-2xl">로그인</p>
+                <p className="text-amber-500 text-2xl mt-10">로그인</p>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
@@ -59,7 +69,7 @@ const LoginForm = () => {
                 </form>
 
                 <div className="flex">
-                    <span className="text-amber-400 mr-3 mb-10">
+                    <span className="text-amber-400 mr-3 mb-10 hidden sm:block">
                         아직 계정이 없으시다면!
                     </span>
                     <span

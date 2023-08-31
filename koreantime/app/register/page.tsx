@@ -1,22 +1,19 @@
 "use client";
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../components/Input";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Input, PwInput } from "../components/Input";
 import { Button } from "../components/Button";
-
-interface IFormInput {
-    email: string;
-    password: string;
-    nickname: string;
-    pwCheck: string;
-}
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const RegisterForm = () => {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormInput>({
+    } = useForm<FieldValues>({
         defaultValues: {
             email: "",
             password: "",
@@ -25,7 +22,18 @@ const RegisterForm = () => {
         },
     });
 
-    const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        axios
+            .post("/api/register", data)
+            .then(() => {
+                toast.success("Success!");
+                router.push("/login");
+            })
+            .catch((err) => {
+                toast.error("Something Went Wrong");
+            })
+            .finally(() => {});
+    };
 
     return (
         <>
@@ -42,10 +50,10 @@ const RegisterForm = () => {
                 border-amber-500
             "
             >
-                <h2 className="text-amber-500 m-auto mt-10 mb-10 text-2xl">
-                    당신은 오늘도 지각입니까?
+                <h2 className="text-amber-500 m-auto mt-10 text-2xl hidden lg:block">
+                    코리안타임에 오신 것을 환영합니다.
                 </h2>
-                <p className="text-amber-500 text-2xl">회원가입</p>
+                <p className="text-amber-500 text-2xl mt-10">회원가입</p>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
@@ -55,12 +63,11 @@ const RegisterForm = () => {
                     <span className="mt-3 text-amber-500">닉네임</span>
                     <Input {...register("nickname")} />
                     <span className="mt-3 text-amber-500">비밀번호</span>
-                    <Input {...register("email")} />
+                    <PwInput {...register("password")} />
                     <span className="mt-3 text-amber-500">비밀번호확인</span>
-                    <Input {...register("pwCheck")} />
-                    <div className="flex justify-around mt-4">
-                        <Button>회원가입</Button>
-                    </div>
+                    <PwInput {...register("pwCheck")} />
+
+                    <Button full>회원가입</Button>
                 </form>
             </div>
         </>

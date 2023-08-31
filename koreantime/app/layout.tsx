@@ -1,5 +1,7 @@
+import { Container } from "./components/Container";
 import "./globals.css";
 import type { Metadata } from "next";
+import { ToasterProvider } from "./providers/ToasterProvider";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -13,7 +15,10 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <ToasterProvider />
+                <Container>{children}</Container>
+            </body>
         </html>
     );
 }
