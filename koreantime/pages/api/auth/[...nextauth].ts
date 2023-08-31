@@ -25,8 +25,12 @@ export const authOptions: AuthOptions = {
                     },
                 });
 
+                if (!user) {
+                    throw new Error("이메일을 확인해주세요");
+                }
+
                 if (!user || !user?.hashedPassword) {
-                    throw new Error("Invalid credentials");
+                    throw new Error("비밀번호를 확인해주세요");
                 }
 
                 const isCorrectPassword = await bcrypt.compare(
@@ -35,7 +39,7 @@ export const authOptions: AuthOptions = {
                 );
 
                 if (!isCorrectPassword) {
-                    throw new Error("Invalid credentials");
+                    throw new Error("비밀번호를 확인해주세요");
                 }
 
                 return user;
