@@ -12,6 +12,7 @@ export interface IFormInput {
     password: string;
     nickname?: string;
     pwCheck: string;
+    name?: string;
 }
 
 const RegisterForm = () => {
@@ -23,6 +24,7 @@ const RegisterForm = () => {
         formState: { errors },
     } = useForm<IFormInput>({
         defaultValues: {
+            name: "",
             email: "",
             password: "",
             nickname: "",
@@ -64,6 +66,19 @@ const RegisterForm = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
                 >
+                    <span className="text-amber-500">이름</span>
+                    <Input
+                        type="text"
+                        {...register("name", {
+                            required: "이름을 입력해주세요",
+                        })}
+                        placeholder="이름을 입력해주세요"
+                    />
+                    {errors?.name ? (
+                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                            {errors?.name?.message}
+                        </p>
+                    ) : null}
                     <span className="text-amber-500">이메일</span>
                     <Input
                         type="text"
