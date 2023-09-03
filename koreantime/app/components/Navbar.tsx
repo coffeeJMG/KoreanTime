@@ -7,7 +7,7 @@ import { User } from "../types";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export interface navbarProps {
+interface navbarProps {
     currentUser: User | null;
 }
 
