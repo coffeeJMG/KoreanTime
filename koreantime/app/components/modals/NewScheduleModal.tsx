@@ -12,6 +12,8 @@ import { Post } from "../Post";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../Button";
+import axios from "axios";
+import { currentUserType } from "@/app/types";
 
 interface MakingPlan {
     name: string;
@@ -19,29 +21,21 @@ interface MakingPlan {
     time: string;
     ReactSelect: { value: string; label: string };
     ReactDatepicker: Date;
+    dutyAddr: string;
+    members: string;
 }
 
-const pmamOption = [
-    { value: "오전", label: "오전" },
-    { value: "오후", label: "오후" },
-];
-
-const timeOption = [{ value: "00:00" }];
-
-const termOption = [
-    { value: "15", label: "15" },
-    { value: "30", label: "30" },
-];
-
-export const NewSchedule = () => {
+export const NewScheduleModal: React.FC<currentUserType> = ({
+    currentUser,
+}) => {
     const newSchedule = useNewSchedule();
     const [isLoading, setIsLoading] = useState(false);
-
     const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
     const [addr2, setAddr2] = useState<string>(""); // 상세주소
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
+    const [dutyAddr, setDutyAddr] = useState<string>("");
 
     const getAddrData = (
         addr1: string,
@@ -55,6 +49,7 @@ export const NewSchedule = () => {
         setLat(lat);
         setLng(lng);
         setFullAddress(fullAddress);
+        setDutyAddr(fullAddress);
     };
     const {
         register,
@@ -67,12 +62,39 @@ export const NewSchedule = () => {
             name: "",
             place: "",
             ReactSelect: { value: "", label: "" },
+            time: "",
+            members: "",
         },
     });
 
+    function formatDateToCustomString(dateString: string) {
+        const date = new Date(dateString);
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const year = String(date.getFullYear());
+
+        return `${month}${day}${year}`;
+    }
+
     const onSubmit: SubmitHandler<MakingPlan> = async (data) => {
         try {
-            console.log(data);
+            data.place = fullAddress;
+
+            const selectDate = data.ReactDatepicker;
+            const FormattedDate = formatDateToCustomString(String(selectDate));
+
+            console.log(FormattedDate);
+
+            const scheduleData = {
+                time: data.time,
+                place: data.place,
+                title: data.name,
+                member: data.ReactSelect.value,
+                date: FormattedDate,
+                members: currentUser?.email,
+            };
+
+            await axios.post("/api/schedule", scheduleData);
         } catch (erros) {}
     };
     const bodyContent = (

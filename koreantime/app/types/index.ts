@@ -10,3 +10,7 @@ export type User = {
     hashedPassword?: string | null;
     nickname?: string | null;
 };
+
+export interface currentUserType {
+    currentUser: User | null;
+}
