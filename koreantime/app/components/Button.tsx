@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../types/constant";
 
 interface ButtonProps {
     children: React.ReactNode; // Define children prop
@@ -20,17 +21,16 @@ export const Button: React.FC<ButtonProps> = ({
             ${full ? "w-full" : "w-1/3"}
             mt-3
             h-2/5
-            bg-yellow-200
-            text-amber-500
+            ${colors.inputColor}
+            ${colors.textColor}
             p-4
             relative
             disabled:opacity-70
             disabled:cursor-not-allowed
             rounded-lg
-            hover:opacity-80
+            hover:scale-[0.98]
             transition
             
-           
             `}
             onClick={onClick}
         >

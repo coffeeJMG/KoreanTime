@@ -6,6 +6,7 @@ import DaumPostCode from "react-daum-postcode";
 import axios from "axios";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { size } from "../types/constant";
 
 interface Latlng {
     lat: number | null;
@@ -97,7 +98,9 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
         <>
             <div className="w-full flex flex-col box-border">
                 <div className="flex items-center">
-                    <p className="items-center w-full text-2xl">모임 장소</p>
+                    <p className={`items-center w-full ${size.titleSize}`}>
+                        모임 장소
+                    </p>
                     <div className="w-full mr-2 justify-end flex">
                         <Button onClick={handleOpenModal}>주소 찾기</Button>
                     </div>

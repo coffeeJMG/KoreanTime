@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../Button";
 import axios from "axios";
 import { currentUserType } from "@/app/types";
+import { size } from "@/app/types/constant";
 
 interface MakingPlan {
     name: string;
@@ -125,7 +126,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 />
 
                 <div className="flex flex-row items-center gap-10">
-                    <p className="text-2xl w-48">인원 수</p>
+                    <p className={`items-center w-full ${size.titleSize}`}>
+                        인원 수
+                    </p>
                     <div className="w-full flex gap-10">
                         <div className="w-36">
                             <Controller
@@ -167,7 +170,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     </div>
                 </div>
                 <div className="flex flex-row items-center gap-10">
-                    <p className="text-2xl w-48">모임 시간</p>
+                    <p className={`${size.titleSize} w-48`}>모임 시간</p>
                     <Input
                         type="text"
                         {...register("time", {
