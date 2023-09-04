@@ -1,6 +1,6 @@
 export type User = {
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     id: string;
     name: string;
     pwCheck?: string | null;
@@ -11,6 +11,27 @@ export type User = {
     nickname?: string | null;
 };
 
+export type SafeUser = Omit<
+    User,
+    "createdAt" | "updatedAt" | "emailVerified"
+> & {
+    createdAt: string;
+    updatedAt: string;
+    emailVerified: string | null;
+};
+
 export interface currentUserType {
-    currentUser: User | null;
+    currentUser: SafeUser | null;
 }
+
+export type ScheduleType = {
+    id: string;
+    title?: string;
+    place?: string;
+    time?: string;
+    date?: string;
+    member: string;
+    members: string;
+    lat: string;
+    lng: string;
+};

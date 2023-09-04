@@ -30,7 +30,6 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
     const handleOpenModal = () => {
         // 모달 오픈
         setIsOpen(true);
-        console.log(1);
     };
 
     const handleCloseModal = () => {
@@ -57,7 +56,7 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
         const convertAddressToCoordinates = async () => {
             const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddress}`;
             const headers = {
-                Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_API_KEY}`,
+                Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_JS_KEY}`,
             };
 
             try {

@@ -15,6 +15,7 @@ import { Button } from "../Button";
 import axios from "axios";
 import { currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
+import { useRouter } from "next/navigation";
 
 interface MakingPlan {
     name: string;
@@ -24,12 +25,15 @@ interface MakingPlan {
     ReactDatepicker: Date;
     dutyAddr: string;
     members: string;
+    lat: number;
+    lng: number;
 }
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
 }) => {
     const newSchedule = useNewSchedule();
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
     const [addr2, setAddr2] = useState<string>(""); // 상세주소
@@ -65,6 +69,8 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             ReactSelect: { value: "", label: "" },
             time: "",
             members: "",
+            lat: 0,
+            lng: 0,
         },
     });
 
@@ -84,8 +90,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             const selectDate = data.ReactDatepicker;
             const FormattedDate = formatDateToCustomString(String(selectDate));
 
-            console.log(FormattedDate);
-
             const scheduleData = {
                 time: data.time,
                 place: data.place,
@@ -93,9 +97,14 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 member: data.ReactSelect.value,
                 date: FormattedDate,
                 members: currentUser?.email,
+                lat: lat,
+                lng: lng,
             };
 
             await axios.post("/api/schedule", scheduleData);
+
+            newSchedule.onClose();
+            router.refresh();
         } catch (erros) {}
     };
     const bodyContent = (
@@ -118,10 +127,12 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     name="place"
                     control={control}
                     render={({ field }) => (
-                        <Post
-                            getAddrData={getAddrData}
-                            {...field} // register 대신 field를 전달
-                        />
+                        <>
+                            <Post
+                                getAddrData={getAddrData}
+                                {...field} // register 대신 field를 전달
+                            />
+                        </>
                     )}
                 />
 

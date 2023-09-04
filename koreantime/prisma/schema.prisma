@@ -27,11 +27,13 @@ model User {
 
 model Schedule {
       id   String @id @default(auto()) @map("_id") @db.ObjectId
-      title String?
-      place String?
-      time String?
-      date String?
-      member String? 
+      title String
+      place String
+      time String
+      date String
+      member String?
       members String
+      lat Int?
+      lng Int?
       users User @relation(fields: [members], references: [email], onDelete: Cascade)
 }

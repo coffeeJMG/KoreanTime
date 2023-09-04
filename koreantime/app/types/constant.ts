@@ -8,5 +8,5 @@ export const colors = {
 export const size = {
     titleSize: "text-2xl",
     textSize: "text-sm",
-    listSize: "text-xl",
+    listSize: "text-lg",
 };
