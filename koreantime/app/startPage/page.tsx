@@ -1,7 +1,16 @@
-const StartPage = () => {
+import getScheduleList from "../actions/getScheduleList";
+import ScheduleList from "../components/SchedulList";
+
+const StartPage = async () => {
+    const scheduleList = await getScheduleList();
+
+    if (!scheduleList) {
+        return null;
+    }
+
     return (
         <>
-            <div>로그인 후 도착화면</div>
+            <ScheduleList scheduleList={scheduleList} />
         </>
     );
 };

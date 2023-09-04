@@ -3,20 +3,19 @@
 import { SlLogout } from "react-icons/sl";
 import { CgSandClock } from "react-icons/cg";
 import { AiOutlineHome } from "react-icons/ai";
-import { User } from "../types";
+import { currentUserType } from "../types";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export interface navbarProps {
-    currentUser: User | null;
-}
-
-export const Navbar: React.FC<navbarProps> = ({ currentUser }) => {
+export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
     const router = useRouter();
 
-    if (!currentUser) {
-        router.push("/login");
-    }
+    useEffect(() => {
+        if (!currentUser) {
+            router.push("/login");
+        }
+    }, [currentUser, router]);
 
     return (
         <>

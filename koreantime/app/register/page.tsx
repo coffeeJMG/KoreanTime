@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { toast } from "react-hot-toast";

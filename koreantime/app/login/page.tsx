@@ -9,8 +9,9 @@ import { toast } from "react-hot-toast";
 import { IFormInput } from "../register/page";
 import React from "react";
 
-const LoginForm = () => {
+const LoginForm = async () => {
     const router = useRouter();
+
     const {
         register,
         handleSubmit,

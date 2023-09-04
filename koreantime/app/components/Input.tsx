@@ -1,19 +1,34 @@
 import React from "react";
 
 export interface InputProps {
-    onChange: (...event: any[]) => void;
-    onBlur: (...event: any[]) => void;
-    name: string;
+    onChange?: (...event: any[]) => void;
+    onBlur?: (...event: any[]) => void;
+    name?: string;
     min?: string | number;
     max?: string | number;
     disabled?: boolean;
-    placeholder: string;
-    type: string;
+    placeholder?: string;
+    type?: string;
+    small?: boolean;
+    value?: string;
+    readOnly?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     (
-        { onChange, onBlur, name, min, max, disabled, placeholder, type },
+        {
+            onChange,
+            onBlur,
+            name,
+            min,
+            max,
+            disabled,
+            placeholder,
+            type,
+            small,
+            value,
+            readOnly,
+        },
         ref
     ) => {
         return (
@@ -27,7 +42,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 max={max}
                 disabled={disabled}
                 placeholder={placeholder}
-                className="mt-3 p-4 bg-yellow-200 hover:outline-none outline-none placeholder-amber-500"
+                className={`mt-3 p-4 bg-yellow-200 hover:outline-none outline-none placeholder-amber-500 ${
+                    small ? "w-1/2" : "w-full"
+                }`}
+                value={value}
+                readOnly={readOnly}
             />
         );
     }

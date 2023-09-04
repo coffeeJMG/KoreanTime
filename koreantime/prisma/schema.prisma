@@ -15,12 +15,23 @@ model User {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   pwCheck         String?
-  email           String?   @unique
+  email           String   @unique
   emailVerified   DateTime?
   image           String?
   hashedPassword  String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   nickname        String?
-  
+  schedule Schedule[]
+}
+
+model Schedule {
+      id   String @id @default(auto()) @map("_id") @db.ObjectId
+      title String?
+      place String?
+      time String?
+      date String?
+      member String? 
+      members String
+      users User @relation(fields: [members], references: [email], onDelete: Cascade)
 }

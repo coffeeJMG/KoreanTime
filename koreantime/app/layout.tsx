@@ -5,6 +5,7 @@ import { ToasterProvider } from "./providers/ToasterProvider";
 import { Navbar } from "./components/Navbar";
 import { ClientOnly } from "./ClientOnly";
 import getCurrentUser from "./actions/getCurrentUser";
+import { NewScheduleModal } from "./components/modals/NewScheduleModal";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -21,14 +22,12 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body>
-                <Container>
-                    <ClientOnly>
-                        <ToasterProvider />
-                        <Navbar currentUser={currentUser} />
-                    </ClientOnly>
-
-                    {children}
-                </Container>
+                <ClientOnly>
+                    <ToasterProvider />
+                    <Navbar currentUser={currentUser} />
+                    <NewScheduleModal currentUser={currentUser} />
+                </ClientOnly>
+                <Container>{children}</Container>
             </body>
         </html>
     );
