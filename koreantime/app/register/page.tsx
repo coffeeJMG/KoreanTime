@@ -6,7 +6,7 @@ import { Button } from "../components/Button";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { colors } from "../types/constant";
+import { colors, size } from "../types/constant";
 
 export interface IFormInput {
     email: string;
@@ -58,11 +58,13 @@ const RegisterForm = () => {
                 ${colors.textColor}`}
             >
                 <h2
-                    className={`${colors.textColor} m-auto mt-10 text-2xl hidden lg:block`}
+                    className={`${colors.textColor} m-auto mt-10 ${size.titleSize} hidden lg:block`}
                 >
                     코리안타임에 오신 것을 환영합니다.
                 </h2>
-                <p className={`${colors.textColor} text-2xl mt-10`}>회원가입</p>
+                <p className={`${colors.textColor} ${size.titleSize} mt-10`}>
+                    회원가입
+                </p>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
@@ -76,7 +78,9 @@ const RegisterForm = () => {
                         placeholder="이름을 입력해주세요"
                     />
                     {errors?.name ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.name?.message}
                         </p>
                     ) : null}
@@ -93,7 +97,9 @@ const RegisterForm = () => {
                         placeholder="abc@abc.com"
                     />
                     {errors?.email ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.email?.message}
                         </p>
                     ) : null}
@@ -115,7 +121,9 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.nickname ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.nickname?.message}
                         </p>
                     ) : null}
@@ -132,7 +140,9 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.password ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.password?.message}
                         </p>
                     ) : null}
@@ -158,7 +168,9 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.pwCheck ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.pwCheck?.message}
                         </p>
                     ) : null}

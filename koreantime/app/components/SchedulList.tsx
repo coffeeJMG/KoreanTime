@@ -1,7 +1,7 @@
 "use client";
 
 import { useNewSchedule } from "../hooks/useScheduleModal";
-import { colors } from "@/app/types/constant";
+import { colors, size } from "@/app/types/constant";
 
 interface ScheduleListProps {
     scheduleList:
@@ -26,7 +26,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                     className={`md:full ${colors.bgColor} rounded-full hover:scale-[0.95] transition`}
                 >
                     <p
-                        className={`${colors.textColor} text-2xl p-5 text-center cursor-pointer whitespace-nowrap`}
+                        className={`${colors.textColor} ${size.titleSize} p-5 text-center cursor-pointer whitespace-nowrap`}
                         onClick={newSchedule.onOpen}
                     >
                         모임 생성하기
@@ -36,16 +36,24 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                     {scheduleList.map((item, i) => (
                         <div
                             key={item.id}
-                            className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer`}
+                            className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer shadow-ListShadow`}
                         >
                             <div>
-                                <p className="font-medium">{item.title}</p>
+                                <p className={`font-medium ${size.titleSize}`}>
+                                    {item.title}
+                                </p>
                             </div>
 
-                            <div className="flex flex-col">
-                                <p>날짜 : {item.date}</p>
-                                <p>시간 : {item.time}</p>
-                                <p className="hidden xl:block">
+                            <div className="flex flex-col gap-1">
+                                <p className={`${size.listSize}`}>
+                                    날짜 : {item.date}
+                                </p>
+                                <p className={`${size.listSize}`}>
+                                    시간 : {item.time}
+                                </p>
+                                <p
+                                    className={`hidden xl:block ${size.listSize}`}
+                                >
                                     장소 : {item.place}
                                 </p>
                             </div>

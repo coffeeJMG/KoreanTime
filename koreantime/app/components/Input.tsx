@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../types/constant";
 
 export interface InputProps {
     onChange?: (...event: any[]) => void;
@@ -42,7 +43,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 max={max}
                 disabled={disabled}
                 placeholder={placeholder}
-                className={`mt-3 p-4 bg-yellow-200 hover:outline-none outline-none placeholder-amber-500 ${
+                className={`mt-3 p-4 ${
+                    colors.inputColor
+                } hover:outline-none outline-none ${colors.textColor} ${
                     small ? "w-1/2" : "w-full"
                 }`}
                 value={value}

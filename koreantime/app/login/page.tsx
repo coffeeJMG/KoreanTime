@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import { IFormInput } from "../register/page";
 import React, { useEffect } from "react";
 import { currentUserType } from "../types";
-import { colors } from "../types/constant";
+import { colors, size } from "../types/constant";
 
 const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
     const router = useRouter();
@@ -68,11 +68,13 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
                 ${colors.textColor}`}
             >
                 <h2
-                    className={`${colors.textColor} m-auto mt-10 text-2xl hidden lg:block`}
+                    className={`${colors.textColor} m-auto mt-10 ${size.titleSize} hidden lg:block`}
                 >
                     코리안타임에 오신 것을 환영합니다.
                 </h2>
-                <p className={`${colors.textColor} text-2xl mt-10`}>로그인</p>
+                <p className={`${colors.textColor} ${size.titleSize} mt-10`}>
+                    로그인
+                </p>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
@@ -90,7 +92,9 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
                         placeholder="abc@abc.com"
                     />
                     {errors?.email ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.email?.message}
                         </p>
                     ) : null}
@@ -107,7 +111,9 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
                         })}
                     />
                     {errors?.password ? (
-                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
                             {errors?.password?.message}
                         </p>
                     ) : null}
