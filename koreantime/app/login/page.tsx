@@ -7,10 +7,17 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { IFormInput } from "../register/page";
-import React from "react";
+import React, { useEffect } from "react";
+import { currentUserType } from "../types";
 
-const LoginForm = async () => {
+const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
     const router = useRouter();
+
+    useEffect(() => {
+        if (currentUser) {
+            router.push("/startPage");
+        }
+    }, [currentUser]);
 
     const {
         register,
