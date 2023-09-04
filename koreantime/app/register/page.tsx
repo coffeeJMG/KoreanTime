@@ -6,6 +6,7 @@ import { Button } from "../components/Button";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { colors } from "../types/constant";
 
 export interface IFormInput {
     email: string;
@@ -46,27 +47,27 @@ const RegisterForm = () => {
     return (
         <>
             <div
-                className="
-                flex 
+                className={` flex 
                 flex-col
                 justify-center
                 items-center
-                bg-yellow-100
+                ${colors.bgColor}
                 w-2/5    
                 mx-auto
-                mt-40
-                border-amber-500
-            "
+                mt-10
+                ${colors.textColor}`}
             >
-                <h2 className="text-amber-500 m-auto mt-10 text-2xl hidden lg:block">
+                <h2
+                    className={`${colors.textColor} m-auto mt-10 text-2xl hidden lg:block`}
+                >
                     코리안타임에 오신 것을 환영합니다.
                 </h2>
-                <p className="text-amber-500 text-2xl mt-10">회원가입</p>
+                <p className={`${colors.textColor} text-2xl mt-10`}>회원가입</p>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col p-10 w-full"
                 >
-                    <span className="text-amber-500">이름</span>
+                    <span className={`${colors.textColor}`}>이름</span>
                     <Input
                         type="text"
                         {...register("name", {
@@ -75,11 +76,11 @@ const RegisterForm = () => {
                         placeholder="이름을 입력해주세요"
                     />
                     {errors?.name ? (
-                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
                             {errors?.name?.message}
                         </p>
                     ) : null}
-                    <span className="text-amber-500">이메일</span>
+                    <span className={`${colors.textColor}`}>이메일</span>
                     <Input
                         type="text"
                         {...register("email", {
@@ -92,11 +93,11 @@ const RegisterForm = () => {
                         placeholder="abc@abc.com"
                     />
                     {errors?.email ? (
-                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
                             {errors?.email?.message}
                         </p>
                     ) : null}
-                    <span className="mt-3 text-amber-500">닉네임</span>
+                    <span className={`mt-3 ${colors.textColor}`}>닉네임</span>
                     <Input
                         placeholder={"2글자 이상 입력해주세요"}
                         type="text"
@@ -114,11 +115,11 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.nickname ? (
-                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
                             {errors?.nickname?.message}
                         </p>
                     ) : null}
-                    <span className="mt-3 text-amber-500">비밀번호</span>
+                    <span className={`mt-3 ${colors.textColor}`}>비밀번호</span>
                     <Input
                         type="password"
                         placeholder={"6글자 이상 입력해주세요"}
@@ -131,11 +132,13 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.password ? (
-                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
                             {errors?.password?.message}
                         </p>
                     ) : null}
-                    <span className="mt-3 text-amber-500">비밀번호확인</span>
+                    <span className={`mt-3 ${colors.textColor}`}>
+                        비밀번호확인
+                    </span>
                     <Input
                         type="password"
                         placeholder={"6글자 이상 입력해주세요"}
@@ -155,7 +158,7 @@ const RegisterForm = () => {
                         })}
                     />
                     {errors?.pwCheck ? (
-                        <p className="text-rose-700 ml-2 mt-1 text-sm">
+                        <p className={`${colors.errorColor} ml-2 mt-1 text-sm`}>
                             {errors?.pwCheck?.message}
                         </p>
                     ) : null}

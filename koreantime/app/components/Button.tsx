@@ -27,10 +27,9 @@ export const Button: React.FC<ButtonProps> = ({
             disabled:opacity-70
             disabled:cursor-not-allowed
             rounded-lg
-            hover:opacity-80
+            hover:scale-[0.98]
             transition
             
-           
             `}
             onClick={onClick}
         >
