@@ -1,6 +1,5 @@
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "./getCurrentUser";
-import { Prisma } from "@prisma/client"; // Import Prisma types
 
 export default async function getScheduleList() {
     const currentUser = await getCurrentUser();
@@ -13,7 +12,7 @@ export default async function getScheduleList() {
         const scheduleList = await prisma.schedule.findMany({
             where: {
                 members: {
-                    equals: String(currentUser.email),
+                    equals: currentUser.email,
                 },
             },
         });

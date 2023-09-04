@@ -4,10 +4,13 @@ import ScheduleList from "../components/SchedulList";
 const StartPage = async () => {
     const scheduleList = await getScheduleList();
 
-    console.log(scheduleList);
+    if (!scheduleList) {
+        return null;
+    }
+
     return (
         <>
-            <ScheduleList />
+            <ScheduleList scheduleList={scheduleList} />
         </>
     );
 };
