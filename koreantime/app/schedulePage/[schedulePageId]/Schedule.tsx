@@ -11,7 +11,6 @@ export const Schedule: React.FC<scheduleProps> = ({ schedule }) => {
         return null;
     }
 
-    console.log(schedule);
     const { loading, error } = useKakaoLoader({
         appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`, // 발급 받은 APPKEY
         // 추가 옵션
@@ -47,7 +46,9 @@ export const Schedule: React.FC<scheduleProps> = ({ schedule }) => {
                         }}
                     />
                 </Map>
-                <div className="border-solid border-2 border-neutral-400 w-1/2"></div>
+                <div className="border-solid border-2 border-neutral-400 w-1/2">
+                    초대하기
+                </div>
             </div>
         </>
     );
