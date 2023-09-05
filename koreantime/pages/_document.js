@@ -8,10 +8,10 @@ export default function Document() {
             <body>
                 <Main />
                 <NextScript />
-                <script
-                    type="text/javascript"
-                    src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_MAPS_JS_KEY%&autoload=false"
-                ></script>
+                <Script
+                    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9b50e09b61345369e8dbd464a6a583e4&libraries=services,clusterer&autoload=false"
+                    strategy="beforeInteractive"
+                />
             </body>
         </Html>
     );

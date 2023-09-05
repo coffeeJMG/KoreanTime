@@ -17,7 +17,6 @@ export type SafeUser = Omit<
 > & {
     createdAt: string;
     updatedAt: string;
-    emailVerified: string | null;
 };
 
 export interface currentUserType {

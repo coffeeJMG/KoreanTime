@@ -33,7 +33,7 @@ model Schedule {
       date String
       member String?
       members String
-      lat Int?
-      lng Int?
+      lat Float?
+      lng Float?
       users User @relation(fields: [members], references: [email], onDelete: Cascade)
 }
