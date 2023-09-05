@@ -30,8 +30,18 @@ export type ScheduleType = {
     place?: string;
     time?: string;
     date?: string;
-    member: string;
+    member: string | null;
     members: string;
-    lat: string;
-    lng: string;
+    lat: number | null;
+    lng: number | null;
 };
+
+export interface scheduleProps {
+    schedule: ScheduleType & {
+        users: User;
+    };
+}
+
+export interface IParams {
+    schedulePageId?: string | undefined;
+}
