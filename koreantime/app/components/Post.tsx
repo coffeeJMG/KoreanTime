@@ -27,7 +27,8 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
     const [isOpen, setIsOpen] = useState(false); //모달 상태
     const [dutyAddr, setDutyAddr] = useState(""); // 시,도 주소
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
         // 모달 오픈
         setIsOpen(true);
     };

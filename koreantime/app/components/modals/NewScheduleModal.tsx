@@ -60,7 +60,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
         register,
         handleSubmit,
         formState: { errors },
-        setError,
+        reset,
         control,
     } = useForm<MakingPlan>({
         defaultValues: {
@@ -102,6 +102,16 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             };
 
             await axios.post("/api/schedule", scheduleData);
+
+            reset({
+                name: "",
+                place: "",
+                ReactSelect: { value: "", label: "" },
+                time: "",
+                members: "",
+                lat: 0,
+                lng: 0,
+            });
 
             newSchedule.onClose();
             router.refresh();
