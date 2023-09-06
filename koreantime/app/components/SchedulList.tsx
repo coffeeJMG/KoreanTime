@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
 
@@ -18,6 +19,7 @@ interface ScheduleListProps {
 
 const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
     const newSchedule = useNewSchedule();
+    const router = useRouter();
 
     return (
         <>
@@ -32,9 +34,12 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                         모임 생성하기
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10 ">
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
                     {scheduleList.map((item, i) => (
                         <div
+                            onClick={() =>
+                                router.push(`/schedulePage/${item.id}`)
+                            }
                             key={item.id}
                             className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer shadow-ListShadow`}
                         >

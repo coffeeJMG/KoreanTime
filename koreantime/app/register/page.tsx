@@ -14,6 +14,7 @@ export interface IFormInput {
     nickname?: string;
     pwCheck: string;
     name?: string;
+    invited: boolean;
 }
 
 const RegisterForm = () => {
@@ -30,6 +31,7 @@ const RegisterForm = () => {
             password: "",
             nickname: "",
             pwCheck: "",
+            invited: false,
         },
     });
 

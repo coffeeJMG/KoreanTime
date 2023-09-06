@@ -22,16 +22,19 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   nickname        String?
+  invited         Boolean?
   schedule Schedule[]
 }
 
 model Schedule {
       id   String @id @default(auto()) @map("_id") @db.ObjectId
-      title String?
-      place String?
-      time String?
-      date String?
-      member String? 
+      title String
+      place String
+      time String
+      date String
+      member String?
       members String
+      lat Float?
+      lng Float?
       users User @relation(fields: [members], references: [email], onDelete: Cascade)
 }

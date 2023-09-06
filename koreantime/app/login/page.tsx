@@ -18,7 +18,7 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
         if (currentUser) {
             router.push("/startPage");
         }
-    }, [currentUser]);
+    }, []);
 
     const {
         register,
@@ -40,9 +40,8 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
             });
 
             if (callback?.ok) {
-                toast.success("Logged in");
-                router.refresh();
                 router.push("/startPage");
+                router.refresh();
             } else if (callback?.error) {
                 if (callback.status !== 200) {
                     console.log(callback.error);
