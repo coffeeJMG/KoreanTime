@@ -13,21 +13,9 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../Button";
 import axios from "axios";
-import { currentUserType } from "@/app/types";
+import { MakingPlan, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import { useRouter } from "next/navigation";
-
-interface MakingPlan {
-    name: string;
-    place: string;
-    time: string;
-    ReactSelect: { value: string; label: string };
-    ReactDatepicker: Date;
-    dutyAddr: string;
-    members: string;
-    lat: number;
-    lng: number;
-}
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -35,26 +23,18 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     const newSchedule = useNewSchedule();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
-    const [addr2, setAddr2] = useState<string>(""); // 상세주소
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
-    const [dutyAddr, setDutyAddr] = useState<string>("");
 
     const getAddrData = (
-        addr1: string,
-        addr2: string,
         lat: number | null,
         lng: number | null,
         fullAddress: string
     ): void => {
-        setAddr1(addr1);
-        setAddr2(addr2);
         setLat(lat);
         setLng(lng);
         setFullAddress(fullAddress);
-        setDutyAddr(fullAddress);
     };
     const {
         register,
@@ -68,7 +48,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             place: "",
             ReactSelect: { value: "", label: "" },
             time: "",
-            members: "",
             lat: 0,
             lng: 0,
         },
@@ -94,9 +73,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 time: data.time,
                 place: data.place,
                 title: data.name,
-                member: data.ReactSelect.value,
+                maximumPeople: data.ReactSelect.value,
                 date: FormattedDate,
-                members: currentUser?.email,
+                hostUser: currentUser?.email,
                 lat: lat,
                 lng: lng,
             };
@@ -108,7 +87,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 place: "",
                 ReactSelect: { value: "", label: "" },
                 time: "",
-                members: "",
                 lat: 0,
                 lng: 0,
             });
@@ -216,7 +194,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 isOpen={newSchedule.isOpen}
                 title="일정 만들기"
                 onClose={newSchedule.onClose}
-                onSubmit={() => {}}
+                onSubmit={handleSubmit(onSubmit)}
                 body={bodyContent}
                 children={undefined}
             />

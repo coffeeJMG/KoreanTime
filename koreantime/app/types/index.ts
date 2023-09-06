@@ -4,7 +4,7 @@ export type User = {
     id: string;
     name: string;
     pwCheck?: string | null;
-    email?: string | null;
+    email: string | null;
     emailVerified?: Date | null;
     image?: string | null;
     hashedPassword?: string | null;
@@ -30,7 +30,9 @@ export type ScheduleType = {
     time?: string;
     date?: string;
     member: string | null;
-    members: string;
+    members: {
+        email: string | null;
+    }[];
     lat: number | null;
     lng: number | null;
 };
@@ -41,6 +43,67 @@ export interface scheduleProps {
     };
 }
 
+// NewScheduleModal 타입
+
 export interface IParams {
     schedulePageId?: string | undefined;
 }
+
+export interface MakingPlan {
+    name: string;
+    place: string;
+    time: string;
+    ReactSelect: { value: string; label: string };
+    ReactDatepicker: Date;
+    dutyAddr: string;
+    members: string;
+    lat: number;
+    lng: number;
+}
+
+// POST  컴포넌트 타입
+
+export interface Latlng {
+    lat: number | null;
+    lng: number | null;
+}
+
+export type addrProps = {
+    getAddrData: (
+        lat: number | null,
+        lng: number | null,
+        fullAddress: string
+    ) => void;
+};
+
+export interface ScheduleListProps {
+    scheduleList: {
+        id: string;
+        title: string;
+        place: string;
+        time: string;
+        date: string;
+        maximumPeople: string | null;
+        lat: number | null;
+        lng: number | null;
+        hostUser: string;
+    }[];
+}
+
+export type CombinedType = {
+    schedule: {
+        id: string;
+        title?: string;
+        place?: string;
+        time?: string;
+        date?: string;
+        maximumPeople: string | null;
+        lat: number | null;
+        lng: number | null;
+        hostUser: string;
+        users: User;
+        members: {
+            email: string;
+        }[];
+    };
+};

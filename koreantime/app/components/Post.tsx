@@ -7,21 +7,7 @@ import axios from "axios";
 import { Button } from "./Button";
 import { Input } from "./Input";
 import { size } from "../types/constant";
-
-interface Latlng {
-    lat: number | null;
-    lng: number | null;
-}
-
-type addrProps = {
-    getAddrData: (
-        addr1: string,
-        addr2: string,
-        lat: number | null,
-        lng: number | null,
-        fullAddress: string
-    ) => void;
-};
+import { Latlng, addrProps } from "../types";
 
 export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
     const [isOpen, setIsOpen] = useState(false); //모달 상태
@@ -89,7 +75,7 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
         // 시,도 주소 변수 값으로 State변화
         setDutyAddr(fullAddress); // 상세주소 변수 값으로 State변화
         // 레지스터폼에서 props로 내려온 getAddrData 함수에 2가지 종류의 주소 데이터를 보냄
-        getAddrData(addr1, addr2, lat, lng, fullAddress);
+        getAddrData(lat, lng, fullAddress);
 
         handleCloseModal(); // 주소 선택 시 모달 닫음
     };

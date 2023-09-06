@@ -28,13 +28,21 @@ model User {
 
 model Schedule {
       id   String @id @default(auto()) @map("_id") @db.ObjectId
-      title String
+      title String @unique
       place String
       time String
       date String
-      member String?
-      members String
+      maximumPeople String?
+      members Member[]
       lat Float?
       lng Float?
-      users User @relation(fields: [members], references: [email], onDelete: Cascade)
+      hostUser String
+      users User @relation(fields: [hostUser], references: [email], onDelete: Cascade)
+}
+
+model Member {
+    id   String @id @default(auto()) @map("_id") @db.ObjectId
+    email String
+    
+    schedule Schedule @relation(fields: [id], references: [id], onDelete: Cascade)
 }

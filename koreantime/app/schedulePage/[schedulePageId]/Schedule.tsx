@@ -1,12 +1,13 @@
 "use client";
 
-import { scheduleProps } from "@/app/types";
+import { CombinedType } from "@/app/types";
 import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
-export const Schedule: React.FC<scheduleProps> = ({ schedule }) => {
+export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
     const lat = Number(schedule.lat);
     const lng = Number(schedule.lng);
 
+    console.log(schedule);
     if (!lat || !lng) {
         return null;
     }
