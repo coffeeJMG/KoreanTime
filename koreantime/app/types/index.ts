@@ -23,20 +23,6 @@ export interface currentUserType {
     currentUser: SafeUser | null;
 }
 
-export type ScheduleType = {
-    id: string;
-    title?: string;
-    place?: string;
-    time?: string;
-    date?: string;
-    member: string | null;
-    members: {
-        email: string | null;
-    }[];
-    lat: number | null;
-    lng: number | null;
-};
-
 export interface scheduleProps {
     schedule: ScheduleType & {
         users: User;
@@ -76,6 +62,7 @@ export type addrProps = {
     ) => void;
 };
 
+// schedule타입
 export interface ScheduleListProps {
     scheduleList: {
         id: string;
@@ -89,6 +76,20 @@ export interface ScheduleListProps {
         hostUser: string;
     }[];
 }
+
+export type ScheduleType = {
+    id: string;
+    title?: string;
+    place?: string;
+    time?: string;
+    date?: string;
+    member: string | null;
+    members: {
+        email: string | null;
+    }[];
+    lat: number | null;
+    lng: number | null;
+};
 
 export type CombinedType = {
     schedule: {
