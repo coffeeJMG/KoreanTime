@@ -2,13 +2,13 @@ export type User = {
     createdAt: Date;
     updatedAt: Date;
     id: string;
-    name: string;
-    pwCheck?: string | null;
+    name: string | null;
+    pwCheck?: string;
     email: string | null;
     emailVerified?: Date | null;
     image?: string | null;
     hashedPassword?: string | null;
-    nickname?: string | null;
+    nickname?: string;
 };
 
 export type SafeUser = Omit<
@@ -86,7 +86,7 @@ export type ScheduleType = {
     member: string | null;
     members: {
         email: string | null;
-    }[];
+    };
     lat: number | null;
     lng: number | null;
 };
@@ -104,7 +104,7 @@ export type CombinedType = {
         hostUser: string;
         users: User;
         members: {
-            email: string;
+            email: string | null;
         }[];
     };
 };

@@ -7,6 +7,7 @@ import { currentUserType } from "../types";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { size } from "../types/constant";
 
 export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
     const router = useRouter();
@@ -22,7 +23,14 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
             <div className="py-4 border-b-[5px] w-full">
                 <div className="flex flex-row items-center justify-between gap-3 md:gap-0 px-10">
                     <CgSandClock size={28} />
-                    <p className="text-4xl">Korean Time</p>
+                    <p
+                        className={`${size.bannerSize}`}
+                        onClick={() => {
+                            router.push("/login");
+                        }}
+                    >
+                        Korean Time
+                    </p>
                     <div className="flex justify-end gap-3">
                         {currentUser ? (
                             <p>{currentUser.name}님 안녕하세요 </p>

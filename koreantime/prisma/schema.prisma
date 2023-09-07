@@ -13,16 +13,17 @@ datasource db {
 
 model User {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  pwCheck         String?
-  email           String   @unique
+  name            String?
+  pwCheck         String
+  email           String?   @unique
   emailVerified   DateTime?
   image           String?
   hashedPassword  String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  nickname        String?
-  invited         Boolean?
+  nickname        String
+  invited         Boolean
+  invitedScheduleList String
   schedule Schedule[]
 }
 
@@ -32,7 +33,7 @@ model Schedule {
       place String
       time String
       date String
-      maximumPeople String?
+      maximumPeople String
       members Member[]
       lat Float?
       lng Float?
@@ -42,7 +43,7 @@ model Schedule {
 
 model Member {
     id   String @id @default(auto()) @map("_id") @db.ObjectId
-    email String
+    email String?
     
     schedule Schedule @relation(fields: [id], references: [id], onDelete: Cascade)
 }

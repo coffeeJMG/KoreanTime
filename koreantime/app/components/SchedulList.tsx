@@ -7,6 +7,7 @@ import { ScheduleListProps } from "../types";
 
 const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
     const newSchedule = useNewSchedule();
+
     const router = useRouter();
 
     return (

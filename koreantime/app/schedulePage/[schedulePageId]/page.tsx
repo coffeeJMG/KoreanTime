@@ -4,7 +4,7 @@ import { IParams } from "@/app/types";
 
 const SchedulePage = async ({ params }: { params: IParams }) => {
     const schedule = await getScheduleId(params);
-    console.log(schedule);
+
     if (!schedule) {
         return null;
     }

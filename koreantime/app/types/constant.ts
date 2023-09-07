@@ -9,4 +9,5 @@ export const size = {
     titleSize: "text-2xl",
     textSize: "text-sm",
     listSize: "text-lg",
+    bannerSize: "text-4xl",
 };

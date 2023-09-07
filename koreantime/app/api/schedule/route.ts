@@ -10,6 +10,10 @@ export async function POST(request: Request) {
     const { title, place, time, date, maximumPeople, lat, lng, hostUser } =
         body;
 
+    if (!currentUser) {
+        return null;
+    }
+
     const schedule = await prisma.schedule.create({
         data: {
             title,
@@ -21,7 +25,7 @@ export async function POST(request: Request) {
             lng,
             hostUser,
             members: {
-                create: [{ email: currentUser?.email }],
+                create: [{ email: currentUser.email }],
             },
         },
     });
