@@ -24,7 +24,7 @@ export async function DELETE(request: Request) {
             },
         });
 
-        return NextResponse.json({ message: "Record deleted successfully." });
+        return NextResponse.json("모임 초대를 거절했습니다.");
     } catch (error) {
         return NextResponse.json({ error: "Error processing the request." });
     }
