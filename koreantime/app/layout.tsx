@@ -7,6 +7,8 @@ import { ClientOnly } from "./ClientOnly";
 import getCurrentUser from "./actions/getCurrentUser";
 import { NewScheduleModal } from "./components/modals/NewScheduleModal";
 import { InviteModal } from "./components/modals/InviteModal";
+import { InvitationModal } from "./components/modals/InvitationModal";
+import getinvitationList from "./actions/getInvitationList";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -19,6 +21,7 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const currentUser = await getCurrentUser();
+    const invitationList = await getinvitationList();
 
     return (
         <html lang="en">
@@ -28,6 +31,7 @@ export default async function RootLayout({
                     <Navbar currentUser={currentUser} />
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
+                    <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
                 <Container>{children}</Container>
             </body>

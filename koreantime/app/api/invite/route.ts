@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-
 import prisma from "@/app/libs/prismadb";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function POST(request: Request) {
     const body = await request.json();
-
     const { email, scheduleId } = body;
 
     const inviteUser = await prisma.user.findUniqueOrThrow({
@@ -17,13 +16,14 @@ export async function POST(request: Request) {
         return NextResponse.json("존재하지 않는 유저입니다");
     }
 
-    await prisma.user.update({
-        where: {
-            email: email,
-        },
+    await prisma.invitedScheduleList.create({
         data: {
-            invited: true,
-            invitedScheduleList: scheduleId,
+            invitedSchedule: scheduleId,
+            user: {
+                connect: {
+                    email: email,
+                },
+            },
         },
     });
 

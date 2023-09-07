@@ -194,7 +194,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 isOpen={newSchedule.isOpen}
                 title="일정 만들기"
                 onClose={newSchedule.onClose}
-                onSubmit={handleSubmit(onSubmit)}
                 body={bodyContent}
                 children={undefined}
             />

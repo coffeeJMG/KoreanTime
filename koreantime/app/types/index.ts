@@ -3,20 +3,23 @@ export type User = {
     updatedAt: Date;
     id: string;
     name: string | null;
-    pwCheck?: string;
-    email: string | null;
+    pwCheck: string;
+    email: string;
     emailVerified?: Date | null;
     image?: string | null;
     hashedPassword?: string | null;
-    nickname?: string;
+    nickname: string;
+    invited: boolean;
 };
-
 export type SafeUser = Omit<
     User,
     "createdAt" | "updatedAt" | "emailVerified"
 > & {
     createdAt: string;
     updatedAt: string;
+    invitedScheduleList?: {
+        invitedSchedule: string;
+    };
 };
 
 export interface currentUserType {
@@ -85,7 +88,7 @@ export type ScheduleType = {
     date?: string;
     member: string | null;
     members: {
-        email: string | null;
+        email: string;
     };
     lat: number | null;
     lng: number | null;
@@ -104,7 +107,7 @@ export type CombinedType = {
         hostUser: string;
         users: User;
         members: {
-            email: string | null;
+            email: string;
         }[];
     };
 };
