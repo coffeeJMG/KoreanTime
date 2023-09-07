@@ -3,22 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
-
-interface ScheduleListProps {
-    scheduleList:
-        | {
-              id: string;
-              title: string | null;
-              place: string | null;
-              time: string | null;
-              date: string | null;
-              member: string | null;
-              members: string;
-          }[];
-}
+import { ScheduleListProps } from "../types";
 
 const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
     const newSchedule = useNewSchedule();
+
     const router = useRouter();
 
     return (
@@ -35,7 +24,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
-                    {scheduleList.map((item, i) => (
+                    {scheduleList.map((item) => (
                         <div
                             onClick={() =>
                                 router.push(`/schedulePage/${item.id}`)

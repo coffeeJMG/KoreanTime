@@ -13,6 +13,11 @@ export const getScheduleId = async (params: IParams) => {
         },
         include: {
             users: true,
+            members: {
+                select: {
+                    email: true, // Add other member properties as needed
+                },
+            },
         },
     });
 

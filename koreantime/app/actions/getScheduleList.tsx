@@ -12,11 +12,27 @@ export default async function getScheduleList() {
         const scheduleList = await prisma.schedule.findMany({
             where: {
                 members: {
-                    equals: currentUser.email,
+                    some: {
+                        email: currentUser.email,
+                    },
+                },
+            },
+            include: {
+                members: {
+                    select: {
+                        email: true, // Add other member properties as needed
+                    },
                 },
             },
         });
-        return scheduleList;
+
+        // Extract member emails from the array of objects
+        const formattedScheduleList = scheduleList.map((schedule) => ({
+            ...schedule,
+            members: schedule.members.map((member) => member.email),
+        }));
+
+        return formattedScheduleList;
     } catch (error: any) {
         console.error(error);
         return null;

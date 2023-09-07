@@ -1,9 +1,18 @@
 "use client";
 
-import { scheduleProps } from "@/app/types";
+import { useInviteModal } from "@/app/hooks/useInviteModal";
+import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
+import { CombinedType } from "@/app/types";
+import { useEffect } from "react";
 import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
-export const Schedule: React.FC<scheduleProps> = ({ schedule }) => {
+export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
+    const inviteModal = useInviteModal();
+    const { scheduleId, setScheduleId } = useShceduleIdStore();
+    useEffect(() => {
+        setScheduleId(schedule.id);
+    }, []);
+
     const lat = Number(schedule.lat);
     const lng = Number(schedule.lng);
 
@@ -47,7 +56,7 @@ export const Schedule: React.FC<scheduleProps> = ({ schedule }) => {
                     />
                 </Map>
                 <div className="border-solid border-2 border-neutral-400 w-1/2">
-                    초대하기
+                    <p onClick={inviteModal.onOpen}>초대하기</p>
                 </div>
             </div>
         </>
