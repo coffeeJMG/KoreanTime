@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import useScheduleListStore from "@/app/stores/updateScheduleList";
 
 export async function DELETE(request: Request) {
     const currentUser = await getCurrentUser();
@@ -10,23 +11,18 @@ export async function DELETE(request: Request) {
         return null;
     }
 
-    console.log(currentUser.email);
-
+    console.log(data);
     try {
-        const body = JSON.parse(data);
-
-        console.log(body);
-
         await prisma.invitedScheduleList.deleteMany({
             where: {
                 invitedUser: currentUser.email,
-                invitedSchedule: body,
+                invitedSchedule: data,
             },
         });
 
-        return NextResponse.json("모임 초대를 거절했습니다.");
+        return NextResponse.json("초대를 거절했습니다");
     } catch (error) {
-        return NextResponse.json({ error: "Error processing the request." });
+        return NextResponse.json("요청 데이터를 확인해주세요.");
     }
 }
 
@@ -61,7 +57,20 @@ export async function POST(request: Request) {
             },
         });
 
-        return NextResponse.json("환영합니다 모임에 참가하셨습니다.");
+        const scheduleList = await prisma.schedule.findMany({
+            where: {
+                members: {
+                    some: {
+                        email: currentUser.email,
+                    },
+                },
+            },
+        });
+
+        return NextResponse.json({
+            message: "모임에 참석하셨습니다.",
+            scheduleList: scheduleList,
+        });
     } catch (error) {
         return NextResponse.json({
             error: error,

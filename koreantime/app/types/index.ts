@@ -67,17 +67,20 @@ export type addrProps = {
 
 // schedule타입
 export interface ScheduleListProps {
-    scheduleList: {
-        id: string;
-        title: string;
-        place: string;
-        time: string;
-        date: string;
-        maximumPeople: string | null;
-        lat: number | null;
-        lng: number | null;
-        hostUser: string;
-    }[];
+    scheduleList:
+        | {
+              members: string[];
+              id: string;
+              title: string;
+              place: string;
+              time: string;
+              date: string;
+              maximumPeople: string;
+              lat: number | null;
+              lng: number | null;
+              hostUser: string;
+          }[]
+        | null;
 }
 
 export type ScheduleType = {

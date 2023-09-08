@@ -7,6 +7,7 @@ import { Button } from "../Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useScheduleListStore from "@/app/stores/updateScheduleList";
 
 type InvitedSchedule = {
     invitedSchedule: string | null;
@@ -26,6 +27,9 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         invitationList
     );
 
+    const { updateScheduleList, setUpdateScheduleList } =
+        useScheduleListStore();
+
     useEffect(() => {
         setInvitation(invitationList);
     }, [invitationList]);
@@ -37,31 +41,55 @@ export const InvitationModal: React.FC<invitationListProps> = ({
     }, []);
 
     const rejectInvitation = async (data: string | null) => {
-        const res = await axios.delete("/api/invitationResponse", {
-            data: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-        });
+        try {
+            const res = await axios.delete("/api/invitationResponse", {
+                data: data,
+            });
 
-        if (res.status === 200) {
-            setInvitation((prev) =>
-                prev
-                    ? prev.filter((invite) => invite.invitedSchedule !== data)
-                    : null
-            );
+            if (res.status === 200) {
+                setInvitation((prev) =>
+                    prev
+                        ? prev.filter(
+                              (invite) => invite.invitedSchedule !== data
+                          )
+                        : null
+                );
+
+                toast.success(JSON.stringify(res.data));
+            }
+        } catch (error) {
+            toast.error("요청 데이터를 확인해주세요");
         }
-        toast.success(res.data);
     };
 
     const joinSchedule = async (data: string | null) => {
-        const res = await axios.post(
-            "/api/invitationResponse",
-            JSON.stringify(data),
-            {
-                headers: { "Content-Type": "application/json" },
-            }
-        );
+        try {
+            const res = await axios.post(
+                "/api/invitationResponse",
+                JSON.stringify(data),
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
 
-        // toast.success(res.data);
+            if (res.status === 200) {
+                setInvitation((prev) =>
+                    prev
+                        ? prev.filter(
+                              (invite) => invite.invitedSchedule !== data
+                          )
+                        : null
+                );
+
+                toast.success(JSON.stringify(res.data.message));
+
+                const resDate = JSON.stringify(res.data.scheduleList);
+                setUpdateScheduleList(resDate);
+                console.log("수락하는 순간 zustand", updateScheduleList);
+            }
+        } catch (error) {
+            toast.error("An error occurred while joining the schedule.");
+        }
     };
 
     const onSubmit = () => {};

@@ -4,11 +4,17 @@ import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
 import { ScheduleListProps } from "../types";
+import useScheduleListStore from "../stores/updateScheduleList";
+import { useEffect } from "react";
 
 const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
     const newSchedule = useNewSchedule();
-
+    const { updateScheduleList } = useScheduleListStore();
     const router = useRouter();
+
+    useEffect(() => {
+        router.refresh();
+    }, [updateScheduleList]);
 
     return (
         <>
@@ -24,7 +30,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
-                    {scheduleList.map((item) => (
+                    {scheduleList?.map((item) => (
                         <div
                             onClick={() =>
                                 router.push(`/schedulePage/${item.id}`)
