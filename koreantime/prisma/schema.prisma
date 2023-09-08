@@ -46,10 +46,13 @@ model Schedule {
 }
 
 model Member {
-    id   String @id @default(auto()) @map("_id") @db.ObjectId
+    id String @id @default(auto()) @map("_id") @db.ObjectId
     email String
+
+    scheduleId String @db.ObjectId
+    schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
     
-    schedule Schedule @relation(fields: [id], references: [id], onDelete: Cascade)
+     
 }
 
 model InvitedScheduleList {

@@ -52,6 +52,18 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         toast.success(res.data);
     };
 
+    const joinSchedule = async (data: string | null) => {
+        const res = await axios.post(
+            "/api/invitationResponse",
+            JSON.stringify(data),
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+
+        // toast.success(res.data);
+    };
+
     const onSubmit = () => {};
     const bodyContent = (
         <>
@@ -62,9 +74,15 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                         <div className="flex flex-col gap-4" key={i}>
                             <div className="flex flex-row items-center gao-4">
                                 <div className="">{item.invitedSchedule}</div>
-                                <Button>수락</Button>
                                 <Button
-                                    onClick={(e) => {
+                                    onClick={() =>
+                                        joinSchedule(item.invitedSchedule)
+                                    }
+                                >
+                                    수락
+                                </Button>
+                                <Button
+                                    onClick={() => {
                                         rejectInvitation(item.invitedSchedule);
                                     }}
                                 >

@@ -29,7 +29,7 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                     <p
                         className={`${size.bannerSize} cursor-pointer`}
                         onClick={() => {
-                            router.push("/login");
+                            router.push("/startPage");
                         }}
                     >
                         Korean Time
