@@ -48,7 +48,7 @@ model Schedule {
 model Member {
     id String @id @default(auto()) @map("_id") @db.ObjectId
     email String
-
+    nickname String
     scheduleId String @db.ObjectId
     schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
     

@@ -110,6 +110,7 @@ export type CombinedType = {
         hostUser: string;
         users: User;
         members: {
+            nickname: string;
             email: string;
         }[];
     };

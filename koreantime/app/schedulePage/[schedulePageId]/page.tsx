@@ -8,6 +8,8 @@ const SchedulePage = async ({ params }: { params: IParams }) => {
     if (!schedule) {
         return null;
     }
+
+    console.log(schedule);
     return <>{<Schedule schedule={schedule} />}</>;
 };
 export default SchedulePage;

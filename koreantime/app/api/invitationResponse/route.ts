@@ -42,6 +42,7 @@ export async function POST(request: Request) {
         await prisma.member.create({
             data: {
                 email: currentUser.email,
+                nickname: currentUser.nickname,
                 schedule: {
                     connect: {
                         id: body, // assuming body contains the schedule ID
