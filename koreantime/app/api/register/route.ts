@@ -25,7 +25,9 @@ export async function POST(request: Request) {
             hashedPassword,
             nickname,
             invited,
-            invitedScheduleList,
+            // invitedScheduleList: {
+            //     create: [{ invitedSchedule: invitedScheduleList }],
+            // },
         },
     });
 

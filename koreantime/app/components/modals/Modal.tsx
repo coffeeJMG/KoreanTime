@@ -6,7 +6,6 @@ import { IoMdClose } from "react-icons/io";
 interface ModalProps {
     isOpen?: boolean;
     onClose: () => void;
-    onSubmit: () => void;
     title?: string;
     body?: React.ReactElement;
     disabled?: boolean;
@@ -16,7 +15,6 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({
     isOpen,
     onClose,
-    onSubmit,
     title,
     body,
     disabled,
@@ -39,13 +37,6 @@ export const Modal: React.FC<ModalProps> = ({
             onClose();
         }, 300);
     }, [disabled, onClose]);
-
-    const handleSubmit = useCallback(() => {
-        if (disabled) {
-            return;
-        }
-        onSubmit();
-    }, [disabled, onSubmit]);
 
     if (!isOpen) {
         return null;

@@ -86,7 +86,6 @@ export const InviteModal = () => {
                 isOpen={inviteModal.isOpen}
                 title="초대하기"
                 onClose={inviteModal.onClose}
-                onSubmit={handleSubmit(onSubmit)}
                 body={bodyContent}
                 children={undefined}
             />

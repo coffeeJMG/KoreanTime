@@ -8,9 +8,12 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { size } from "../types/constant";
+import { FcInvite } from "react-icons/fc";
+import { useInvitationModal } from "../hooks/useInvitationModal";
 
 export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
     const router = useRouter();
+    const invitationModal = useInvitationModal();
 
     useEffect(() => {
         if (!currentUser) {
@@ -24,9 +27,9 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                 <div className="flex flex-row items-center justify-between gap-3 md:gap-0 px-10">
                     <CgSandClock size={28} />
                     <p
-                        className={`${size.bannerSize}`}
+                        className={`${size.bannerSize} cursor-pointer`}
                         onClick={() => {
-                            router.push("/login");
+                            router.push("/startPage");
                         }}
                     >
                         Korean Time
@@ -35,6 +38,11 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                         {currentUser ? (
                             <p>{currentUser.name}님 안녕하세요 </p>
                         ) : null}
+                        <FcInvite
+                            className="cursor-pointer"
+                            size={28}
+                            onClick={invitationModal.onOpen}
+                        />
                         <AiOutlineHome
                             className="cursor-pointer"
                             onClick={() => router.push("/startPage")}
