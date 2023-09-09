@@ -33,9 +33,8 @@ export default async function RootLayout({
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
                     <InviteModal />
-                    {invitationList && invitationList.length > 0 && (
-                        <InvitationModal invitationList={invitationList} />
-                    )}
+
+                    <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
                 <Container>{children}</Container>
             </body>

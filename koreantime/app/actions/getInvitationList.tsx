@@ -20,13 +20,18 @@ export default async function getinvitationList() {
             include: {
                 invitedScheduleList: {
                     select: {
-                        invitedSchedule: true, // Add other member properties as needed
+                        invitedSchedule: true,
                     },
                 },
             },
         });
 
+        if (!invitationList.length || !invitationList[0].invitedScheduleList) {
+            return null;
+        }
+
         const invitation = invitationList[0].invitedScheduleList;
+        return invitation;
 
         return invitation;
     } catch (error: any) {

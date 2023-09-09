@@ -11,7 +11,6 @@ export async function DELETE(request: Request) {
         return null;
     }
 
-    console.log(data);
     try {
         await prisma.invitedScheduleList.deleteMany({
             where: {

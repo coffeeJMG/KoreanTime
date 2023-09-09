@@ -85,7 +85,6 @@ export const InvitationModal: React.FC<invitationListProps> = ({
 
                 const resDate = JSON.stringify(res.data.scheduleList);
                 setUpdateScheduleList(resDate);
-                console.log("수락하는 순간 zustand", updateScheduleList);
             }
         } catch (error) {
             toast.error("An error occurred while joining the schedule.");
