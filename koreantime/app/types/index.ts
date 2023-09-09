@@ -75,7 +75,7 @@ export interface ScheduleListProps {
               place: string;
               time: string;
               date: string;
-              maximumPeople: string;
+              maximumPeople: number;
               lat: number | null;
               lng: number | null;
               hostUser: string;
@@ -104,7 +104,7 @@ export type CombinedType = {
         place?: string;
         time?: string;
         date?: string;
-        maximumPeople: string | null;
+        maximumPeople: number;
         lat: number | null;
         lng: number | null;
         hostUser: string;

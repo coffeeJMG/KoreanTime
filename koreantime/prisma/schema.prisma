@@ -35,7 +35,7 @@ model Schedule {
       place String
       time String
       date String
-      maximumPeople String
+      maximumPeople Int
       members Member[]
       lat Float?
       lng Float?

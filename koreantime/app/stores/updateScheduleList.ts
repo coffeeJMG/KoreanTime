@@ -8,7 +8,7 @@ export interface ScheduleListStore {
         place: string;
         time: string;
         date: string;
-        maximumPeople: string;
+        maximumPeople: number;
         lat: number | null;
         lng: number | null;
         hostUser: string;

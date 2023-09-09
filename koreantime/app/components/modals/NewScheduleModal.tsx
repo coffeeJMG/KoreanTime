@@ -73,7 +73,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 time: data.time,
                 place: data.place,
                 title: data.name,
-                maximumPeople: data.ReactSelect.value,
+                maximumPeople: Number(data.ReactSelect.value),
                 date: FormattedDate,
                 hostUser: currentUser?.email,
                 lat: lat,

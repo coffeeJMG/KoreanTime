@@ -32,7 +32,6 @@ export default async function RootLayout({
                     <Navbar currentUser={currentUser} />
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
-                    <InviteModal />
 
                     <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
