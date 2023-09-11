@@ -16,8 +16,6 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
         router.refresh();
     }, [updateScheduleList]);
 
-    console.log(scheduleList);
-
     return (
         <>
             <div className="w-4/5 flex flex-col items-center mr-40 mt-10">
@@ -34,7 +32,10 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
 
                 {scheduleList && scheduleList.length > 0 ? (
                     scheduleList.map((item) => (
-                        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
+                        <div
+                            className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10"
+                            key={item.id}
+                        >
                             <div
                                 onClick={() =>
                                     router.push(`/schedulePage/${item.id}`)

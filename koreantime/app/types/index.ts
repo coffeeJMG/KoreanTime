@@ -11,6 +11,7 @@ export type User = {
     nickname: string;
     invited: boolean;
 };
+
 export type SafeUser = Omit<
     User,
     "createdAt" | "updatedAt" | "emailVerified"
@@ -25,14 +26,6 @@ export type SafeUser = Omit<
 export interface currentUserType {
     currentUser: SafeUser | null;
 }
-
-export interface scheduleProps {
-    schedule: ScheduleType & {
-        users: User;
-    };
-}
-
-// NewScheduleModal 타입
 
 export interface IParams {
     schedulePageId?: string | undefined;
@@ -82,20 +75,6 @@ export interface ScheduleListProps {
           }[]
         | null;
 }
-
-export type ScheduleType = {
-    id: string;
-    title: string;
-    place?: string;
-    time?: string;
-    date?: string;
-    member: string | null;
-    members: {
-        email: string;
-    };
-    lat: number | null;
-    lng: number | null;
-};
 
 export type CombinedType = {
     schedule: {
