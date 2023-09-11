@@ -19,7 +19,8 @@ import { toast } from "react-hot-toast";
 
 export const InviteModal = () => {
     const inviteModal = useInviteModal();
-    const { scheduleId, maximumPeople, memberLegnth } = useShceduleIdStore();
+    const { scheduleId, maximumPeople, memberLegnth, title } =
+        useShceduleIdStore();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -47,6 +48,7 @@ export const InviteModal = () => {
                 email: data.mail,
                 scheduleId: scheduleId,
                 maximumPeople: maximumPeople,
+                title: title,
             };
 
             if (memberLegnth >= maximumPeople) {

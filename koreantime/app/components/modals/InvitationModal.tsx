@@ -11,6 +11,7 @@ import useScheduleListStore from "@/app/stores/updateScheduleList";
 
 type InvitedSchedule = {
     invitedSchedule: string | null;
+    title: string;
 };
 
 type invitationListProps = {
@@ -99,22 +100,28 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 invitation.map((item, i) => {
                     return (
                         <div className="flex flex-col gap-4" key={i}>
-                            <div className="flex flex-row items-center gao-4">
-                                <div className="">{item.invitedSchedule}</div>
-                                <Button
-                                    onClick={() =>
-                                        joinSchedule(item.invitedSchedule)
-                                    }
-                                >
-                                    수락
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        rejectInvitation(item.invitedSchedule);
-                                    }}
-                                >
-                                    거절
-                                </Button>
+                            <div className="flex flex-row items-center justify-between ">
+                                <div className="">{item.title}</div>
+                                <div className="flex w-1/2 gap-4">
+                                    <Button
+                                        full
+                                        onClick={() =>
+                                            joinSchedule(item.invitedSchedule)
+                                        }
+                                    >
+                                        수락
+                                    </Button>
+                                    <Button
+                                        full
+                                        onClick={() => {
+                                            rejectInvitation(
+                                                item.invitedSchedule
+                                            );
+                                        }}
+                                    >
+                                        거절
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     );

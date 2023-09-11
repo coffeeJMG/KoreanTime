@@ -5,7 +5,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 export async function POST(request: Request) {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { email, scheduleId } = body;
+    const { email, scheduleId, title } = body;
 
     const inviteUser = await prisma.user.findUnique({
         where: {
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
     await prisma.invitedScheduleList.create({
         data: {
             invitedSchedule: scheduleId,
+            title: title,
             user: {
                 connect: {
                     email: email,

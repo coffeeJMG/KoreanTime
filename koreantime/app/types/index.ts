@@ -85,7 +85,7 @@ export interface ScheduleListProps {
 
 export type ScheduleType = {
     id: string;
-    title?: string;
+    title: string;
     place?: string;
     time?: string;
     date?: string;
@@ -100,7 +100,7 @@ export type ScheduleType = {
 export type CombinedType = {
     schedule: {
         id: string;
-        title?: string;
+        title: string;
         place?: string;
         time?: string;
         date?: string;

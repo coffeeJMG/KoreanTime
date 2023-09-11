@@ -8,7 +8,7 @@ import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
 export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
     const inviteModal = useInviteModal();
-    const { setScheduleId, setMaximumPeople, setMemberLegnth } =
+    const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
         useShceduleIdStore();
 
     const memberList = schedule.members;
@@ -17,6 +17,7 @@ export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
         setScheduleId(schedule.id);
         setMaximumPeople(schedule.maximumPeople);
         setMemberLegnth(schedule.members.length);
+        setTitle(schedule.title);
     }, []);
 
     const lat = Number(schedule.lat);

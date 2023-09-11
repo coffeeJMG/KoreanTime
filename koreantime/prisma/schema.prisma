@@ -59,6 +59,7 @@ model InvitedScheduleList {
     id   String @id @default(auto()) @map("_id") @db.ObjectId
     
     invitedUser String
+    title String
     user User @relation(fields: [invitedUser], references: [email], onDelete: Cascade)
 
     invitedSchedule String?

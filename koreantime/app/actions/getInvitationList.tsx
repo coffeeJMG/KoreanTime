@@ -21,6 +21,7 @@ export default async function getinvitationList() {
                 invitedScheduleList: {
                     select: {
                         invitedSchedule: true,
+                        title: true,
                     },
                 },
             },
@@ -31,8 +32,6 @@ export default async function getinvitationList() {
         }
 
         const invitation = invitationList[0].invitedScheduleList;
-        return invitation;
-
         return invitation;
     } catch (error: any) {
         console.error(error);
