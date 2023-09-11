@@ -8,9 +8,16 @@ import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
 export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
     const inviteModal = useInviteModal();
-    const { scheduleId, setScheduleId } = useShceduleIdStore();
+    const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
+        useShceduleIdStore();
+
+    const memberList = schedule.members;
+
     useEffect(() => {
         setScheduleId(schedule.id);
+        setMaximumPeople(schedule.maximumPeople);
+        setMemberLegnth(schedule.members.length);
+        setTitle(schedule.title);
     }, []);
 
     const lat = Number(schedule.lat);
@@ -29,9 +36,18 @@ export const Schedule: React.FC<CombinedType> = ({ schedule }) => {
         <>
             <div className="flex flex-row w-full">
                 <div className="flex flex-col w-1/2">
-                    <div className="border-solid border-2 border-neutral-400 w-full">
-                        <p>{schedule.users.nickname}</p>
-                    </div>
+                    {memberList.map((item) => {
+                        return (
+                            <div
+                                className="border-solid border-2 border-neutral-400 w-full"
+                                key={item.email}
+                            >
+                                <div>
+                                    <p>{item.nickname}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <Map // 지도를 표시할 Container

@@ -35,7 +35,7 @@ model Schedule {
       place String
       time String
       date String
-      maximumPeople String
+      maximumPeople Int
       members Member[]
       lat Float?
       lng Float?
@@ -48,7 +48,7 @@ model Schedule {
 model Member {
     id String @id @default(auto()) @map("_id") @db.ObjectId
     email String
-
+    nickname String
     scheduleId String @db.ObjectId
     schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
     
@@ -59,6 +59,7 @@ model InvitedScheduleList {
     id   String @id @default(auto()) @map("_id") @db.ObjectId
     
     invitedUser String
+    title String
     user User @relation(fields: [invitedUser], references: [email], onDelete: Cascade)
 
     invitedSchedule String?

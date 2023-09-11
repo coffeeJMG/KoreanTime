@@ -7,9 +7,11 @@ import { Button } from "../Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useScheduleListStore from "@/app/stores/updateScheduleList";
 
 type InvitedSchedule = {
     invitedSchedule: string | null;
+    title: string;
 };
 
 type invitationListProps = {
@@ -26,6 +28,9 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         invitationList
     );
 
+    const { updateScheduleList, setUpdateScheduleList } =
+        useScheduleListStore();
+
     useEffect(() => {
         setInvitation(invitationList);
     }, [invitationList]);
@@ -37,31 +42,54 @@ export const InvitationModal: React.FC<invitationListProps> = ({
     }, []);
 
     const rejectInvitation = async (data: string | null) => {
-        const res = await axios.delete("/api/invitationResponse", {
-            data: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-        });
+        try {
+            const res = await axios.delete("/api/invitationResponse", {
+                data: data,
+            });
 
-        if (res.status === 200) {
-            setInvitation((prev) =>
-                prev
-                    ? prev.filter((invite) => invite.invitedSchedule !== data)
-                    : null
-            );
+            if (res.status === 200) {
+                setInvitation((prev) =>
+                    prev
+                        ? prev.filter(
+                              (invite) => invite.invitedSchedule !== data
+                          )
+                        : null
+                );
+
+                toast.success(JSON.stringify(res.data));
+            }
+        } catch (error) {
+            toast.error("요청 데이터를 확인해주세요");
         }
-        toast.success(res.data);
     };
 
     const joinSchedule = async (data: string | null) => {
-        const res = await axios.post(
-            "/api/invitationResponse",
-            JSON.stringify(data),
-            {
-                headers: { "Content-Type": "application/json" },
-            }
-        );
+        try {
+            const res = await axios.post(
+                "/api/invitationResponse",
+                JSON.stringify(data),
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
 
-        // toast.success(res.data);
+            if (res.status === 200) {
+                setInvitation((prev) =>
+                    prev
+                        ? prev.filter(
+                              (invite) => invite.invitedSchedule !== data
+                          )
+                        : null
+                );
+
+                toast.success(JSON.stringify(res.data.message));
+
+                const resDate = JSON.stringify(res.data.scheduleList);
+                setUpdateScheduleList(resDate);
+            }
+        } catch (error) {
+            toast.error("An error occurred while joining the schedule.");
+        }
     };
 
     const onSubmit = () => {};
@@ -72,22 +100,28 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 invitation.map((item, i) => {
                     return (
                         <div className="flex flex-col gap-4" key={i}>
-                            <div className="flex flex-row items-center gao-4">
-                                <div className="">{item.invitedSchedule}</div>
-                                <Button
-                                    onClick={() =>
-                                        joinSchedule(item.invitedSchedule)
-                                    }
-                                >
-                                    수락
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        rejectInvitation(item.invitedSchedule);
-                                    }}
-                                >
-                                    거절
-                                </Button>
+                            <div className="flex flex-row items-center justify-between ">
+                                <div className="">{item.title}</div>
+                                <div className="flex w-1/2 gap-4">
+                                    <Button
+                                        full
+                                        onClick={() =>
+                                            joinSchedule(item.invitedSchedule)
+                                        }
+                                    >
+                                        수락
+                                    </Button>
+                                    <Button
+                                        full
+                                        onClick={() => {
+                                            rejectInvitation(
+                                                item.invitedSchedule
+                                            );
+                                        }}
+                                    >
+                                        거절
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     );

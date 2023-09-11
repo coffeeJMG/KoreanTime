@@ -10,7 +10,7 @@ import {
 } from "react-hook-form";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { size } from "@/app/types/constant";
@@ -19,7 +19,8 @@ import { toast } from "react-hot-toast";
 
 export const InviteModal = () => {
     const inviteModal = useInviteModal();
-    const { scheduleId, setScheduleId } = useShceduleIdStore();
+    const { scheduleId, maximumPeople, memberLegnth, title } =
+        useShceduleIdStore();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -46,16 +47,26 @@ export const InviteModal = () => {
             const inviteData = {
                 email: data.mail,
                 scheduleId: scheduleId,
+                maximumPeople: maximumPeople,
+                title: title,
             };
-            const res = await axios.post("/api/invite", inviteData);
-            toast.success(res.data);
-            reset({
-                mail: "",
-            });
 
-            handleClose();
-        } catch (erros) {
-            toast.error("존재하지 않는 유저입니다.");
+            if (memberLegnth >= maximumPeople) {
+                toast.error(`최대 인원은 ${maximumPeople}입니다.`);
+            } else {
+                const res = await axios.post("/api/invite", inviteData);
+                toast.success(res.data);
+                reset({
+                    mail: "",
+                });
+
+                handleClose();
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const errorMessage = error.response?.data as string;
+                toast.error(errorMessage);
+            }
         }
     };
     const bodyContent = (
