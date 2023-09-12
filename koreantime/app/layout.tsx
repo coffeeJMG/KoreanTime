@@ -9,7 +9,6 @@ import { NewScheduleModal } from "./components/modals/NewScheduleModal";
 import { InviteModal } from "./components/modals/InviteModal";
 import { InvitationModal } from "./components/modals/InvitationModal";
 import getinvitationList from "./actions/getInvitationList";
-import { Schedule } from "./schedulePage/[schedulePageId]/Schedule";
 
 export const metadata: Metadata = {
     title: "Create Next App",

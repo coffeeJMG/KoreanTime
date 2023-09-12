@@ -1,11 +1,12 @@
 "use client";
 
 import getCurrentLocation from "@/app/actions/getCurrentLocation";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import { getCurrentTime } from "@/app/actions/getCurrentTime";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { CombinedType, currentUserType } from "@/app/types";
-import { useEffect } from "react";
+import { colors } from "@/app/types/constant";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
@@ -14,43 +15,99 @@ type ScheduleType = CombinedType & currentUserType;
 export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal();
     const currentLocation = getCurrentLocation();
+    const { today, currentTime, hours, minutes, seconds } = getCurrentTime();
+    const [dDay, setdDay] = useState(false);
 
     const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
         useShceduleIdStore();
 
-    const memberList = schedule.members; // 모임에 속한 인원 명단
-    const loginId = currentUser?.email;
     useEffect(() => {
-        // 상태관리를 위한 값 저장
         setScheduleId(schedule.id);
         setMaximumPeople(schedule.maximumPeople);
         setMemberLegnth(schedule.members.length);
         setTitle(schedule.title);
     }, []);
 
-    // 모임 장소
     const lat = Number(schedule.lat);
     const lng = Number(schedule.lng);
 
     if (!currentLocation.coordinates) {
         return toast.error("유저의 현재 위치를 찾을 수 없습니다.");
     }
+
     const userLat = currentLocation.coordinates?.lat;
     const userLng = currentLocation.coordinates?.lng;
 
-    if (!lat || !lng) {
-        return null;
-    }
+    const memberList = schedule.members;
+    const loginId = currentUser?.email;
 
-    // 카카오 맵 로더
     const { loading, error } = useKakaoLoader({
-        appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`, // 발급 받은 APPKEY
-        // 추가 옵션
+        appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`,
     });
+
+    const meetingTime = Number(schedule.time?.replace(":", "") + "0" + "0");
+    const timerTime = Number(hours + minutes + seconds);
+
+    function toSeconds(time: number) {
+        let hours = Math.floor(time / 10000);
+        let minutes = Math.floor((time % 10000) / 100);
+        let seconds = time % 100;
+        return hours * 3600 + minutes * 60 + seconds;
+    }
+    const meetingTimeSeconds = toSeconds(meetingTime);
+    const timerTimeSeconds = toSeconds(timerTime);
+
+    const diffSeconds = meetingTimeSeconds - timerTimeSeconds;
+    const [countDown, setCountDown] = useState(diffSeconds);
+    // Now diffSeconds has the total difference in seconds
+    // We can display it as hh:mm:ss using the toHHMMSS function
+
+    // For the countdown, you can use setInterval
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (countDown > 0) {
+                setCountDown((prevCount) => prevCount - 1);
+            } else {
+                clearInterval(intervalId);
+            }
+        }, 1000);
+
+        return () => clearInterval(intervalId); // useEffect가 종료될 때 실행될 cleanup 함수
+    }, [countDown]);
+
+    // console.log(Math.floor(diffSeconds / 60));
+    // console.log(diffSeconds % 60);
+    const timerClock = `남은시간 ${Math.floor(diffSeconds / 60)} : ${
+        diffSeconds % 60
+    } 입니다.`;
+
+    useEffect(() => {
+        if (schedule.date === today) {
+            setdDay(true);
+        }
+    }, []);
 
     return (
         <>
-            <div className="border-solid border-x-2 border-neutral-400 w-full ">
+            <div className="w-full ">
+                <div
+                    className={`
+                        text-center
+                        mt-3
+                        w-1/3
+                        h-2/5
+                        ${colors.inputColor}
+                        ${colors.textColor}
+                        p-4
+                        rounded-lg
+                        hover:scale-[0.98]
+                        transition`}
+                >
+                    {currentTime}
+                </div>
+                {dDay ? timerClock : null}
+
                 <p onClick={inviteModal.onOpen}>초대하기</p>
             </div>
             <div className="flex flex-row w-full">
