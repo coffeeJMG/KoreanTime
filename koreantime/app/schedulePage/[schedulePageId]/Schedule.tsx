@@ -2,6 +2,7 @@
 
 import getCurrentLocation from "@/app/actions/getCurrentLocation";
 import { getCurrentTime } from "@/app/actions/getCurrentTime";
+import { Button } from "@/app/components/Button";
 import { MapLoader } from "@/app/components/MapLoader";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
@@ -17,7 +18,9 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const currentLocation = getCurrentLocation(); // 유저의 현재위치
     const { today, currentTime, hours, minutes, seconds } = getCurrentTime(); // 오늘 날짜, 현재 시간, 시,분,초
     const [dDay, setdDay] = useState(false); // 약속 날짜가 오늘 판단
-    const [isLastFiveMinutes, setIsLastFiveMinutes] = useState(false); // 남은 시간이 5분인지 판단
+    const [isLastThirtyMinutes, setIsLastThirtyMinutes] = useState(false); // 남은 시간이 30분인지 판단
+    const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     // 일정 관련 정보 상태관리
     const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
@@ -61,6 +64,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const meetingTimeSeconds = toSeconds(meetingTime);
     const timerTimeSeconds = toSeconds(timerTime);
 
+    // 모임시간까지 남은 시간을 타이머가 작동할 때마다 최신화
     useEffect(() => {
         const diff = meetingTimeSeconds - timerTimeSeconds;
         setCountDown(diff);
@@ -68,7 +72,6 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const [countDown, setCountDown] = useState(0); // 남은 시간 state 관리
 
     // 1초씩 줄어드는 타이머 함수
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (countDown > 0) {
@@ -81,48 +84,63 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         return () => clearInterval(intervalId); // useEffect가 종료될 때 실행될 cleanup 함수
     }, [countDown]);
 
-    // 약속 날짜가 오늘 인지 확인
     useEffect(() => {
+        // 남은 시간이 30분 이하인지 확인
+        if (countDown <= 1800 && countDown > 0) {
+            setIsLastThirtyMinutes(true);
+            setIsButtonDisabled(true);
+        } else {
+            setIsLastThirtyMinutes(false);
+            setIsButtonDisabled(false);
+        }
+
+        // 남은 시간이 10분 이하인지 확인
+        if (countDown <= 600 && countDown > 0) {
+            setIsLastTenMinutes(true);
+            setIsLastThirtyMinutes(false);
+        } else {
+            setIsLastTenMinutes(false);
+        }
+
+        // 오늘이 모임 날짜인지 확인
         if (schedule.date === today) {
             setdDay(true);
         }
     }, [countDown]);
 
-    useEffect(() => {
-        if (countDown <= 600 && countDown > 0) {
-            setIsLastFiveMinutes(true);
-        } else {
-            setIsLastFiveMinutes(false);
-        }
-    }, [countDown]);
-
+    console.log(countDown);
+    console.log(isLastThirtyMinutes);
+    console.log(isButtonDisabled);
     return (
         <>
-            <div className="w-full flex justify-center gap-10">
-                <div
-                    className={`
-                        text-center
-                        mt-3
-                        w-1/3
-                        h-2/5
-                        ${colors.inputColor}
-                        ${colors.textColor}
-                        p-4
-                        rounded-lg
-                        hover:scale-[0.98]
-                        ${size.titleSize}
-                        transition`}
-                >
+            <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
+                <Button big>
                     {currentTime}
-                    {dDay && isLastFiveMinutes ? (
+                    {dDay && isLastTenMinutes ? (
                         <p className="blinking">
-                            남은시간 {Math.floor(countDown / 60)} :
+                            남은시간 {Math.floor(countDown / 60)} :{" "}
                             {countDown % 60}
                         </p>
                     ) : null}
-                </div>
+                    {dDay && isLastThirtyMinutes ? (
+                        <p>
+                            남은시간 {Math.floor(countDown / 60)} :{" "}
+                            {countDown % 60}
+                        </p>
+                    ) : null}
+                </Button>
+                <Button
+                    disabled={isButtonDisabled}
+                    onClick={inviteModal.onOpen}
+                    big
+                >
+                    초대하기
+                    {dDay && isButtonDisabled ? (
+                        <p>초대는 30분 전까지만 가능합니다.</p>
+                    ) : null}
+                </Button>
             </div>
-            <p onClick={inviteModal.onOpen}>초대하기</p>
+
             <div className="flex flex-row w-full">
                 <div className="flex flex-col w-1/2">
                     {memberList.map((item) => {

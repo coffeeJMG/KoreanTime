@@ -18,7 +18,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
 
     return (
         <>
-            <div className="w-4/5 flex flex-col items-center mr-40 mt-10">
+            <div className="w-full flex flex-col items-center mt-10">
                 <div
                     className={`md:full ${colors.bgColor} rounded-full hover:scale-[0.95] transition`}
                 >

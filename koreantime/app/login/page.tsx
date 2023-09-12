@@ -69,7 +69,7 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
                 <h2
                     className={`${colors.textColor} m-auto mt-10 ${size.titleSize} hidden lg:block`}
                 >
-                    코리안타임에 오신 것을 환영합니다.
+                    환영합니다
                 </h2>
                 <p className={`${colors.textColor} ${size.titleSize} mt-10`}>
                     로그인
