@@ -8,6 +8,7 @@ import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { CombinedType, currentUserType } from "@/app/types";
 import { colors, size } from "@/app/types/constant";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -94,6 +95,18 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setIsButtonDisabled(false);
         }
 
+        const test = async () => {
+            try {
+                const res = await axios.post("/api/schedulePage", {
+                    id: schedule.id,
+                });
+                if (res.status === 200) {
+                    console.log(res.data);
+                }
+            } catch (erros) {
+                console.log(erros);
+            }
+        };
         // 남은 시간이 10분 이하인지 확인
         if (countDown <= 600 && countDown > 0) {
             setIsLastTenMinutes(true);
@@ -106,11 +119,12 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         if (schedule.date === today) {
             setdDay(true);
         }
+
+        if (countDown === -60) {
+            test();
+        }
     }, [countDown]);
 
-    console.log(countDown);
-    console.log(isLastThirtyMinutes);
-    console.log(isButtonDisabled);
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
