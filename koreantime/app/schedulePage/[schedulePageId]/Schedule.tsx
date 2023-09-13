@@ -17,14 +17,33 @@ type ScheduleType = CombinedType & currentUserType;
 
 export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal(); // 초대장 모달
-    const currentLocation = getCurrentLocation(); // 유저의 현재위치
-    const { today, currentTime, hours, minutes, seconds } = getCurrentTime(); // 오늘 날짜, 현재 시간, 시,분,초
+    const currentLocation = getCurrentLocation(); // 유저의 현재위치 // 오늘 날짜, 현재 시간, 시,분,초
     const [dDay, setdDay] = useState(false); // 약속 날짜가 오늘 판단
     const [isLastThirtyMinutes, setIsLastThirtyMinutes] = useState(false); // 남은 시간이 30분인지 판단
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
     const router = useRouter();
+
+    const initialTimeData = getCurrentTime();
+    const [today, setToday] = useState(initialTimeData.today);
+    const [currentTime, setCurrentTime] = useState(initialTimeData.currentTime);
+    const [hours, setHours] = useState(initialTimeData.hours);
+    const [minutes, setMinutes] = useState(initialTimeData.minutes);
+    const [seconds, setSeconds] = useState(initialTimeData.seconds);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const updatedTime = getCurrentTime();
+            setToday(updatedTime.today);
+            setCurrentTime(updatedTime.currentTime);
+            setHours(updatedTime.hours);
+            setMinutes(updatedTime.minutes);
+            setSeconds(updatedTime.seconds);
+        }, 1000);
+
+        return () => clearInterval(interval); // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
+    }, []);
 
     // 일정 관련 정보 상태관리
     const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
@@ -94,7 +113,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
                 id: schedule.id,
             });
             if (res.status === 200) {
-                console.log(res.data);
+                console.log("모임을 삭제했습니다.");
             }
         } catch (erros) {
             console.log(erros);

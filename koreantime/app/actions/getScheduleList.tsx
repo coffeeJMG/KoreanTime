@@ -1,8 +1,16 @@
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "./getCurrentUser";
+import { getCurrentTime } from "./getCurrentTime";
 
 export default async function getScheduleList() {
     const currentUser = await getCurrentUser();
+    const useCurrentTime = getCurrentTime();
+
+    const today = Number(useCurrentTime.comparisonToday);
+    const currentTime = Number(useCurrentTime.comparisonTime);
+
+    console.log(today);
+    console.log(currentTime);
 
     if (!currentUser) {
         return null;
@@ -30,9 +38,21 @@ export default async function getScheduleList() {
         const formattedScheduleList = scheduleList.map((schedule) => ({
             ...schedule,
             members: schedule.members.map((member) => member.email),
+            formattedTime: Number(schedule.time.replace(":", "")),
+            formattedDate: Number(
+                schedule.date.slice(4) + schedule.date.slice(0, 4)
+            ),
         }));
 
-        return formattedScheduleList;
+        // Filter schedules based on current time and today's date
+        const upcomingSchedules = formattedScheduleList.filter(
+            (schedule) =>
+                schedule.formattedDate > today ||
+                (schedule.formattedDate === today &&
+                    schedule.formattedTime > currentTime)
+        );
+
+        return upcomingSchedules;
     } catch (error: any) {
         console.error(error);
         return null;
