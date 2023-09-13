@@ -8,7 +8,7 @@ interface MapLoaderProps {
 
 export const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
     // 카카오 지도 api
-    const { loading, error } = useKakaoLoader({
+    useKakaoLoader({
         appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`,
     });
     return (
