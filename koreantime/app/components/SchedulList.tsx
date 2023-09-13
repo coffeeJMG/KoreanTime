@@ -37,7 +37,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                                     router.push(`/schedulePage/${item.id}`)
                                 }
                                 key={item.id}
-                                className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer shadow-ListShadow`}
+                                className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer`}
                             >
                                 <div>
                                     <p
