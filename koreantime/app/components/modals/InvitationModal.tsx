@@ -92,7 +92,6 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         }
     };
 
-    const onSubmit = () => {};
     const bodyContent = (
         <>
             <p>초대장 리스트</p>

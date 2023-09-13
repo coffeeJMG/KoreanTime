@@ -23,39 +23,39 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="py-4 border-b-[5px] w-full">
-                <div className="flex flex-row items-center justify-between gap-3 md:gap-0 px-10">
+            <div className="grid grid-cols-3 items-center gap-3 px-10 mt-3">
+                <div>
                     <CgSandClock size={28} />
+                </div>
+
+                <div className="justify-self-center">
                     <p
                         className={`${size.bannerSize} cursor-pointer`}
-                        onClick={() => {
-                            router.push("/startPage");
-                        }}
+                        onClick={() => router.push("/startPage")}
                     >
-                        Korean Time
+                        일찍 와주길 바래
                     </p>
-                    <div className="flex justify-end gap-3">
-                        {currentUser ? (
-                            <p>{currentUser.name}님 안녕하세요 </p>
-                        ) : null}
-                        <FcInvite
-                            className="cursor-pointer"
-                            size={28}
-                            onClick={invitationModal.onOpen}
-                        />
-                        <AiOutlineHome
-                            className="cursor-pointer"
-                            onClick={() => router.push("/startPage")}
-                            size={28}
-                        />
-                        <SlLogout
-                            className="cursor-pointer"
-                            onClick={async () => {
-                                await signOut();
-                            }}
-                            size={28}
-                        />
-                    </div>
+                </div>
+
+                <div className="flex justify-end gap-3">
+                    {currentUser ? (
+                        <p>{currentUser.name}님 안녕하세요 </p>
+                    ) : null}
+                    <FcInvite
+                        className="cursor-pointer"
+                        size={28}
+                        onClick={invitationModal.onOpen}
+                    />
+                    <AiOutlineHome
+                        className="cursor-pointer"
+                        onClick={() => router.push("/startPage")}
+                        size={28}
+                    />
+                    <SlLogout
+                        className="cursor-pointer"
+                        onClick={async () => await signOut()}
+                        size={28}
+                    />
                 </div>
             </div>
         </>

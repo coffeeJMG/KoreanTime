@@ -9,7 +9,7 @@ import { NewScheduleModal } from "./components/modals/NewScheduleModal";
 import { InviteModal } from "./components/modals/InviteModal";
 import { InvitationModal } from "./components/modals/InvitationModal";
 import getinvitationList from "./actions/getInvitationList";
-import { Schedule } from "./schedulePage/[schedulePageId]/Schedule";
+import { DeleteScheduleModal } from "./components/modals/DeleteScheduleModal";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -32,6 +32,7 @@ export default async function RootLayout({
                     <Navbar currentUser={currentUser} />
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
+                    <DeleteScheduleModal />
                     <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
                 <Container>{children}</Container>

@@ -18,7 +18,7 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
 
     return (
         <>
-            <div className="w-4/5 flex flex-col items-center mr-40 mt-10">
+            <div className="w-full flex flex-col items-center mt-10">
                 <div
                     className={`md:full ${colors.bgColor} rounded-full hover:scale-[0.95] transition`}
                 >
@@ -29,13 +29,9 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                         모임 생성하기
                     </p>
                 </div>
-
-                {scheduleList && scheduleList.length > 0 ? (
-                    scheduleList.map((item) => (
-                        <div
-                            className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10"
-                            key={item.id}
-                        >
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
+                    {scheduleList && scheduleList.length > 0 ? (
+                        scheduleList.map((item) => (
                             <div
                                 onClick={() =>
                                     router.push(`/schedulePage/${item.id}`)
@@ -65,11 +61,11 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
                                     </p>
                                 </div>
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <div>속해 있는 모임이 없습니다.</div>
-                )}
+                        ))
+                    ) : (
+                        <div>속해 있는 모임이 없습니다.</div>
+                    )}
+                </div>
             </div>
         </>
     );

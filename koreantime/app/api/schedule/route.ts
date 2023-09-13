@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import { Schedule } from "@/app/schedulePage/[schedulePageId]/Schedule";
 
 export async function POST(request: Request) {
     const body = await request.json();

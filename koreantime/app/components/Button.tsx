@@ -1,18 +1,19 @@
 import React from "react";
-import { colors } from "../types/constant";
+import { colors, size } from "../types/constant";
 
 interface ButtonProps {
     children: React.ReactNode; // Define children prop
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     full?: boolean;
     disabled?: boolean;
+    big?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
     children,
     onClick,
     full,
-
+    big,
     disabled,
 }) => {
     return (
@@ -25,16 +26,16 @@ export const Button: React.FC<ButtonProps> = ({
             ${colors.textColor}
             p-4
             relative
-            disabled:opacity-70
-            disabled:cursor-not-allowed
+            ${disabled ? "opacity-70 cursor-not-allowed" : ""}
+            disabled={disabled}
             rounded-lg
             hover:scale-[0.98]
             transition
-            
-            `}
+            disabled
+            ${big ? `${size.titleSize}` : null}`}
             onClick={onClick}
         >
-            {children} {/* Render the children */}
+            {children}
         </button>
     );
 };
