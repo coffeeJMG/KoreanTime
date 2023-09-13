@@ -4,11 +4,12 @@ import getCurrentLocation from "@/app/actions/getCurrentLocation";
 import { getCurrentTime } from "@/app/actions/getCurrentTime";
 import { Button } from "@/app/components/Button";
 import { MapLoader } from "@/app/components/MapLoader";
+import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { CombinedType, currentUserType } from "@/app/types";
-import { colors, size } from "@/app/types/constant";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -21,7 +22,9 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const [dDay, setdDay] = useState(false); // 약속 날짜가 오늘 판단
     const [isLastThirtyMinutes, setIsLastThirtyMinutes] = useState(false); // 남은 시간이 30분인지 판단
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
+    const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
+    const router = useRouter();
 
     // 일정 관련 정보 상태관리
     const { setScheduleId, setMaximumPeople, setMemberLegnth, setTitle } =
@@ -70,7 +73,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         const diff = meetingTimeSeconds - timerTimeSeconds;
         setCountDown(diff);
     }, [timerTimeSeconds]); // 모임시간 까지 남은시간
-    const [countDown, setCountDown] = useState(0); // 남은 시간 state 관리
+    const [countDown, setCountDown] = useState(meetingTimeSeconds); // 남은 시간 state 관리
 
     // 1초씩 줄어드는 타이머 함수
     useEffect(() => {
@@ -83,8 +86,20 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         }, 1000);
 
         return () => clearInterval(intervalId); // useEffect가 종료될 때 실행될 cleanup 함수
-    }, [countDown]);
+    }, []);
 
+    const handleDeleteModal = async () => {
+        try {
+            const res = await axios.post("/api/schedulePage", {
+                id: schedule.id,
+            });
+            if (res.status === 200) {
+                console.log(res.data);
+            }
+        } catch (erros) {
+            console.log(erros);
+        }
+    };
     useEffect(() => {
         // 남은 시간이 30분 이하인지 확인
         if (countDown <= 1800 && countDown > 0) {
@@ -95,18 +110,6 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setIsButtonDisabled(false);
         }
 
-        const test = async () => {
-            try {
-                const res = await axios.post("/api/schedulePage", {
-                    id: schedule.id,
-                });
-                if (res.status === 200) {
-                    console.log(res.data);
-                }
-            } catch (erros) {
-                console.log(erros);
-            }
-        };
         // 남은 시간이 10분 이하인지 확인
         if (countDown <= 600 && countDown > 0) {
             setIsLastTenMinutes(true);
@@ -120,8 +123,15 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setdDay(true);
         }
 
-        if (countDown === -60) {
-            test();
+        if (countDown == 0) {
+            deleteScheduleModal.onOpen();
+        }
+
+        // 모임 시간 1분뒤에 모임삭제
+        if (countDown < -60) {
+            handleDeleteModal();
+            deleteScheduleModal.onClose();
+            router.push("/startPage");
         }
     }, [countDown]);
 
