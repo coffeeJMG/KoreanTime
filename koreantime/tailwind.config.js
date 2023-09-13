@@ -13,7 +13,4 @@ module.exports = {
         },
     },
     plugins: [],
-    compilerOptions: {
-        types: ["kakao.maps.d.ts"],
-    },
 };
