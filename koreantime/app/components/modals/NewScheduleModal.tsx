@@ -95,6 +95,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             router.refresh();
         } catch (erros) {}
     };
+
     const bodyContent = (
         <>
             <form
@@ -161,7 +162,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                         {...fieldProps}
                                         className="input"
                                         placeholderText="날짜 선택"
+                                        minDate={new Date()}
                                         selected={value}
+                                        showDisabledMonthNavigation
                                     />
                                 );
                             }}

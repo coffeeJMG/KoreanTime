@@ -65,14 +65,9 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const lat = Number(schedule.lat);
     const lng = Number(schedule.lng);
 
-    // 유저 위치 찾지 못하는 경우 에러 알람
-    if (!currentLocation.coordinates) {
-        return toast.error("유저의 현재 위치를 찾을 수 없습니다.");
-    }
-
     // 유저의 위치 위도,경도 값
-    const userLat = currentLocation.coordinates?.lat;
-    const userLng = currentLocation.coordinates?.lng;
+    const userLat = currentLocation.coordinates.lat;
+    const userLng = currentLocation.coordinates.lng;
 
     const memberList = schedule.members; // 현재 모임에 속한 인원
 
