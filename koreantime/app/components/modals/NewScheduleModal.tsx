@@ -16,6 +16,7 @@ import axios from "axios";
 import { MakingPlan, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import { useRouter } from "next/navigation";
+import { isTimeInFuture } from "@/app/actions/getCurrentTime";
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -42,6 +43,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
         formState: { errors },
         reset,
         control,
+        setValue,
     } = useForm<MakingPlan>({
         defaultValues: {
             name: "",
@@ -156,7 +158,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                         <Controller
                             control={control}
                             name="ReactDatepicker"
-                            render={({ field: { value, ...fieldProps } }) => {
+                            render={({
+                                field: { onChange, value, ...fieldProps },
+                            }) => {
                                 return (
                                     <ReactDatePicker
                                         {...fieldProps}
@@ -165,25 +169,27 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                         minDate={new Date()}
                                         selected={value}
                                         showDisabledMonthNavigation
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={15}
+                                        timeCaption="time"
+                                        filterTime={isTimeInFuture}
+                                        onChange={(date) => {
+                                            onChange(date);
+                                            const selectedHours = String(
+                                                date?.getHours()
+                                            ).padStart(2, "0");
+                                            const selectedMinutes = String(
+                                                date?.getMinutes()
+                                            ).padStart(2, "0");
+                                            const formattedTime = `${selectedHours}:${selectedMinutes}`;
+                                            setValue("time", formattedTime);
+                                        }}
                                     />
                                 );
                             }}
                         />
                     </div>
-                </div>
-                <div className="flex flex-row items-center gap-10">
-                    <p className={`${size.titleSize} w-48`}>모임 시간</p>
-                    <Input
-                        type="text"
-                        {...register("time", {
-                            required: "모임 시간을 입력해주세요",
-                            pattern: {
-                                value: /\d{2}:\d{2}/,
-                                message: "00:00양식으로 입력해주세요",
-                            },
-                        })}
-                        placeholder="00:00 양식으로 입력해주세요"
-                    />
                 </div>
                 <Button full>일정 생성하기</Button>
             </form>
