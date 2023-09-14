@@ -9,6 +9,9 @@ interface MapLoaderProps {
 }
 
 const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
+    if (typeof lat !== "number" || typeof lng !== "number") {
+        alert("위치를 찾을 수 없습니다.");
+    }
     // 카카오 지도 api
     useKakaoLoader({
         appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`,
