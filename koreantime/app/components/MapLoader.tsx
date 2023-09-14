@@ -1,3 +1,5 @@
+"use client";
+
 import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
 
 interface MapLoaderProps {
@@ -6,7 +8,7 @@ interface MapLoaderProps {
     height: string;
 }
 
-export const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
+const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
     // 카카오 지도 api
     useKakaoLoader({
         appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`,
@@ -37,3 +39,5 @@ export const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
         </>
     );
 };
+
+export default MapLoader;

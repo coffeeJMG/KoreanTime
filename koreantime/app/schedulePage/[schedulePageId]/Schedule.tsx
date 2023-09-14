@@ -3,18 +3,22 @@
 import getCurrentLocation from "@/app/actions/getCurrentLocation";
 import { getCurrentTime } from "@/app/actions/getCurrentTime";
 import { Button } from "@/app/components/Button";
-import { MapLoader } from "@/app/components/MapLoader";
+
 import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { CombinedType, currentUserType } from "@/app/types";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 type ScheduleType = CombinedType & currentUserType;
 
+const MapLoader = dynamic(() => import("../../components/MapLoader"), {
+    ssr: false,
+});
 export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal(); // 초대장 모달
     const currentLocation = getCurrentLocation(); // 유저의 현재위치 // 오늘 날짜, 현재 시간, 시,분,초
