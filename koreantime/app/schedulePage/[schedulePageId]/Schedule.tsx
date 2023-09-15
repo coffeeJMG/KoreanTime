@@ -128,7 +128,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     };
     useEffect(() => {
         // 남은 시간이 30분 이하인지 확인
-        if (countDown <= 1800 && countDown > 0) {
+        if (countDown <= 1800 && countDown > 0 && dDay) {
             setIsLastThirtyMinutes(true);
             setIsButtonDisabled(true);
         } else {
@@ -137,7 +137,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         }
 
         // 남은 시간이 10분 이하인지 확인
-        if (countDown <= 600 && countDown > 0) {
+        if (countDown <= 600 && countDown > 0 && dDay) {
             setIsLastTenMinutes(true);
             setIsLastThirtyMinutes(false);
         } else {
@@ -149,12 +149,12 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setdDay(true);
         }
 
-        if (countDown == 0) {
+        if (countDown == 0 && dDay) {
             deleteScheduleModal.onOpen();
         }
 
         // 모임 시간 1분뒤에 모임삭제
-        if (countDown < -60) {
+        if (countDown < -60 && dDay) {
             handleDeleteModal();
             deleteScheduleModal.onClose();
             router.push("/startPage");
@@ -182,6 +182,8 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         });
     };
 
+    // console.log(dDay);
+    // console.log(isButtonDisabled);
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
