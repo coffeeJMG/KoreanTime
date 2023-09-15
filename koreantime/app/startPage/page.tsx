@@ -12,7 +12,10 @@ const StartPage = async () => {
 
     return (
         <>
-            <ScheduleList scheduleList={scheduleList} />
+            <ScheduleList
+                scheduleList={scheduleList}
+                currentUser={currnetUser}
+            />
         </>
     );
 };
