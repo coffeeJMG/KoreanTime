@@ -3,20 +3,16 @@
 import getCurrentLocation from "@/app/actions/getCurrentLocation";
 import { getCurrentTime } from "@/app/actions/getCurrentTime";
 import { Button } from "@/app/components/Button";
-
 import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
-import { CombinedType, currentUserType } from "@/app/types";
+import { CombinedType, IParams, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { SlLogout } from "react-icons/sl";
-
-type ScheduleType = CombinedType & currentUserType;
 
 type MapLoadingForUserType = {
     [key: string]: boolean;
@@ -24,16 +20,29 @@ type MapLoadingForUserType = {
 const MapLoader = dynamic(() => import("../../components/MapLoader"), {
     ssr: false,
 });
-export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
+
+type ScheduleProps = CombinedType & currentUserType;
+
+export const Schedule: React.FC<ScheduleProps> = ({
+    schedule,
+    currentUser,
+}) => {
     const inviteModal = useInviteModal(); // 초대장 모달
-    const currentLocation = getCurrentLocation(); // 유저의 현재위치 // 오늘 날짜, 현재 시간, 시,분,초
+    const currentLocation = getCurrentLocation(); // 유저의 현재위치
+
     const [dDay, setdDay] = useState(false); // 약속 날짜가 오늘 판단
     const [isLastThirtyMinutes, setIsLastThirtyMinutes] = useState(false); // 남은 시간이 30분인지 판단
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
     const router = useRouter();
-    const [mapLoading, setMapLoading] = useState(false);
+
+    if (!currentUser) {
+        return null;
+    }
+
+    const currentUserMail = currentUser.email;
+
     const [mapLoadingForUser, setMapLoadingForUser] =
         useState<MapLoadingForUserType>({});
 
@@ -77,8 +86,38 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const userLat = currentLocation.coordinates.lat;
     const userLng = currentLocation.coordinates.lng;
 
-    const memberList = schedule.members; // 현재 모임에 속한 인원
+    useEffect(() => {
+        // console.log("User's location has been updated!", {
+        //     userLat,
+        //     userLng,
+        //     currentUserMail,
+        // });
+        const saveLocationToDB = async () => {
+            try {
+                const response = await axios.post("/api/userLocation", {
+                    email: currentUserMail,
+                    lat: userLat,
+                    lng: userLng,
+                    scheduleId: schedule.id,
+                });
 
+                if (response.status === 200) {
+                    console.log("위치 정보가 성공적으로 저장되었습니다.");
+                } else {
+                    console.log("위치 정보 저장에 실패하였습니다.");
+                }
+            } catch (error) {
+                console.error(
+                    "위치 정보 저장 중 에러가 발생하였습니다.",
+                    error
+                );
+            }
+        };
+
+        saveLocationToDB();
+    }, [userLat, userLng]);
+
+    const memberList = schedule.members; // 현재 모임에 속한 인원
     const meetingTime = Number(schedule.time?.replace(":", "") + "0" + "0"); // 모임시간
     const timerTime = Number(hours + minutes + seconds); // 현재시간
 
@@ -114,6 +153,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         return () => clearInterval(intervalId); // useEffect가 종료될 때 실행될 cleanup 함수
     }, []);
 
+    // 모임 삭제 함수
     const handleDeleteModal = async () => {
         try {
             const res = await axios.post("/api/schedulePage", {
@@ -149,6 +189,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setdDay(true);
         }
 
+        // 모임시간 도달 시 모임 종료 모달 오픈
         if (countDown == 0 && dDay) {
             deleteScheduleModal.onOpen();
         }
@@ -161,6 +202,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         }
     }, [countDown]);
 
+    // 선택된 유저의 자리만 위치 지도 공개
     const handleMapLoading = (
         e: React.MouseEvent<HTMLElement>,
         email: string
@@ -182,8 +224,6 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         });
     };
 
-    // console.log(dDay);
-    // console.log(isButtonDisabled);
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">

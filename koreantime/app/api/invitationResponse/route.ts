@@ -36,8 +36,6 @@ export async function POST(request: Request) {
     try {
         const body = JSON.parse(data);
 
-        // 여기서 body는 스케줄의 ID를 포함해야 합니다.
-
         await prisma.member.create({
             data: {
                 email: currentUser.email,

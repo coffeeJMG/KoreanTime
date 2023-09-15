@@ -17,6 +17,7 @@ import { MakingPlan, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import { useRouter } from "next/navigation";
 import { isTimeInFuture } from "@/app/actions/getCurrentTime";
+import getCurrentLocation from "@/app/actions/getCurrentLocation";
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -27,7 +28,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
+    const userLocation = getCurrentLocation();
 
+    console.log(userLocation.coordinates.lat);
     const getAddrData = (
         lat: number | null,
         lng: number | null,
