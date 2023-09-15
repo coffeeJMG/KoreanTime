@@ -23,9 +23,9 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="grid grid-cols-3 items-center gap-3 px-10 mt-3">
+            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-400 border-b-2">
                 <div>
-                    <CgSandClock size={28} />
+                    <CgSandClock size={40} />
                 </div>
 
                 <div className="justify-self-center">
@@ -37,24 +37,24 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                     </p>
                 </div>
 
-                <div className="flex justify-end gap-3">
+                <div className="flex justify-end gap-3 items-center">
                     {currentUser ? (
                         <p>{currentUser.name}님 안녕하세요 </p>
                     ) : null}
                     <FcInvite
                         className="cursor-pointer"
-                        size={28}
+                        size={40}
                         onClick={invitationModal.onOpen}
                     />
                     <AiOutlineHome
-                        className="cursor-pointer"
+                        className="cursor-pointer pb-1"
                         onClick={() => router.push("/startPage")}
-                        size={28}
+                        size={40}
                     />
                     <SlLogout
-                        className="cursor-pointer"
+                        className="cursor-pointer pb-2"
                         onClick={async () => await signOut()}
-                        size={28}
+                        size={40}
                     />
                 </div>
             </div>

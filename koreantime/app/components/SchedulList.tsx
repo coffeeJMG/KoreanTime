@@ -3,16 +3,24 @@
 import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
-import { ScheduleListProps } from "../types";
+import { ScheduleListProps, currentUserType } from "../types";
 import useScheduleListStore from "../stores/updateScheduleList";
 import { useEffect } from "react";
 
-const ScheduleList: React.FC<ScheduleListProps> = ({ scheduleList }) => {
+type userSchedule = ScheduleListProps & currentUserType;
+
+const ScheduleList: React.FC<userSchedule> = ({
+    scheduleList,
+    currentUser,
+}) => {
     const newSchedule = useNewSchedule();
     const { updateScheduleList } = useScheduleListStore();
     const router = useRouter();
 
     useEffect(() => {
+        if (!currentUser) {
+            router.push("/login");
+        }
         router.refresh();
     }, [updateScheduleList]);
 

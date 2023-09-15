@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 interface locationType {
     loaded: boolean;
-    coordinates?: { lat: number; lng: number };
+    coordinates: { lat: number; lng: number };
     error?: { code: number; message: string };
 }
 
@@ -16,23 +16,28 @@ const getCurrentLocation = () => {
     const onSuccess = (location: {
         coords: { latitude: number; longitude: number };
     }) => {
-        setLocation({
-            loaded: true,
-            coordinates: {
-                lat: location.coords.latitude,
-                lng: location.coords.longitude,
-            },
-        });
+        if (
+            typeof location.coords.latitude === "number" &&
+            typeof location.coords.longitude === "number"
+        ) {
+            setLocation({
+                loaded: true,
+                coordinates: {
+                    lat: location.coords.latitude,
+                    lng: location.coords.longitude,
+                },
+            });
+        }
     };
 
     // 에러에 대한 로직
     const onError = (error: { code: number; message: string }) => {
         setLocation({
             loaded: true,
+            coordinates: { lat: 0, lng: 0 }, // <-- 기본 좌표값 설정
             error,
         });
     };
-
     useEffect(() => {
         // navigator 객체 안에 geolocation이 없다면
         // 위치 정보가 없는 것.

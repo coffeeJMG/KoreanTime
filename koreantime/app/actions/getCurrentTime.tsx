@@ -30,3 +30,22 @@ export const getCurrentTime = () => {
         comparisonToday,
     };
 };
+
+export const isTimeInFuture = (time: Date) => {
+    const { comparisonToday, comparisonTime } = getCurrentTime();
+    const year = time.getFullYear();
+    const month = String(time.getMonth() + 1).padStart(2, "0");
+    const day = String(time.getDate()).padStart(2, "0");
+    const hours = String(time.getHours()).padStart(2, "0");
+    const minutes = String(time.getMinutes()).padStart(2, "0");
+
+    const timeDate = `${year}${month}${day}`;
+    const timeValue = `${hours}${minutes}`;
+
+    // If the selected date is today, check if the time is in the future
+    if (timeDate === comparisonToday) {
+        return timeValue >= comparisonTime;
+    }
+
+    return true; // Allow selection for other dates
+};

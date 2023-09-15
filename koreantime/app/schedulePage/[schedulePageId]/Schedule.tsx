@@ -8,14 +8,19 @@ import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { CombinedType, currentUserType } from "@/app/types";
+import { size } from "@/app/types/constant";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { SlLogout } from "react-icons/sl";
 
 type ScheduleType = CombinedType & currentUserType;
 
+type MapLoadingForUserType = {
+    [key: string]: boolean;
+};
 const MapLoader = dynamic(() => import("../../components/MapLoader"), {
     ssr: false,
 });
@@ -28,6 +33,9 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
     const router = useRouter();
+    const [mapLoading, setMapLoading] = useState(false);
+    const [mapLoadingForUser, setMapLoadingForUser] =
+        useState<MapLoadingForUserType>({});
 
     const initialTimeData = getCurrentTime();
     const [today, setToday] = useState(initialTimeData.today);
@@ -65,14 +73,9 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     const lat = Number(schedule.lat);
     const lng = Number(schedule.lng);
 
-    // 유저 위치 찾지 못하는 경우 에러 알람
-    if (!currentLocation.coordinates) {
-        return toast.error("유저의 현재 위치를 찾을 수 없습니다.");
-    }
-
     // 유저의 위치 위도,경도 값
-    const userLat = currentLocation.coordinates?.lat;
-    const userLng = currentLocation.coordinates?.lng;
+    const userLat = currentLocation.coordinates.lat;
+    const userLng = currentLocation.coordinates.lng;
 
     const memberList = schedule.members; // 현재 모임에 속한 인원
 
@@ -125,7 +128,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
     };
     useEffect(() => {
         // 남은 시간이 30분 이하인지 확인
-        if (countDown <= 1800 && countDown > 0) {
+        if (countDown <= 1800 && countDown > 0 && dDay) {
             setIsLastThirtyMinutes(true);
             setIsButtonDisabled(true);
         } else {
@@ -134,7 +137,7 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
         }
 
         // 남은 시간이 10분 이하인지 확인
-        if (countDown <= 600 && countDown > 0) {
+        if (countDown <= 600 && countDown > 0 && dDay) {
             setIsLastTenMinutes(true);
             setIsLastThirtyMinutes(false);
         } else {
@@ -146,18 +149,41 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
             setdDay(true);
         }
 
-        if (countDown == 0) {
+        if (countDown == 0 && dDay) {
             deleteScheduleModal.onOpen();
         }
 
         // 모임 시간 1분뒤에 모임삭제
-        if (countDown < -60) {
+        if (countDown < -60 && dDay) {
             handleDeleteModal();
             deleteScheduleModal.onClose();
             router.push("/startPage");
         }
     }, [countDown]);
 
+    const handleMapLoading = (
+        e: React.MouseEvent<HTMLElement>,
+        email: string
+    ) => {
+        setMapLoadingForUser((prev) => {
+            // 같은 유저를 다시 클릭한 경우
+            if (prev[email]) {
+                return { ...prev, [email]: false };
+            }
+
+            // 나머지 유저의 지도를 모두 닫고, 클릭한 유저의 지도만 열기
+            const newState = Object.keys(prev).reduce((acc, currEmail) => {
+                acc[currEmail] = false;
+                return acc;
+            }, {} as MapLoadingForUserType);
+
+            newState[email] = true;
+            return newState;
+        });
+    };
+
+    // console.log(dDay);
+    // console.log(isButtonDisabled);
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
@@ -188,27 +214,52 @@ export const Schedule: React.FC<ScheduleType> = ({ schedule, currentUser }) => {
                 </Button>
             </div>
 
-            <div className="flex flex-row w-full">
+            <div className="flex flex-row w-full gap-10">
+                <MapLoader lat={lat} lng={lng} height="780px" />
                 <div className="flex flex-col w-1/2">
-                    {memberList.map((item) => {
+                    {memberList.map((item, index) => {
+                        const isLastThreeUsers = index >= memberList.length - 3;
+
                         return (
                             <div
                                 className="border-solid border-2 border-neutral-400 w-full 	box-sizing:border-box"
                                 key={item.email}
                             >
-                                <div>
-                                    <p>{item.nickname}</p>
+                                {/* 6, 7, 8번 유저에 대한 지도는 박스 위쪽에 표시 */}
+                                {isLastThreeUsers &&
+                                mapLoadingForUser[item.email] ? (
+                                    <MapLoader
+                                        lat={userLat}
+                                        lng={userLng}
+                                        height="200px"
+                                    />
+                                ) : null}
+
+                                <div className="flex justify-between p-5">
+                                    <p
+                                        className={`${size.titleSize}`}
+                                        onClick={(e) =>
+                                            handleMapLoading(e, item.email)
+                                        }
+                                    >
+                                        {item.nickname}
+                                    </p>
+                                    <SlLogout size={30} />
                                 </div>
-                                <MapLoader
-                                    lat={userLat}
-                                    lng={userLng}
-                                    height="300px"
-                                />
+
+                                {/* 1,2,3,4,5번 유저의 지도는 박스 아래쪽에 */}
+                                {!isLastThreeUsers &&
+                                mapLoadingForUser[item.email] ? (
+                                    <MapLoader
+                                        lat={userLat}
+                                        lng={userLng}
+                                        height="200px"
+                                    />
+                                ) : null}
                             </div>
                         );
                     })}
                 </div>
-                <MapLoader lat={lat} lng={lng} height="450px" />
             </div>
         </>
     );
