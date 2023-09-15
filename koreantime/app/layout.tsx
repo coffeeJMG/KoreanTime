@@ -11,6 +11,7 @@ import { InvitationModal } from "./components/modals/InvitationModal";
 import getinvitationList from "./actions/getInvitationList";
 import { DeleteScheduleModal } from "./components/modals/DeleteScheduleModal";
 import LoginForm from "./components/LoginForm";
+import ScheduleList from "./components/SchedulList";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -34,6 +35,7 @@ export default async function RootLayout({
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
                     <DeleteScheduleModal />
+
                     <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
                 <Container>{children}</Container>
