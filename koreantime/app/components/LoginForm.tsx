@@ -10,8 +10,9 @@ import { IFormInput } from "../register/page";
 import React, { useEffect } from "react";
 import { currentUserType } from "../types";
 import { colors, size } from "../types/constant";
+import getCurrentUser from "../actions/getCurrentUser";
 
-const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
+const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
     const router = useRouter();
 
     useEffect(() => {
@@ -144,4 +145,6 @@ const LoginForm: React.FC<currentUserType> = async ({ currentUser }) => {
     );
 };
 
-export default LoginForm;
+const Login = React.memo(LoginForm);
+
+export default Login;
