@@ -41,6 +41,8 @@ export interface MakingPlan {
     members: string;
     lat: number;
     lng: number;
+    userLat: number;
+    userLng: number;
 }
 
 // POST  컴포넌트 타입

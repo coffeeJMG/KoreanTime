@@ -9,9 +9,6 @@ export default async function getScheduleList() {
     const today = Number(useCurrentTime.comparisonToday);
     const currentTime = Number(useCurrentTime.comparisonTime);
 
-    console.log(today);
-    console.log(currentTime);
-
     if (!currentUser) {
         return null;
     }

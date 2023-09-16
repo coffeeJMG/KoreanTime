@@ -1,3 +1,4 @@
+import getCurrentLocation from "../actions/getCurrentLocation";
 import getCurrentUser from "../actions/getCurrentUser";
 import Login from "../components/LoginForm";
 

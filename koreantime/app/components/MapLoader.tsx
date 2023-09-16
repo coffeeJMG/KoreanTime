@@ -1,45 +1,68 @@
 "use client";
 
-import { Map, MapMarker, useKakaoLoader } from "react-kakao-maps-sdk";
+import {
+    Map,
+    MapInfoWindow,
+    MapMarker,
+    useKakaoLoader,
+} from "react-kakao-maps-sdk";
 
-interface MapLoaderProps {
+interface MemberLocation {
+    memberEmail: string;
     lat: number;
     lng: number;
-    height: string;
+    scheduleId?: string;
 }
 
-const MapLoader: React.FC<MapLoaderProps> = ({ lat, lng, height }) => {
+interface MapLoaderProps {
+    lat?: number;
+    lng?: number;
+    height: string;
+    membersLocation?: MemberLocation[];
+}
+
+const MapLoader: React.FC<MapLoaderProps> = ({
+    lat,
+    lng,
+    height,
+    membersLocation,
+}) => {
     if (typeof lat !== "number" || typeof lng !== "number") {
         alert("위치를 찾을 수 없습니다.");
     }
-    // 카카오 지도 api
+
     useKakaoLoader({
         appkey: `${process.env.NEXT_PUBLIC_KAKAO_MAPS_JS_KEY}`,
     });
+
     return (
-        <>
-            <Map // 지도를 표시할 Container
-                center={{
-                    // 지도의 중심좌표
-                    lat: lat,
-                    lng: lng,
-                }}
-                style={{
-                    // 지도의 크기
-                    width: "100%",
-                    height: height,
-                }}
-                level={3} // 지도의 확대 레벨
-            >
-                <MapMarker // 마커를 생성합니다
-                    position={{
-                        // 마커가 표시될 위치입니다
-                        lat: lat,
-                        lng: lng,
-                    }}
-                />
-            </Map>
-        </>
+        <Map
+            center={{
+                lat: lat || (membersLocation && membersLocation[0]?.lat) || 0,
+                lng: lng || (membersLocation && membersLocation[0]?.lng) || 0,
+            }}
+            style={{
+                width: "100%",
+                height: height,
+            }}
+            level={3}
+        >
+            {membersLocation ? (
+                membersLocation.map((member, index) => (
+                    <div key={index}>
+                        <MapMarker
+                            position={{ lat: member.lat, lng: member.lng }}
+                        >
+                            <div style={{ padding: "5px", color: "#000" }}>
+                                {member.memberEmail}
+                            </div>
+                        </MapMarker>
+                    </div>
+                ))
+            ) : (
+                <MapMarker position={{ lat: lat!, lng: lng! }} />
+            )}
+        </Map>
     );
 };
 

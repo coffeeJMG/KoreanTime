@@ -27,6 +27,7 @@ model User {
   invited         Boolean
   schedule Schedule[]
   invitedScheduleList InvitedScheduleList[]
+  
 }
 
 model Schedule {
@@ -37,6 +38,7 @@ model Schedule {
       date String
       maximumPeople Int
       members Member[]
+      membersLocations MembersLocation[]
       lat Float?
       lng Float?
       hostUser String
@@ -47,11 +49,11 @@ model Schedule {
 
 model Member {
     id String @id @default(auto()) @map("_id") @db.ObjectId
-    email String
+    email String 
     nickname String
     scheduleId String @db.ObjectId
     schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-    
+   
      
 }
 
@@ -64,4 +66,15 @@ model InvitedScheduleList {
 
     invitedSchedule String?
     
+}
+
+model MembersLocation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  memberEmail String 
+  lat Float
+  lng Float
+  scheduleId String @db.ObjectId
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+ 
+ @@unique([memberEmail, scheduleId])
 }
