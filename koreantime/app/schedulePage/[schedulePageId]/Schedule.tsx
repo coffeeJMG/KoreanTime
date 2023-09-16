@@ -10,7 +10,7 @@ import { CombinedType, IParams, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlLogout } from "react-icons/sl";
 
@@ -35,24 +35,26 @@ export const Schedule: React.FC<ScheduleProps> = ({
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
+    const [membersLocation, setMembersLocation] = useState([]);
     const router = useRouter();
 
     if (!currentUser) {
         return null;
     }
 
-    const currentUserMail = currentUser.email;
+    const currentUserNickName = currentUser.nickname; // 현재 로그인한 유저
 
-    const [mapLoadingForUser, setMapLoadingForUser] =
+    const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
         useState<MapLoadingForUserType>({});
 
-    const initialTimeData = getCurrentTime();
-    const [today, setToday] = useState(initialTimeData.today);
-    const [currentTime, setCurrentTime] = useState(initialTimeData.currentTime);
-    const [hours, setHours] = useState(initialTimeData.hours);
-    const [minutes, setMinutes] = useState(initialTimeData.minutes);
-    const [seconds, setSeconds] = useState(initialTimeData.seconds);
+    const initialTimeData = getCurrentTime(); // 현재시간의 정보를 담은 변수
+    const [today, setToday] = useState(initialTimeData.today); // 오늘 날짜
+    const [currentTime, setCurrentTime] = useState(initialTimeData.currentTime); // 현재시간
+    const [hours, setHours] = useState(initialTimeData.hours); //  시간
+    const [minutes, setMinutes] = useState(initialTimeData.minutes); //  분
+    const [seconds, setSeconds] = useState(initialTimeData.seconds); //  초
 
+    // 매 초마다 시간 반영
     useEffect(() => {
         const interval = setInterval(() => {
             const updatedTime = getCurrentTime();
@@ -86,16 +88,12 @@ export const Schedule: React.FC<ScheduleProps> = ({
     const userLat = currentLocation.coordinates.lat;
     const userLng = currentLocation.coordinates.lng;
 
+    // 유저의 위치 정보를 모임 멤버들의 위치를 담은 db에 저장 및 모임 유저들의 위치를 받아오는 함수
     useEffect(() => {
-        // console.log("User's location has been updated!", {
-        //     userLat,
-        //     userLng,
-        //     currentUserMail,
-        // });
-        const saveLocationToDB = async () => {
+        const saveAndFetchLocations = async () => {
             try {
                 const response = await axios.post("/api/userLocation", {
-                    email: currentUserMail,
+                    email: currentUserNickName,
                     lat: userLat,
                     lng: userLng,
                     scheduleId: schedule.id,
@@ -103,18 +101,30 @@ export const Schedule: React.FC<ScheduleProps> = ({
 
                 if (response.status === 200) {
                     console.log("위치 정보가 성공적으로 저장되었습니다.");
+
+                    // 위치 정보 저장 성공 후 멤버 위치 정보 불러오기
+                    const memberLocationsResponse = await axios.post(
+                        "/api/getMembersLocation",
+                        {
+                            scheduleId: schedule.id,
+                        }
+                    );
+
+                    // 여기에서 memberLocationsResponse.data를 사용하여 원하는 동작을 수행하실 수 있습니다.
+
+                    setMembersLocation(memberLocationsResponse.data);
                 } else {
                     console.log("위치 정보 저장에 실패하였습니다.");
                 }
             } catch (error) {
                 console.error(
-                    "위치 정보 저장 중 에러가 발생하였습니다.",
+                    "위치 정보 저장 또는 멤버 위치 정보 불러오기 중 에러가 발생하였습니다.",
                     error
                 );
             }
         };
 
-        saveLocationToDB();
+        saveAndFetchLocations();
     }, [userLat, userLng]);
 
     const memberList = schedule.members; // 현재 모임에 속한 인원
@@ -255,7 +265,13 @@ export const Schedule: React.FC<ScheduleProps> = ({
             </div>
 
             <div className="flex flex-row w-full gap-10">
-                <MapLoader lat={lat} lng={lng} height="780px" />
+                <MapLoader
+                    lat={lat}
+                    lng={lng}
+                    membersLocation={membersLocation}
+                    height="780px"
+                />
+
                 <div className="flex flex-col w-1/2">
                     {memberList.map((item, index) => {
                         const isLastThreeUsers = index >= memberList.length - 3;

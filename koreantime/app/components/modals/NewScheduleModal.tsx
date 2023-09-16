@@ -30,7 +30,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
     const userLocation = getCurrentLocation();
 
-    console.log(userLocation.coordinates.lat);
     const getAddrData = (
         lat: number | null,
         lng: number | null,
