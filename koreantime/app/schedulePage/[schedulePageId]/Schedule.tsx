@@ -1,18 +1,19 @@
 "use client";
 
-import getCurrentLocation from "@/app/actions/getCurrentLocation";
-import { getCurrentTime } from "@/app/actions/getCurrentTime";
-import { Button } from "@/app/components/Button";
-import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
-import { useInviteModal } from "@/app/hooks/useInviteModal";
-import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
-import { CombinedType, currentUserType } from "@/app/types";
-import { size } from "@/app/types/constant";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlLogout } from "react-icons/sl";
+import getCurrentLocation from "../../actions/getCurrentLocation";
+import { CombinedType, currentUserType } from "../../types";
+import { useInviteModal } from "../../hooks/useInviteModal";
+import { useDeleteSchedule } from "../../hooks/useDeleteScheduleModal";
+import { getCurrentTime } from "../../actions/getCurrentTime";
+import { useShceduleIdStore } from "../../stores/scheduleIdStore";
+import React from "react";
+import { Button } from "../../components/Button";
+import { size } from "../../types/constant";
 
 type MapLoadingForUserType = {
     [key: string]: boolean;

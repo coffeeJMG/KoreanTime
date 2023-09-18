@@ -1,4 +1,5 @@
-import getCurrentLocation from "../actions/getCurrentLocation";
+import React from "react";
+
 import getCurrentUser from "../actions/getCurrentUser";
 import Login from "../components/LoginForm";
 
