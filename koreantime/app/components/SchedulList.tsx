@@ -6,8 +6,29 @@ import { colors, size } from "@/app/types/constant";
 import { ScheduleListProps, currentUserType } from "../types";
 import useScheduleListStore from "../stores/updateScheduleList";
 import { useEffect } from "react";
+import {
+    Controller,
+    FieldValues,
+    SubmitHandler,
+    useForm,
+} from "react-hook-form";
+import { Button } from "./Button";
+import { Input } from "./Input";
+import ReactSelect, { StylesConfig } from "react-select";
 
 type userSchedule = ScheduleListProps & currentUserType;
+
+const customStyles: StylesConfig = {
+    container: (provided) => ({
+        ...provided,
+        width: "300px",
+    }),
+    control: (provided) => ({
+        ...provided,
+        padding: "3%",
+        backgroundColor: "rgb(254 240 138)",
+    }),
+};
 
 const ScheduleList: React.FC<userSchedule> = ({
     scheduleList,
@@ -25,6 +46,23 @@ const ScheduleList: React.FC<userSchedule> = ({
         router.refresh();
     }, [updateScheduleList]);
 
+    const {
+        register,
+        handleSubmit,
+        getValues,
+        control,
+        formState: { errors },
+    } = useForm<FieldValues>({
+        defaultValues: {
+            name: "",
+        },
+    });
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        try {
+        } catch (errors) {}
+    };
+
     return (
         <>
             <div className="w-full flex flex-col items-center mt-10">
@@ -38,6 +76,47 @@ const ScheduleList: React.FC<userSchedule> = ({
                         모임 생성하기
                     </p>
                 </div>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex flex-row p-10 w-1/2 gap-10 items-start relative"
+                >
+                    <div className="flex flex-col items-start">
+                        <Input
+                            type="text"
+                            {...register("name", {
+                                required: "이름을 입력해주세요",
+                            })}
+                            placeholder="이름을 입력해주세요"
+                        />
+                        {/* {errors?.name ? (
+                        <p
+                            className={`${colors.errorColor} ml-2 mt-1 ${size.textSize}`}
+                        >
+                            {errors?.name?.message}
+                        </p>
+                    ) : null} */}
+                    </div>
+                    <div className="w-1/2 mt-3">
+                        <Controller
+                            render={({ field }) => (
+                                <ReactSelect
+                                    styles={customStyles}
+                                    {...field}
+                                    options={[
+                                        { value: "오늘", label: "오늘" },
+                                        { value: "일주일", label: "일주일" },
+                                        { value: "한달", label: "한달" },
+                                    ]}
+                                    isClearable
+                                    instanceId="filterId"
+                                    placeholder="기간을 선택해주세요"
+                                />
+                            )}
+                            name="ReactSelect"
+                            control={control}
+                        />
+                    </div>
+                </form>
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
                     {scheduleList && scheduleList.length > 0 ? (
                         scheduleList.map((item) => (
