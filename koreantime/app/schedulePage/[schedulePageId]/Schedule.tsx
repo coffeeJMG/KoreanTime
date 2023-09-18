@@ -6,7 +6,7 @@ import { Button } from "@/app/components/Button";
 import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useInviteModal } from "@/app/hooks/useInviteModal";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
-import { CombinedType, IParams, currentUserType } from "@/app/types";
+import { CombinedType, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import axios from "axios";
 import dynamic from "next/dynamic";
@@ -23,10 +23,7 @@ const MapLoader = dynamic(() => import("../../components/MapLoader"), {
 
 type ScheduleProps = CombinedType & currentUserType;
 
-export const Schedule: React.FC<ScheduleProps> = ({
-    schedule,
-    currentUser,
-}) => {
+const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal(); // 초대장 모달
     const currentLocation = getCurrentLocation(); // 유저의 현재위치
 
@@ -265,12 +262,15 @@ export const Schedule: React.FC<ScheduleProps> = ({
             </div>
 
             <div className="flex flex-row w-full gap-10">
-                <MapLoader
-                    lat={lat}
-                    lng={lng}
-                    membersLocation={membersLocation}
-                    height="780px"
-                />
+                <div className="w-1/2">
+                    <MapLoader
+                        lat={lat}
+                        lng={lng}
+                        membersLocation={membersLocation}
+                        height="780px"
+                        id={`map-${schedule.id}`}
+                    />
+                </div>
 
                 <div className="flex flex-col w-1/2">
                     {memberList.map((item, index) => {
@@ -284,11 +284,14 @@ export const Schedule: React.FC<ScheduleProps> = ({
                                 {/* 6, 7, 8번 유저에 대한 지도는 박스 위쪽에 표시 */}
                                 {isLastThreeUsers &&
                                 mapLoadingForUser[item.email] ? (
-                                    <MapLoader
-                                        lat={userLat}
-                                        lng={userLng}
-                                        height="200px"
-                                    />
+                                    <div className="w-full">
+                                        <MapLoader
+                                            id={`map-${schedule.members[index].email}`}
+                                            lat={userLat}
+                                            lng={userLng}
+                                            height="200px"
+                                        />
+                                    </div>
                                 ) : null}
 
                                 <div className="flex justify-between p-5">
@@ -306,11 +309,14 @@ export const Schedule: React.FC<ScheduleProps> = ({
                                 {/* 1,2,3,4,5번 유저의 지도는 박스 아래쪽에 */}
                                 {!isLastThreeUsers &&
                                 mapLoadingForUser[item.email] ? (
-                                    <MapLoader
-                                        lat={userLat}
-                                        lng={userLng}
-                                        height="200px"
-                                    />
+                                    <div className="w-full">
+                                        <MapLoader
+                                            id={`map-${schedule.members[index].email}`}
+                                            lat={userLat}
+                                            lng={userLng}
+                                            height="200px"
+                                        />
+                                    </div>
                                 ) : null}
                             </div>
                         );
@@ -320,3 +326,5 @@ export const Schedule: React.FC<ScheduleProps> = ({
         </>
     );
 };
+
+export default Schedule;
