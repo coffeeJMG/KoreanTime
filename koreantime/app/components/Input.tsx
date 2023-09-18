@@ -2,7 +2,8 @@ import React from "react";
 import { colors } from "../types/constant";
 
 export interface InputProps {
-    onChange?: (...event: any[]) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onBlur?: (...event: any[]) => void;
     name?: string;
     min?: string | number;
@@ -29,6 +30,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             small,
             value,
             readOnly,
+            onKeyPress,
         },
         ref
     ) => {
@@ -50,6 +52,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 }`}
                 value={value}
                 readOnly={readOnly}
+                onKeyPress={onKeyPress}
             />
         );
     }
