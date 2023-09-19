@@ -58,25 +58,31 @@ const ScheduleList: React.FC<userSchedule> = ({
         handleSubmit,
         control,
         formState: { errors },
+        reset,
     } = useForm<FieldValues>({
         defaultValues: {
             mail: "",
+            ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
         },
     });
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
             data.user = currentUser?.email;
-
+            console.log(data);
             const response = await axios.post("api/filteringList", data);
 
             if (response.status == 200) {
-                console.log(response);
                 setMailFilterdList(response.data);
             } else {
                 let message = String(response.data);
                 toast.error(message);
             }
+
+            reset({
+                ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
+                mail: "",
+            });
         } catch (error) {
             const axiosError = error as AxiosError;
             if (axiosError.response) {
@@ -136,10 +142,10 @@ const ScheduleList: React.FC<userSchedule> = ({
                                     options={[
                                         { value: "오늘", label: "오늘" },
                                         {
-                                            value: "일주일",
-                                            label: "일주일",
+                                            value: "7일",
+                                            label: "7일",
                                         },
-                                        { value: "한달", label: "한달" },
+                                        { value: "30일", label: "30일" },
                                     ]}
                                     isClearable
                                     instanceId="filterId"
