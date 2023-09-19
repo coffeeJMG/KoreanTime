@@ -97,6 +97,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     scheduleId: schedule.id,
                 });
 
+                console.log(schedule.id);
                 if (response.status === 200) {
                     console.log("위치 정보가 성공적으로 저장되었습니다.");
 
@@ -123,7 +124,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         };
 
         saveAndFetchLocations();
-    }, [userLat, userLng]);
+    }, [userLat, userLng, schedule.id]);
 
     const memberList = schedule.members; // 현재 모임에 속한 인원
     const meetingTime = Number(schedule.time?.replace(":", "") + "0" + "0"); // 모임시간
