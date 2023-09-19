@@ -3,11 +3,35 @@
 import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
-import { ScheduleListProps, currentUserType } from "../types";
+import { ScheduleItem, ScheduleListProps, currentUserType } from "../types";
 import useScheduleListStore from "../stores/updateScheduleList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+    Controller,
+    FieldValues,
+    SubmitHandler,
+    useForm,
+} from "react-hook-form";
+import { Input } from "./Input";
+import ReactSelect, { StylesConfig } from "react-select";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { Button } from "./Button";
 
 type userSchedule = ScheduleListProps & currentUserType;
+
+const customStyles: StylesConfig = {
+    container: (provided) => ({
+        ...provided,
+        width: "300px",
+    }),
+    control: (provided) => ({
+        ...provided,
+        padding: "3%",
+        backgroundColor: "rgb(254 240 138)",
+        borderRadius: "5px",
+    }),
+};
 
 const ScheduleList: React.FC<userSchedule> = ({
     scheduleList,
@@ -16,7 +40,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const { updateScheduleList } = useScheduleListStore(); // 유저가 속한 스케쥴
     const router = useRouter();
-
+    const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -24,6 +48,51 @@ const ScheduleList: React.FC<userSchedule> = ({
         }
         router.refresh();
     }, [updateScheduleList]);
+
+    useEffect(() => {
+        setMailFilterdList(scheduleList);
+    }, [scheduleList]);
+
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+        reset,
+    } = useForm<FieldValues>({
+        defaultValues: {
+            mail: "",
+            ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
+        },
+    });
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        try {
+            data.user = currentUser?.email;
+            console.log(data);
+            const response = await axios.post("api/filteringList", data);
+
+            if (response.status == 200) {
+                setMailFilterdList(response.data);
+            } else {
+                let message = String(response.data);
+                toast.error(message);
+            }
+
+            reset({
+                ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
+                mail: "",
+            });
+        } catch (error) {
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                let message = String(axiosError.response.data);
+                toast.error(message);
+            } else {
+                console.log("오류가 발생했습니다.");
+            }
+        }
+    };
 
     return (
         <>
@@ -38,9 +107,64 @@ const ScheduleList: React.FC<userSchedule> = ({
                         모임 생성하기
                     </p>
                 </div>
+                <div className="grid grid-cols-3 gap-10 w-2/3 p-10 items-center">
+                    <Button
+                        full
+                        onClick={() => {
+                            setMailFilterdList(scheduleList);
+                        }}
+                    >
+                        전체보기
+                    </Button>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex flex-col items-start">
+                            <Input
+                                type="text"
+                                radius
+                                {...register("mail")}
+                                placeholder="이메일을 입력해주세요"
+                                onKeyPress={(
+                                    e: React.KeyboardEvent<HTMLInputElement>
+                                ) => {
+                                    if (e.key === "Enter") {
+                                        handleSubmit(onSubmit)();
+                                    }
+                                }}
+                            />
+                        </div>
+                    </form>
+                    <div className="w-1/2 mt-3">
+                        <Controller
+                            render={({ field }) => (
+                                <ReactSelect
+                                    styles={customStyles}
+                                    {...field}
+                                    options={[
+                                        { value: "오늘", label: "오늘" },
+                                        {
+                                            value: "7일",
+                                            label: "7일",
+                                        },
+                                        { value: "30일", label: "30일" },
+                                    ]}
+                                    isClearable
+                                    instanceId="filterId"
+                                    placeholder="기간을 선택해주세요"
+                                    onChange={(value) => {
+                                        field.onChange(value); // 필요한 경우 기존의 onChange 로직을 유지
+                                        handleSubmit(onSubmit)(); // 옵션을 선택할 때마다 폼 제출
+                                    }}
+                                />
+                            )}
+                            name="ReactSelect"
+                            control={control}
+                        />
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
-                    {scheduleList && scheduleList.length > 0 ? (
-                        scheduleList.map((item) => (
+                    {mailFilterdList && mailFilterdList.length > 0 ? (
+                        mailFilterdList.map((item) => (
                             <div
                                 onClick={() =>
                                     router.push(`/schedulePage/${item.id}`)

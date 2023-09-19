@@ -22,6 +22,9 @@ export default async function getScheduleList() {
                     },
                 },
             },
+            orderBy: {
+                date: "asc", // 오름차순으로 정렬
+            },
             include: {
                 members: {
                     select: {

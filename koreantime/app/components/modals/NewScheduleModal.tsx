@@ -150,6 +150,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                             { value: "8", label: "8" },
                                         ]}
                                         isClearable
+                                        instanceId="newScheduleId"
                                     />
                                 )}
                                 name="ReactSelect"

@@ -39,8 +39,8 @@ model Schedule {
       maximumPeople Int
       members Member[]
       membersLocations MembersLocation[]
-      lat Float?
-      lng Float?
+      lat Float
+      lng Float
       hostUser String
       users User @relation(fields: [hostUser], references: [email], onDelete: Cascade)
    
