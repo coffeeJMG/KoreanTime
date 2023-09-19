@@ -14,6 +14,7 @@ export interface InputProps {
     small?: boolean;
     value?: string;
     readOnly?: boolean;
+    radius?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -30,7 +31,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             small,
             value,
             readOnly,
-            onKeyPress,
+            radius,
         },
         ref
     ) => {
@@ -47,12 +48,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 placeholder={placeholder}
                 className={`mt-3 p-4 ${
                     colors.inputColor
-                } hover:outline-none outline-none ${colors.textColor} ${
-                    small ? "w-1/2" : "w-full"
-                }`}
+                } hover:outline-none outline-none ${colors.textColor} 
+                ${small ? "w-1/2" : "w-full"}
+                ${radius ? "rounded-lg" : ""}
+                `}
                 value={value}
                 readOnly={readOnly}
-                onKeyPress={onKeyPress}
             />
         );
     }

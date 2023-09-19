@@ -48,36 +48,42 @@ export interface MakingPlan {
 // POST  컴포넌트 타입
 
 export interface Latlng {
-    lat: number | null;
-    lng: number | null;
+    lat: number;
+    lng: number;
 }
 
 export type addrProps = {
-    getAddrData: (
-        lat: number | null,
-        lng: number | null,
-        fullAddress: string
-    ) => void;
+    getAddrData: (lat: number, lng: number, fullAddress: string) => void;
 };
 
 // schedule타입
 export interface ScheduleListProps {
-    scheduleList:
-        | {
-              members: string[];
-              id: string;
-              title: string;
-              place: string;
-              time: string;
-              date: string;
-              maximumPeople: number;
-              lat: number | null;
-              lng: number | null;
-              hostUser: string;
-          }[]
-        | null;
+    scheduleList: {
+        members: string[];
+        id: string;
+        title: string;
+        place: string;
+        time: string;
+        date: string;
+        maximumPeople: number;
+        lat: number;
+        lng: number;
+        hostUser: string;
+    }[];
 }
 
+export type ScheduleItem = {
+    members: string[];
+    id: string;
+    title: string;
+    place: string;
+    time: string;
+    date: string;
+    maximumPeople: number;
+    lat: number;
+    lng: number;
+    hostUser: string;
+};
 export type CombinedType = {
     schedule: {
         id: string;
@@ -86,8 +92,8 @@ export type CombinedType = {
         time?: string;
         date?: string;
         maximumPeople: number;
-        lat: number | null;
-        lng: number | null;
+        lat: number;
+        lng: number;
         hostUser: string;
         users: User;
         members: {

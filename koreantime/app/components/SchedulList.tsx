@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
-import { ScheduleListProps, currentUserType } from "../types";
+import { ScheduleItem, ScheduleListProps, currentUserType } from "../types";
 import useScheduleListStore from "../stores/updateScheduleList";
 import { useEffect, useState } from "react";
 import {
@@ -16,6 +16,7 @@ import { Input } from "./Input";
 import ReactSelect, { StylesConfig } from "react-select";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import { Button } from "./Button";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
@@ -28,6 +29,7 @@ const customStyles: StylesConfig = {
         ...provided,
         padding: "3%",
         backgroundColor: "rgb(254 240 138)",
+        borderRadius: "5px",
     }),
 };
 
@@ -38,9 +40,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const { updateScheduleList } = useScheduleListStore(); // 유저가 속한 스케쥴
     const router = useRouter();
-    const [mailFilterdList, setMailFilterdList] = useState<ScheduleListProps[]>(
-        []
-    );
+    const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -48,6 +48,10 @@ const ScheduleList: React.FC<userSchedule> = ({
         }
         router.refresh();
     }, [updateScheduleList]);
+
+    useEffect(() => {
+        setMailFilterdList(scheduleList);
+    }, [scheduleList]);
 
     const {
         register,
@@ -97,24 +101,32 @@ const ScheduleList: React.FC<userSchedule> = ({
                         모임 생성하기
                     </p>
                 </div>
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-row p-10 w-1/2 gap-10 items-start relative"
-                >
-                    <div className="flex flex-col items-start">
-                        <Input
-                            type="text"
-                            {...register("mail")}
-                            placeholder="이메일을 입력해주세요"
-                            onKeyPress={(
-                                e: React.KeyboardEvent<HTMLInputElement>
-                            ) => {
-                                if (e.key === "Enter") {
-                                    handleSubmit(onSubmit)();
-                                }
-                            }}
-                        />
-                    </div>
+                <div className="grid grid-cols-3 gap-10 w-2/3 p-10 items-center">
+                    <Button
+                        full
+                        onClick={() => {
+                            setMailFilterdList(scheduleList);
+                        }}
+                    >
+                        전체보기
+                    </Button>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex flex-col items-start">
+                            <Input
+                                type="text"
+                                radius
+                                {...register("mail")}
+                                placeholder="이메일을 입력해주세요"
+                                onKeyPress={(
+                                    e: React.KeyboardEvent<HTMLInputElement>
+                                ) => {
+                                    if (e.key === "Enter") {
+                                        handleSubmit(onSubmit)();
+                                    }
+                                }}
+                            />
+                        </div>
+                    </form>
                     <div className="w-1/2 mt-3">
                         <Controller
                             render={({ field }) => (
@@ -123,7 +135,10 @@ const ScheduleList: React.FC<userSchedule> = ({
                                     {...field}
                                     options={[
                                         { value: "오늘", label: "오늘" },
-                                        { value: "일주일", label: "일주일" },
+                                        {
+                                            value: "일주일",
+                                            label: "일주일",
+                                        },
                                         { value: "한달", label: "한달" },
                                     ]}
                                     isClearable
@@ -139,10 +154,11 @@ const ScheduleList: React.FC<userSchedule> = ({
                             control={control}
                         />
                     </div>
-                </form>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
-                    {scheduleList && scheduleList.length > 0 ? (
-                        scheduleList.map((item) => (
+                    {mailFilterdList && mailFilterdList.length > 0 ? (
+                        mailFilterdList.map((item) => (
                             <div
                                 onClick={() =>
                                     router.push(`/schedulePage/${item.id}`)

@@ -21,7 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
             className={`
             ${full ? "w-full" : "w-1/3"}
             mt-3
-            h-2/5
+            h-5/4
             ${colors.inputColor}
             ${colors.textColor}
             p-4

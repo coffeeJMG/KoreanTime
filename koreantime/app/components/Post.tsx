@@ -58,10 +58,10 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
                     );
                     return { lat, lng };
                 } else {
-                    return { lat: null, lng: null };
+                    return { lat: 0, lng: 0 };
                 }
             } catch (error) {
-                return { lat: null, lng: null };
+                return { lat: 0, lng: 0 };
             }
         };
         const { lat, lng }: Latlng = await convertAddressToCoordinates();
