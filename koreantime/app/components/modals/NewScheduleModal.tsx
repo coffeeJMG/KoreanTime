@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Modal } from './Modal';
+import { useState } from "react";
+import { Modal } from "./Modal";
 
-import { useNewSchedule } from '../../hooks/useScheduleModal';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Input } from '../Input';
-import ReactSelect from 'react-select';
+import { useNewSchedule } from "../../hooks/useScheduleModal";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Input } from "../Input";
+import ReactSelect from "react-select";
 
-import { Post } from '../Post';
-import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { Button } from '../Button';
-import axios from 'axios';
-import { MakingPlan, currentUserType } from '@/app/types';
-import { size } from '@/app/types/constant';
-import { useRouter } from 'next/navigation';
-import { isTimeInFuture } from '@/app/actions/getCurrentTime';
-import toast from 'react-hot-toast';
+import { Post } from "../Post";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Button } from "../Button";
+import axios from "axios";
+import { MakingPlan, currentUserType } from "@/app/types";
+import { size } from "@/app/types/constant";
+import { useRouter } from "next/navigation";
+import { isTimeInFuture } from "@/app/actions/getCurrentTime";
+import toast from "react-hot-toast";
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -27,7 +27,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
-    const [fullAddress, setFullAddress] = useState<string>(''); //전체주소
+    const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
 
     const getAddrData = (
         lat: number | null,
@@ -47,10 +47,10 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
         setValue,
     } = useForm<MakingPlan>({
         defaultValues: {
-            name: '',
-            place: '',
-            ReactSelect: { value: '', label: '' },
-            time: '',
+            name: "",
+            place: "",
+            ReactSelect: { value: "", label: "" },
+            time: "",
             lat: 0,
             lng: 0,
         },
@@ -58,8 +58,8 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
 
     function formatDateToCustomString(dateString: string) {
         const date = new Date(dateString);
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         const year = String(date.getFullYear());
 
         return `${month}${day}${year}`;
@@ -83,13 +83,13 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 lng: lng,
             };
 
-            await axios.post('/api/schedule', scheduleData);
+            await axios.post("/api/schedule", scheduleData);
 
             reset({
-                name: '',
-                place: '',
-                ReactSelect: { value: '', label: '' },
-                time: '',
+                name: "",
+                place: "",
+                ReactSelect: { value: "", label: "" },
+                time: "",
                 lat: 0,
                 lng: 0,
             });
@@ -112,8 +112,8 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     <p className="text-2xl w-48">모임 이름</p>
                     <Input
                         type="text"
-                        {...register('name', {
-                            required: '모임 이름을 입력해주세요',
+                        {...register("name", {
+                            required: "모임 이름을 입력해주세요",
                         })}
                         placeholder="모임 이름을 입력해주세요"
                     />
@@ -142,14 +142,14 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                     <ReactSelect
                                         {...field}
                                         options={[
-                                            { value: '1', label: '1' },
-                                            { value: '2', label: '2' },
-                                            { value: '3', label: '3' },
-                                            { value: '4', label: '4' },
-                                            { value: '5', label: '5' },
-                                            { value: '6', label: '6' },
-                                            { value: '7', label: '7' },
-                                            { value: '8', label: '8' },
+                                            { value: "1", label: "1" },
+                                            { value: "2", label: "2" },
+                                            { value: "3", label: "3" },
+                                            { value: "4", label: "4" },
+                                            { value: "5", label: "5" },
+                                            { value: "6", label: "6" },
+                                            { value: "7", label: "7" },
+                                            { value: "8", label: "8" },
                                         ]}
                                         isClearable
                                         instanceId="newScheduleId"
@@ -183,12 +183,12 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                             onChange(date);
                                             const selectedHours = String(
                                                 date?.getHours(),
-                                            ).padStart(2, '0');
+                                            ).padStart(2, "0");
                                             const selectedMinutes = String(
                                                 date?.getMinutes(),
-                                            ).padStart(2, '0');
+                                            ).padStart(2, "0");
                                             const formattedTime = `${selectedHours}:${selectedMinutes}`;
-                                            setValue('time', formattedTime);
+                                            setValue("time", formattedTime);
                                         }}
                                     />
                                 );
