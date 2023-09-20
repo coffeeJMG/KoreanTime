@@ -25,7 +25,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [invitation, setInvitation] = useState<InvitedSchedule[] | null>(
-        invitationList
+        invitationList,
     );
 
     const { updateScheduleList, setUpdateScheduleList } =
@@ -39,7 +39,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         setTimeout(() => {
             invitationModal.onClose();
         }, 300);
-    }, []);
+    }, [invitationModal]);
 
     const rejectInvitation = async (data: string | null) => {
         try {
@@ -51,9 +51,9 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 setInvitation((prev) =>
                     prev
                         ? prev.filter(
-                              (invite) => invite.invitedSchedule !== data
+                              (invite) => invite.invitedSchedule !== data,
                           )
-                        : null
+                        : null,
                 );
 
                 toast.success(JSON.stringify(res.data));
@@ -70,16 +70,16 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 JSON.stringify(data),
                 {
                     headers: { "Content-Type": "application/json" },
-                }
+                },
             );
 
             if (res.status === 200) {
                 setInvitation((prev) =>
                     prev
                         ? prev.filter(
-                              (invite) => invite.invitedSchedule !== data
+                              (invite) => invite.invitedSchedule !== data,
                           )
-                        : null
+                        : null,
                 );
 
                 toast.success(JSON.stringify(res.data.message));
@@ -114,7 +114,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                                         full
                                         onClick={() => {
                                             rejectInvitation(
-                                                item.invitedSchedule
+                                                item.invitedSchedule,
                                             );
                                         }}
                                     >
@@ -140,7 +140,6 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 title="초대장 리스트"
                 onClose={invitationModal.onClose}
                 body={bodyContent}
-                children={undefined}
             />
         </>
     );

@@ -33,7 +33,7 @@ export default async function getinvitationList() {
 
         const invitation = invitationList[0].invitedScheduleList;
         return invitation;
-    } catch (error: any) {
+    } catch (error) {
         console.error(error);
         return null;
     }

@@ -25,8 +25,7 @@ export const DeleteScheduleModal = () => {
                 title="모임 종료"
                 onClose={deleteScheduleModal.onClose}
                 body={bodyContent}
-                children={undefined}
-            />
+            ></Modal>
         </>
     );
 };

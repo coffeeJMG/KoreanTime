@@ -51,10 +51,10 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
 
                 if (response.status === 200) {
                     const lng = parseFloat(
-                        response.data.documents[0].address.x
+                        response.data.documents[0].address.x,
                     );
                     const lat = parseFloat(
-                        response.data.documents[0].address.y
+                        response.data.documents[0].address.y,
                     );
                     return { lat, lng };
                 } else {
@@ -108,3 +108,5 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
         </>
     );
 });
+
+Post.displayName = "Post";

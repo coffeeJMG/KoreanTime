@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlLogout } from "react-icons/sl";
-import getCurrentLocation from "../../actions/getCurrentLocation";
 import { CombinedType, currentUserType } from "../../types";
 import { useInviteModal } from "../../hooks/useInviteModal";
 import { useDeleteSchedule } from "../../hooks/useDeleteScheduleModal";
@@ -14,6 +13,7 @@ import { useShceduleIdStore } from "../../stores/scheduleIdStore";
 import React from "react";
 import { Button } from "../../components/Button";
 import { size } from "../../types/constant";
+import useGetCurrentLocation from "../../actions/getCurrentLocation";
 
 type MapLoadingForUserType = {
     [key: string]: boolean;
@@ -26,7 +26,7 @@ type ScheduleProps = CombinedType & currentUserType;
 
 const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal(); // 초대장 모달
-    const currentLocation = getCurrentLocation(); // 유저의 현재위치
+    const currentLocation = useGetCurrentLocation(); // 유저의 현재위치
 
     const [dDay, setdDay] = useState(false); // 약속 날짜가 오늘 판단
     const [isLastThirtyMinutes, setIsLastThirtyMinutes] = useState(false); // 남은 시간이 30분인지 판단
@@ -36,11 +36,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [membersLocation, setMembersLocation] = useState([]);
     const router = useRouter();
 
-    if (!currentUser) {
-        return null;
-    }
-
-    const currentUserNickName = currentUser.nickname; // 현재 로그인한 유저
+    const currentUserNickName = currentUser?.nickname; // 현재 로그인한 유저
 
     const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
         useState<MapLoadingForUserType>({});
@@ -106,7 +102,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                         "/api/getMembersLocation",
                         {
                             scheduleId: schedule.id,
-                        }
+                        },
                     );
 
                     // 여기에서 memberLocationsResponse.data를 사용하여 원하는 동작을 수행하실 수 있습니다.
@@ -118,7 +114,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             } catch (error) {
                 console.error(
                     "위치 정보 저장 또는 멤버 위치 정보 불러오기 중 에러가 발생하였습니다.",
-                    error
+                    error,
                 );
             }
         };
@@ -132,9 +128,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
     // 시간 계산을 위한 시간 변경 함수
     function toSeconds(time: number) {
-        let hours = Math.floor(time / 10000);
-        let minutes = Math.floor((time % 10000) / 100);
-        let seconds = time % 100;
+        const hours = Math.floor(time / 10000);
+        const minutes = Math.floor((time % 10000) / 100);
+        const seconds = time % 100;
         return hours * 3600 + minutes * 60 + seconds;
     }
 
@@ -214,7 +210,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     // 선택된 유저의 자리만 위치 지도 공개
     const handleMapLoading = (
         e: React.MouseEvent<HTMLElement>,
-        email: string
+        email: string,
     ) => {
         setMapLoadingForUser((prev) => {
             // 같은 유저를 다시 클릭한 경우
