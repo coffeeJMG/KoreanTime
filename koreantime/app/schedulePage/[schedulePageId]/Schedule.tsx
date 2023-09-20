@@ -212,7 +212,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         }
 
         // 모임 시간 1분뒤에 모임삭제
-        if (countDown < -60 && dDay) {
+        if (countDown == -60 && dDay) {
             handleDeleteModal();
             deleteScheduleModal.onClose();
             router.push("/startPage");
