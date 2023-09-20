@@ -14,6 +14,12 @@ import React from "react";
 import { Button } from "../../components/Button";
 import { size } from "../../types/constant";
 import useGetCurrentLocation from "../../actions/getCurrentLocation";
+import getUserDistance from "@/app/actions/getUserDistance";
+import { useRankingStore } from "@/app/stores/ranking";
+
+type RankingsType = {
+    [email: string]: number;
+};
 
 type MapLoadingForUserType = {
     [key: string]: boolean;
@@ -44,7 +50,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         [],
     );
     const router = useRouter();
-
+    const { setUpdateRanking } = useRankingStore();
     const currentUserNickName = currentUser?.nickname; // 현재 로그인한 유저
 
     const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
@@ -102,10 +108,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     scheduleId: schedule.id,
                 });
 
-                console.log(schedule.id);
                 if (response.status === 200) {
-                    console.log("위치 정보가 성공적으로 저장되었습니다.");
-
                     // 위치 정보 저장 성공 후 멤버 위치 정보 불러오기
                     const memberLocationsResponse = await axios.post(
                         "/api/getMembersLocation",
@@ -237,6 +240,28 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             return newState;
         });
     };
+
+    useEffect(() => {
+        // 1. 각 유저의 도착지점 까지의 거리를 객체로 생성
+        const distances = membersLocation.map((member) => {
+            const distance = getUserDistance(lat, lng, member.lat, member.lng);
+            return {
+                email: member.memberEmail,
+                distance: distance,
+            };
+        });
+
+        // 2. 해당 배열을 거리 기준으로 오름차순으로 정렬
+        distances.sort((a, b) => a.distance - b.distance);
+
+        // 3. 정렬된 배열을 순회하면서 이메일을 키로, 등수를 값으로 하는 객체
+        const rankings: RankingsType = {};
+        distances.forEach((member, index) => {
+            rankings[member.email] = index + 1; // 이메일: 등수 형태로 저장
+        });
+        setUpdateRanking(rankings);
+        console.log(rankings);
+    }, [membersLocation]);
 
     return (
         <>

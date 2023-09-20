@@ -1,22 +1,38 @@
 "use client";
 
+import { useRankingStore } from "@/app/stores/ranking";
 import { Modal } from "./Modal";
 
 import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
-import { useCallback } from "react";
+import { useEffect } from "react";
 
 export const DeleteScheduleModal = () => {
     const deleteScheduleModal = useDeleteSchedule();
+    const { updateRanking } = useRankingStore();
+
+    let bodyContent;
+    useEffect(() => {
+        console.log(updateRanking);
+        const rankingList = Object.entries(updateRanking)
+            .sort(([, rankA], [, rankB]) => rankA - rankB) // 순위에 따라 정렬
+            .map(([email, rank], index) => (
+                <li key={index}>
+                    {email}: {rank}등
+                </li>
+            ));
+
+        bodyContent = (
+            <>
+                <div>
+                    <ul>{rankingList}</ul>
+                </div>
+            </>
+        );
+    }, [updateRanking]);
 
     // const handleClose = useCallback(() => {
     //     deleteScheduleModal.onClose();
     // }, [deleteScheduleModal]);
-
-    const bodyContent = (
-        <>
-            <div> 1분뒤에 이 모임은 사라집니다.</div>
-        </>
-    );
 
     return (
         <>
