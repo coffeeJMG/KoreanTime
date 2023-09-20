@@ -10,23 +10,20 @@ import { IFormInput } from "../register/page";
 import React, { useEffect } from "react";
 import { currentUserType } from "../types";
 import { colors, size } from "../types/constant";
-import getCurrentLocation from "../actions/getCurrentLocation";
 
 const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
     const router = useRouter();
-    const currentLocation = getCurrentLocation();
 
     useEffect(() => {
         if (currentUser) {
             router.push("/startPage");
         }
-    }, [currentUser]);
+    }, [currentUser, router]);
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-        setError,
         reset,
     } = useForm<IFormInput>({
         defaultValues: {

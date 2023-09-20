@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     if (inviteUser?.email === currentUser?.email) {
         return new NextResponse(
             JSON.stringify("자기 자신은 초대할 수 없습니다."),
-            { status: 400 }
+            { status: 400 },
         );
     } else if (!inviteUser) {
         return new NextResponse(JSON.stringify("존재하지 않는 유저입니다"), {

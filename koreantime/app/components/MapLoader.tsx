@@ -52,12 +52,12 @@ const MapLoader: React.FC<MapLoaderProps> = ({
                 if (!mapContainer) {
                     return null;
                 }
-                let map = new window.kakao.maps.Map(mapContainer, option);
+                const map = new window.kakao.maps.Map(mapContainer, option);
 
                 if (membersLocation) {
                     const schedulePosition = new window.kakao.maps.LatLng(
                         lat,
-                        lng
+                        lng,
                     );
 
                     const scheduleMarker = new window.kakao.maps.Marker({
@@ -66,11 +66,11 @@ const MapLoader: React.FC<MapLoaderProps> = ({
 
                     scheduleMarker.setMap(map);
 
-                    let iwContent = `<div style="padding:5px">도착지</div>`,
+                    const iwContent = `<div style="padding:5px">도착지</div>`,
                         iwPosition = new window.kakao.maps.LatLng(lat, lng),
                         iwRemoveable = true;
 
-                    let infowindow = new window.kakao.maps.InfoWindow({
+                    const infowindow = new window.kakao.maps.InfoWindow({
                         map: map,
                         position: iwPosition,
                         content: iwContent,
@@ -81,7 +81,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
                     membersLocation.forEach((member) => {
                         const memberPosition = new window.kakao.maps.LatLng(
                             member.lat,
-                            member.lng
+                            member.lng,
                         );
 
                         const memberMarker = new window.kakao.maps.Marker({
@@ -89,11 +89,11 @@ const MapLoader: React.FC<MapLoaderProps> = ({
                         });
 
                         memberMarker.setMap(map);
-                        let iwContent = `<div style="padding:5px">${member.memberEmail}</div>`,
+                        const iwContent = `<div style="padding:5px">${member.memberEmail}</div>`,
                             iwPosition = new window.kakao.maps.LatLng(lat, lng),
                             iwRemoveable = true;
 
-                        let infowindow = new window.kakao.maps.InfoWindow({
+                        const infowindow = new window.kakao.maps.InfoWindow({
                             map: map,
                             position: iwPosition,
                             content: iwContent,
@@ -103,15 +103,18 @@ const MapLoader: React.FC<MapLoaderProps> = ({
                         infowindow.open(map, memberMarker);
                     });
                 } else {
-                    let markerPosition = new window.kakao.maps.LatLng(lat, lng);
-                    let marker = new window.kakao.maps.Marker({
+                    const markerPosition = new window.kakao.maps.LatLng(
+                        lat,
+                        lng,
+                    );
+                    const marker = new window.kakao.maps.Marker({
                         position: markerPosition,
                     });
-                    let iwContent = '<div style="padding:5px">현 위치</div>',
+                    const iwContent = '<div style="padding:5px">현 위치</div>',
                         iwPosition = new window.kakao.maps.LatLng(lat, lng),
                         iwRemoveable = true;
 
-                    let infowindow = new window.kakao.maps.InfoWindow({
+                    const infowindow = new window.kakao.maps.InfoWindow({
                         map: map,
                         position: iwPosition,
                         content: iwContent,
@@ -127,7 +130,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
         return () => {
             mapScript.removeEventListener("load", onLoadKakaoMap);
         };
-    }, [lat, lng, membersLocation]);
+    }, [id, lat, lng, membersLocation]);
 
     return (
         <div>

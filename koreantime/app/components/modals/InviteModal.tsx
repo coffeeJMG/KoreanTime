@@ -98,7 +98,6 @@ export const InviteModal = () => {
                 title="초대하기"
                 onClose={inviteModal.onClose}
                 body={bodyContent}
-                children={undefined}
             />
         </>
     );

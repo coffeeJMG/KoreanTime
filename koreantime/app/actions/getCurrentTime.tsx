@@ -12,7 +12,7 @@ export const getCurrentTime = () => {
     const comparisonToday = `${year}${month}${day}`;
 
     let currentTime; // 렌더링을 위한 현재시간 변수
-    let comparisonTime = `${hours}${minutes}`; // 계산을 위한 현재시간 변수
+    const comparisonTime = `${hours}${minutes}`; // 계산을 위한 현재시간 변수
 
     if (Number(hours) >= 13) {
         const formattedHours = String(Number(hours) - 12).padStart(2, "0");

@@ -4,7 +4,7 @@ import { colors } from "../types/constant";
 export interface InputProps {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-    onBlur?: (...event: any[]) => void;
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     name?: string;
     min?: string | number;
     max?: string | number;
@@ -33,7 +33,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             readOnly,
             radius,
         },
-        ref
+        ref,
     ) => {
         return (
             <input
@@ -56,5 +56,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 readOnly={readOnly}
             />
         );
-    }
+    },
 );
+
+Input.displayName = "Input";

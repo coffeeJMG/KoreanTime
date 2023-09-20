@@ -9,7 +9,6 @@ interface ModalProps {
     title?: string;
     body?: React.ReactElement;
     disabled?: boolean;
-    children: React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -18,7 +17,6 @@ export const Modal: React.FC<ModalProps> = ({
     title,
     body,
     disabled,
-    children,
 }) => {
     const [showModal, setShowModal] = useState(isOpen);
 

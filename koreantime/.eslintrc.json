@@ -4,11 +4,15 @@
         "es6": true,
         "node": true
     },
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "extends": [
+        "prettier",
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "next",
+        "next/core-web-vitals"
     ],
     "settings": {
         "react": {
@@ -22,12 +26,19 @@
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
-    "plugins": ["react", "react-hooks", "prettier"],
+    "plugins": ["react", "react-hooks", "prettier", "@typescript-eslint"],
     "rules": {
+        "react-hooks/exhaustive-deps": "off",
+        "no-var": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "comma-dangle": ["error", "always-multiline"],
+        "react/prop-types": "off",
         "react/react-in-jsx-scope": 0,
         "react/prefer-stateless-function": 0,
         "react/jsx-filename-extension": 0,
         "react/jsx-one-expression-per-line": 0,
-        "no-nested-ternary": 0
+        "no-nested-ternary": 0,
+        "prettier/prettier": ["error", { "endOfLine": "auto", "tabWidth": 4 }]
     }
 }

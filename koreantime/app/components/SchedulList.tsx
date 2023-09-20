@@ -47,7 +47,7 @@ const ScheduleList: React.FC<userSchedule> = ({
             router.push("/login");
         }
         router.refresh();
-    }, [updateScheduleList]);
+    }, [currentUser, router, updateScheduleList]);
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
@@ -75,7 +75,7 @@ const ScheduleList: React.FC<userSchedule> = ({
             if (response.status == 200) {
                 setMailFilterdList(response.data);
             } else {
-                let message = String(response.data);
+                const message = String(response.data);
                 toast.error(message);
             }
 
@@ -86,7 +86,7 @@ const ScheduleList: React.FC<userSchedule> = ({
         } catch (error) {
             const axiosError = error as AxiosError;
             if (axiosError.response) {
-                let message = String(axiosError.response.data);
+                const message = String(axiosError.response.data);
                 toast.error(message);
             } else {
                 console.log("오류가 발생했습니다.");
@@ -124,7 +124,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                                 {...register("mail")}
                                 placeholder="이메일을 입력해주세요"
                                 onKeyPress={(
-                                    e: React.KeyboardEvent<HTMLInputElement>
+                                    e: React.KeyboardEvent<HTMLInputElement>,
                                 ) => {
                                     if (e.key === "Enter") {
                                         handleSubmit(onSubmit)();

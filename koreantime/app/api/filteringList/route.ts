@@ -3,16 +3,16 @@ import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
 import { addDays, format } from "date-fns";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
     const body = await req.json();
     const { mail, user, ReactSelect } = body;
     const today = getCurrentTime();
 
-    let startDate = `${today.today.substring(4)}-${today.today.substring(
+    const startDate = `${today.today.substring(4)}-${today.today.substring(
         0,
-        2
+        2,
     )}-${today.today.substring(2, 4)}`;
-    let scheduleDate = today.today;
+    const scheduleDate = today.today;
     let endDate;
 
     console.log(ReactSelect.value);
@@ -43,7 +43,7 @@ export async function POST(req: Request, res: Response) {
             if (!vailedUser) {
                 return new NextResponse(
                     JSON.stringify("존재하지 않는 유저입니다."),
-                    { status: 400 }
+                    { status: 400 },
                 );
             }
         }
@@ -123,5 +123,12 @@ export async function POST(req: Request, res: Response) {
         }
 
         return NextResponse.json(mailFiltering); // 응답으로 데이터 반환
-    } catch (error) {}
+    } catch (error) {
+        return new NextResponse(
+            JSON.stringify(
+                "서버에서 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+            ),
+            { status: 500 },
+        );
+    }
 }

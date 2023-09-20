@@ -17,7 +17,7 @@ import { MakingPlan, currentUserType } from "@/app/types";
 import { size } from "@/app/types/constant";
 import { useRouter } from "next/navigation";
 import { isTimeInFuture } from "@/app/actions/getCurrentTime";
-import getCurrentLocation from "@/app/actions/getCurrentLocation";
+import toast from "react-hot-toast";
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -28,12 +28,11 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
-    const userLocation = getCurrentLocation();
 
     const getAddrData = (
         lat: number | null,
         lng: number | null,
-        fullAddress: string
+        fullAddress: string,
     ): void => {
         setLat(lat);
         setLng(lng);
@@ -97,7 +96,10 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
 
             newSchedule.onClose();
             router.refresh();
-        } catch (erros) {}
+        } catch (erros) {
+            const message = String(errors);
+            toast.error(message);
+        }
     };
 
     const bodyContent = (
@@ -180,10 +182,10 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                         onChange={(date) => {
                                             onChange(date);
                                             const selectedHours = String(
-                                                date?.getHours()
+                                                date?.getHours(),
                                             ).padStart(2, "0");
                                             const selectedMinutes = String(
-                                                date?.getMinutes()
+                                                date?.getMinutes(),
                                             ).padStart(2, "0");
                                             const formattedTime = `${selectedHours}:${selectedMinutes}`;
                                             setValue("time", formattedTime);
@@ -207,7 +209,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 title="일정 만들기"
                 onClose={newSchedule.onClose}
                 body={bodyContent}
-                children={undefined}
             />
         </>
     );

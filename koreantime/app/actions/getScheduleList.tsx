@@ -40,7 +40,7 @@ export default async function getScheduleList() {
             members: schedule.members.map((member) => member.email),
             formattedTime: Number(schedule.time.replace(":", "")),
             formattedDate: Number(
-                schedule.date.slice(4) + schedule.date.slice(0, 4)
+                schedule.date.slice(4) + schedule.date.slice(0, 4),
             ),
         }));
 
@@ -49,11 +49,11 @@ export default async function getScheduleList() {
             (schedule) =>
                 schedule.formattedDate > today ||
                 (schedule.formattedDate === today &&
-                    schedule.formattedTime > currentTime)
+                    schedule.formattedTime > currentTime),
         );
 
         return upcomingSchedules;
-    } catch (error: any) {
+    } catch (error) {
         console.error(error);
         return null;
     }
