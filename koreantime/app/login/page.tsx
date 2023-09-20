@@ -3,7 +3,7 @@ import React from "react";
 import getCurrentUser from "../actions/getCurrentUser";
 import Login from "../components/LoginForm";
 
-const loginPage = async () => {
+const LoginPage = async () => {
     const currentUser = await getCurrentUser();
 
     return (
@@ -13,4 +13,4 @@ const loginPage = async () => {
     );
 };
 
-export default loginPage;
+export default LoginPage;

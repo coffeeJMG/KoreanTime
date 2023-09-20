@@ -1,9 +1,9 @@
-import StartPage from "./startPage/page";
+import LoginPage from "./login/page";
 
 export default async function Home() {
     return (
         <>
-            <StartPage />
+            <LoginPage />
         </>
     );
 }

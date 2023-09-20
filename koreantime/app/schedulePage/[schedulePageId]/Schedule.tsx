@@ -50,8 +50,8 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         [],
     );
     const router = useRouter();
-    const { setUpdateRanking } = useRankingStore();
-    const currentUserNickName = currentUser?.nickname; // 현재 로그인한 유저
+    const { setUpdateRanking, updateRanking } = useRankingStore();
+    const currentUserMail = currentUser?.email; // 현재 로그인한 유저
 
     const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
         useState<MapLoadingForUserType>({});
@@ -102,7 +102,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         const saveAndFetchLocations = async () => {
             try {
                 const response = await axios.post("/api/userLocation", {
-                    email: currentUserNickName,
+                    email: currentUserMail,
                     lat: userLat,
                     lng: userLng,
                     scheduleId: schedule.id,
@@ -110,6 +110,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
                 if (response.status === 200) {
                     // 위치 정보 저장 성공 후 멤버 위치 정보 불러오기
+
                     const memberLocationsResponse = await axios.post(
                         "/api/getMembersLocation",
                         {
@@ -208,6 +209,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
         // 모임시간 도달 시 모임 종료 모달 오픈
         if (countDown == 0 && dDay) {
+            axios.post("/api/rankingPoint", {
+                membersRanking: updateRanking,
+            });
             deleteScheduleModal.onOpen();
         }
 
@@ -260,7 +264,6 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             rankings[member.email] = index + 1; // 이메일: 등수 형태로 저장
         });
         setUpdateRanking(rankings);
-        console.log(rankings);
     }, [membersLocation]);
 
     return (
@@ -308,7 +311,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     {memberList.map((member, index) => {
                         // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
                         const location = membersLocation.find(
-                            (loc) => loc.memberEmail === member.nickname,
+                            (loc) => loc.memberEmail === member.email,
                         );
 
                         const isLastThreeUsers = index >= memberList.length - 3;
@@ -337,7 +340,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                             handleMapLoading(e, member.email)
                                         }
                                     >
-                                        {member.email}
+                                        {member.nickname}
                                     </p>
                                     <SlLogout size={30} />
                                 </div>

@@ -16,6 +16,7 @@ export interface IFormInput {
     name?: string;
     invited: boolean;
     invitedScheduleList: string;
+    point: number;
 }
 
 const RegisterForm = () => {
@@ -34,6 +35,7 @@ const RegisterForm = () => {
             pwCheck: "",
             invited: false,
             invitedScheduleList: "",
+            point: 0,
         },
     });
 

@@ -12,7 +12,6 @@ export const DeleteScheduleModal = () => {
     const [bodyContent, setBodyContent] = useState(<></>); // 상태 변수로 변경
 
     useEffect(() => {
-        console.log(updateRanking);
         const rankingList = Object.entries(updateRanking)
             .sort(([, rankA], [, rankB]) => rankA - rankB)
             .map(([email, rank], index) => (

@@ -47,7 +47,7 @@ const ScheduleList: React.FC<userSchedule> = ({
             router.push("/login");
         }
         router.refresh();
-    }, [currentUser, router, updateScheduleList]);
+    }, [currentUser]);
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
@@ -69,7 +69,6 @@ const ScheduleList: React.FC<userSchedule> = ({
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
             data.user = currentUser?.email;
-            console.log(data);
             const response = await axios.post("api/filteringList", data);
 
             if (response.status == 200) {
