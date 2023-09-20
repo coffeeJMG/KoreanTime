@@ -13,7 +13,6 @@
         "plugin:@typescript-eslint/recommended",
         "next",
         "next/core-web-vitals",
-        "prettier/@typescript-eslint",
         "plugin:prettier/recommended"
     ],
     "settings": {
