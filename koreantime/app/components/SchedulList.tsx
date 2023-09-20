@@ -1,34 +1,42 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useNewSchedule } from '../hooks/useScheduleModal';
-import { colors, size } from '@/app/types/constant';
-import { ScheduleItem, ScheduleListProps, currentUserType } from '../types';
-import useScheduleListStore from '../stores/updateScheduleList';
-import { useEffect, useState } from 'react';
-import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { Input } from './Input';
-import ReactSelect, { StylesConfig } from 'react-select';
-import axios, { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
-import { Button } from './Button';
+import { useRouter } from "next/navigation";
+import { useNewSchedule } from "../hooks/useScheduleModal";
+import { colors, size } from "@/app/types/constant";
+import { ScheduleItem, ScheduleListProps, currentUserType } from "../types";
+import useScheduleListStore from "../stores/updateScheduleList";
+import { useEffect, useState } from "react";
+import {
+    Controller,
+    FieldValues,
+    SubmitHandler,
+    useForm,
+} from "react-hook-form";
+import { Input } from "./Input";
+import ReactSelect, { StylesConfig } from "react-select";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { Button } from "./Button";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
 const customStyles: StylesConfig = {
     container: (provided) => ({
         ...provided,
-        width: '300px',
+        width: "300px",
     }),
     control: (provided) => ({
         ...provided,
-        padding: '3%',
-        backgroundColor: 'rgb(254 240 138)',
-        borderRadius: '5px',
+        padding: "3%",
+        backgroundColor: "rgb(254 240 138)",
+        borderRadius: "5px",
     }),
 };
 
-const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => {
+const ScheduleList: React.FC<userSchedule> = ({
+    scheduleList,
+    currentUser,
+}) => {
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const { updateScheduleList } = useScheduleListStore(); // 유저가 속한 스케쥴
     const router = useRouter();
@@ -36,7 +44,7 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
-            router.push('/login');
+            router.push("/login");
         }
         router.refresh();
     }, [currentUser, router, updateScheduleList]);
@@ -53,8 +61,8 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
         reset,
     } = useForm<FieldValues>({
         defaultValues: {
-            mail: '',
-            ReactSelect: { value: '', label: '조회기간을 선택해주세요' },
+            mail: "",
+            ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
         },
     });
 
@@ -62,7 +70,7 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
         try {
             data.user = currentUser?.email;
             console.log(data);
-            const response = await axios.post('api/filteringList', data);
+            const response = await axios.post("api/filteringList", data);
 
             if (response.status == 200) {
                 setMailFilterdList(response.data);
@@ -72,8 +80,8 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
             }
 
             reset({
-                ReactSelect: { value: '', label: '조회기간을 선택해주세요' },
-                mail: '',
+                ReactSelect: { value: "", label: "조회기간을 선택해주세요" },
+                mail: "",
             });
         } catch (error) {
             const axiosError = error as AxiosError;
@@ -81,7 +89,7 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
                 const message = String(axiosError.response.data);
                 toast.error(message);
             } else {
-                console.log('오류가 발생했습니다.');
+                console.log("오류가 발생했습니다.");
             }
         }
     };
@@ -89,7 +97,9 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
     return (
         <>
             <div className="w-full flex flex-col items-center mt-10">
-                <div className={`md:full ${colors.bgColor} rounded-full hover:scale-[0.95] transition`}>
+                <div
+                    className={`md:full ${colors.bgColor} rounded-full hover:scale-[0.95] transition`}
+                >
                     <p
                         className={`${colors.textColor} ${size.titleSize} p-5 text-center cursor-pointer whitespace-nowrap`}
                         onClick={newSchedule.onOpen}
@@ -111,10 +121,12 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
                             <Input
                                 type="text"
                                 radius
-                                {...register('mail')}
+                                {...register("mail")}
                                 placeholder="이메일을 입력해주세요"
-                                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                    if (e.key === 'Enter') {
+                                onKeyPress={(
+                                    e: React.KeyboardEvent<HTMLInputElement>,
+                                ) => {
+                                    if (e.key === "Enter") {
                                         handleSubmit(onSubmit)();
                                     }
                                 }}
@@ -128,12 +140,12 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
                                     styles={customStyles}
                                     {...field}
                                     options={[
-                                        { value: '오늘', label: '오늘' },
+                                        { value: "오늘", label: "오늘" },
                                         {
-                                            value: '7일',
-                                            label: '7일',
+                                            value: "7일",
+                                            label: "7일",
                                         },
-                                        { value: '30일', label: '30일' },
+                                        { value: "30일", label: "30일" },
                                     ]}
                                     isClearable
                                     instanceId="filterId"
@@ -154,18 +166,32 @@ const ScheduleList: React.FC<userSchedule> = ({ scheduleList, currentUser }) => 
                     {mailFilterdList && mailFilterdList.length > 0 ? (
                         mailFilterdList.map((item) => (
                             <div
-                                onClick={() => router.push(`/schedulePage/${item.id}`)}
+                                onClick={() =>
+                                    router.push(`/schedulePage/${item.id}`)
+                                }
                                 key={item.id}
                                 className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer`}
                             >
                                 <div>
-                                    <p className={`font-medium ${size.titleSize}`}>{item.title}</p>
+                                    <p
+                                        className={`font-medium ${size.titleSize}`}
+                                    >
+                                        {item.title}
+                                    </p>
                                 </div>
 
                                 <div className="flex flex-col gap-1">
-                                    <p className={`${size.listSize}`}>날짜 : {item.date}</p>
-                                    <p className={`${size.listSize}`}>시간 : {item.time}</p>
-                                    <p className={`hidden xl:block ${size.listSize}`}>장소 : {item.place}</p>
+                                    <p className={`${size.listSize}`}>
+                                        날짜 : {item.date}
+                                    </p>
+                                    <p className={`${size.listSize}`}>
+                                        시간 : {item.time}
+                                    </p>
+                                    <p
+                                        className={`hidden xl:block ${size.listSize}`}
+                                    >
+                                        장소 : {item.place}
+                                    </p>
                                 </div>
                             </div>
                         ))
