@@ -22,6 +22,13 @@ const MapLoader = dynamic(() => import("../../components/MapLoader"), {
     ssr: false,
 });
 
+type MemberLocation = {
+    id: string;
+    lat: number;
+    lng: number;
+    memberEmail: string;
+    scheduleId: string;
+};
 type ScheduleProps = CombinedType & currentUserType;
 
 const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
@@ -33,7 +40,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
-    const [membersLocation, setMembersLocation] = useState([]);
+    const [membersLocation, setMembersLocation] = useState<MemberLocation[]>(
+        [],
+    );
     const router = useRouter();
 
     const currentUserNickName = currentUser?.nickname; // 현재 로그인한 유저
@@ -271,22 +280,26 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                 </div>
 
                 <div className="flex flex-col w-1/2">
-                    {memberList.map((item, index) => {
+                    {memberList.map((member, index) => {
+                        // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
+                        const location = membersLocation.find(
+                            (loc) => loc.memberEmail === member.nickname,
+                        );
+
                         const isLastThreeUsers = index >= memberList.length - 3;
 
                         return (
                             <div
-                                className="border-solid border-2 border-neutral-400 w-full 	box-sizing:border-box"
-                                key={item.email}
+                                className="border-solid border-2 border-neutral-400 w-full box-sizing:border-box"
+                                key={member.email}
                             >
-                                {/* 6, 7, 8번 유저에 대한 지도는 박스 위쪽에 표시 */}
                                 {isLastThreeUsers &&
-                                mapLoadingForUser[item.email] ? (
+                                mapLoadingForUser[member.email] ? (
                                     <div className="w-full">
                                         <MapLoader
-                                            id={`map-${schedule.members[index].email}`}
-                                            lat={userLat}
-                                            lng={userLng}
+                                            id={`map-${member.email}`}
+                                            lat={location ? location.lat : 0} // defaultLat은 임의의 디폴트 위도값
+                                            lng={location ? location.lng : 0} // defaultLng은 임의의 디폴트 경도값
                                             height="200px"
                                         />
                                     </div>
@@ -296,22 +309,21 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                     <p
                                         className={`${size.titleSize}`}
                                         onClick={(e) =>
-                                            handleMapLoading(e, item.email)
+                                            handleMapLoading(e, member.email)
                                         }
                                     >
-                                        {item.nickname}
+                                        {member.email}
                                     </p>
                                     <SlLogout size={30} />
                                 </div>
 
-                                {/* 1,2,3,4,5번 유저의 지도는 박스 아래쪽에 */}
                                 {!isLastThreeUsers &&
-                                mapLoadingForUser[item.email] ? (
+                                mapLoadingForUser[member.email] ? (
                                     <div className="w-full">
                                         <MapLoader
-                                            id={`map-${schedule.members[index].email}`}
-                                            lat={userLat}
-                                            lng={userLng}
+                                            id={`map-${member.email}`}
+                                            lat={location ? location.lat : 0}
+                                            lng={location ? location.lng : 0}
                                             height="200px"
                                         />
                                     </div>

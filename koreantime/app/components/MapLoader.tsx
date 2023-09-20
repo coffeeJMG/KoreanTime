@@ -134,7 +134,21 @@ const MapLoader: React.FC<MapLoaderProps> = ({
 
     return (
         <div>
-            <div id={id} style={{ width: "100%", height: height }}></div>
+            {lat === 0 && lng === 0 ? (
+                <div
+                    style={{
+                        width: "100%",
+                        height: height,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    유저의 최초 접속이 필요합니다
+                </div>
+            ) : (
+                <div id={id} style={{ width: "100%", height: height }}></div>
+            )}
         </div>
     );
 };
