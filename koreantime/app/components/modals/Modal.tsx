@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
+import { useCallback, useEffect, useState } from 'react';
+import { IoMdClose } from 'react-icons/io';
 
 interface ModalProps {
     isOpen?: boolean;
@@ -74,8 +74,8 @@ export const Modal: React.FC<ModalProps> = ({
                     translate
                     duration-300
                     h-full
-                    ${showModal ? "translate-y-0" : "translate-y-full"}
-                    ${showModal ? "opacity-100" : "opacity-0"}
+                    ${showModal ? 'translate-y-0' : 'translate-y-full'}
+                    ${showModal ? 'opacity-100' : 'opacity-0'}
                 `}
                 >
                     <div
