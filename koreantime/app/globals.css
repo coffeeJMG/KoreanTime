@@ -1,11 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 html,
 body,
 :root {
     height: 100%;
+}
+
+@media (max-width: 575px) {
+    .max-xs\:hidden {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .max-sm\:hidden {
+        display: none;
+    }
+}
+
+@media (max-width: 991px) {
+    .max-md\:hidden {
+        display: none;
+    }
 }
 
 @keyframes blink {
