@@ -14,6 +14,12 @@ import React from "react";
 import { Button } from "../../components/Button";
 import { size } from "../../types/constant";
 import useGetCurrentLocation from "../../actions/getCurrentLocation";
+import getUserDistance from "@/app/actions/getUserDistance";
+import { useRankingStore } from "@/app/stores/ranking";
+
+type RankingsType = {
+    [email: string]: number;
+};
 
 type MapLoadingForUserType = {
     [key: string]: boolean;
@@ -22,6 +28,13 @@ const MapLoader = dynamic(() => import("../../components/MapLoader"), {
     ssr: false,
 });
 
+type MemberLocation = {
+    id: string;
+    lat: number;
+    lng: number;
+    memberEmail: string;
+    scheduleId: string;
+};
 type ScheduleProps = CombinedType & currentUserType;
 
 const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
@@ -33,11 +46,12 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
-    const [membersLocation, setMembersLocation] = useState([]);
+    const [membersLocation, setMembersLocation] = useState<MemberLocation[]>(
+        [],
+    );
     const router = useRouter();
-
-    const currentUserNickName = currentUser?.nickname; // 현재 로그인한 유저
-
+    const { setUpdateRanking, updateRanking } = useRankingStore();
+    const currentUserMail = currentUser?.email; // 현재 로그인한 유저
     const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
         useState<MapLoadingForUserType>({});
 
@@ -87,17 +101,15 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         const saveAndFetchLocations = async () => {
             try {
                 const response = await axios.post("/api/userLocation", {
-                    email: currentUserNickName,
+                    email: currentUserMail,
                     lat: userLat,
                     lng: userLng,
                     scheduleId: schedule.id,
                 });
 
-                console.log(schedule.id);
                 if (response.status === 200) {
-                    console.log("위치 정보가 성공적으로 저장되었습니다.");
-
                     // 위치 정보 저장 성공 후 멤버 위치 정보 불러오기
+
                     const memberLocationsResponse = await axios.post(
                         "/api/getMembersLocation",
                         {
@@ -196,11 +208,14 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
         // 모임시간 도달 시 모임 종료 모달 오픈
         if (countDown == 0 && dDay) {
+            axios.post("/api/rankingPoint", {
+                membersRanking: updateRanking,
+            });
             deleteScheduleModal.onOpen();
         }
 
         // 모임 시간 1분뒤에 모임삭제
-        if (countDown < -60 && dDay) {
+        if (countDown == -60 && dDay) {
             handleDeleteModal();
             deleteScheduleModal.onClose();
             router.push("/startPage");
@@ -227,6 +242,36 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             newState[email] = true;
             return newState;
         });
+    };
+
+    useEffect(() => {
+        // 1. 각 유저의 도착지점 까지의 거리를 객체로 생성
+        const distances = membersLocation.map((member) => {
+            const distance = getUserDistance(lat, lng, member.lat, member.lng);
+            return {
+                email: member.memberEmail,
+                distance: distance,
+            };
+        });
+
+        // 2. 해당 배열을 거리 기준으로 오름차순으로 정렬
+        distances.sort((a, b) => a.distance - b.distance);
+
+        // 3. 정렬된 배열을 순회하면서 이메일을 키로, 등수를 값으로 하는 객체
+        const rankings: RankingsType = {};
+        distances.forEach((member, index) => {
+            rankings[member.email] = index + 1; // 이메일: 등수 형태로 저장
+        });
+        setUpdateRanking(rankings);
+    }, [membersLocation]);
+
+    const cancelSchedule = async () => {
+        await axios.post("/api/cancelSchedule", {
+            id: currentUser?.email,
+            scheduleId: schedule.id,
+        });
+
+        router.push("/startPage");
     };
 
     return (
@@ -271,47 +316,65 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                 </div>
 
                 <div className="flex flex-col w-1/2">
-                    {memberList.map((item, index) => {
+                    {memberList.map((member, index) => {
+                        // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
+                        const location = membersLocation.find(
+                            (loc) => loc.memberEmail === member.email,
+                        );
+
                         const isLastThreeUsers = index >= memberList.length - 3;
 
                         return (
                             <div
-                                className="border-solid border-2 border-neutral-400 w-full 	box-sizing:border-box"
-                                key={item.email}
+                                className="border-solid border-2 border-neutral-400 w-full box-sizing:border-box"
+                                key={member.email}
                             >
-                                {/* 6, 7, 8번 유저에 대한 지도는 박스 위쪽에 표시 */}
                                 {isLastThreeUsers &&
-                                mapLoadingForUser[item.email] ? (
+                                mapLoadingForUser[member.email] ? (
                                     <div className="w-full">
                                         <MapLoader
-                                            id={`map-${schedule.members[index].email}`}
-                                            lat={userLat}
-                                            lng={userLng}
+                                            id={`map-${member.email}`}
+                                            lat={location ? location.lat : 0} // defaultLat은 임의의 디폴트 위도값
+                                            lng={location ? location.lng : 0} // defaultLng은 임의의 디폴트 경도값
                                             height="200px"
                                         />
                                     </div>
                                 ) : null}
 
                                 <div className="flex justify-between p-5">
-                                    <p
-                                        className={`${size.titleSize}`}
-                                        onClick={(e) =>
-                                            handleMapLoading(e, item.email)
-                                        }
-                                    >
-                                        {item.nickname}
-                                    </p>
-                                    <SlLogout size={30} />
+                                    <div>
+                                        <p
+                                            className={`${size.titleSize}`}
+                                            onClick={(e) =>
+                                                handleMapLoading(
+                                                    e,
+                                                    member.email,
+                                                )
+                                            }
+                                        >
+                                            {member.nickname}
+                                        </p>
+                                        <p>{member.point}</p>
+                                    </div>
+
+                                    {(currentUser?.email === member.email ||
+                                        currentUser?.email ===
+                                            schedule.hostUser) && (
+                                        <SlLogout
+                                            size={30}
+                                            onClick={cancelSchedule}
+                                            className="cursor-pointer"
+                                        />
+                                    )}
                                 </div>
 
-                                {/* 1,2,3,4,5번 유저의 지도는 박스 아래쪽에 */}
                                 {!isLastThreeUsers &&
-                                mapLoadingForUser[item.email] ? (
+                                mapLoadingForUser[member.email] ? (
                                     <div className="w-full">
                                         <MapLoader
-                                            id={`map-${schedule.members[index].email}`}
-                                            lat={userLat}
-                                            lng={userLng}
+                                            id={`map-${member.email}`}
+                                            lat={location ? location.lat : 0}
+                                            lng={location ? location.lng : 0}
                                             height="200px"
                                         />
                                     </div>

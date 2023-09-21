@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     const scheduleDate = today.today;
     let endDate;
 
-    console.log(ReactSelect.value);
     if (ReactSelect.value !== "") {
         switch (ReactSelect.value) {
             case "오늘":

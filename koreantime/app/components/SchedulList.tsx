@@ -38,7 +38,6 @@ const ScheduleList: React.FC<userSchedule> = ({
     currentUser,
 }) => {
     const newSchedule = useNewSchedule(); // 스케쥴 정보
-    const { updateScheduleList } = useScheduleListStore(); // 유저가 속한 스케쥴
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
     // 로그인이 안되어있을 시 로그인 페이지 이동
@@ -47,7 +46,7 @@ const ScheduleList: React.FC<userSchedule> = ({
             router.push("/login");
         }
         router.refresh();
-    }, [currentUser, router, updateScheduleList]);
+    }, []);
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
@@ -69,7 +68,6 @@ const ScheduleList: React.FC<userSchedule> = ({
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
             data.user = currentUser?.email;
-            console.log(data);
             const response = await axios.post("api/filteringList", data);
 
             if (response.status == 200) {

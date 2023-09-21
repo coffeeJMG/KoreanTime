@@ -39,6 +39,7 @@ export async function POST(request: Request) {
             data: {
                 email: currentUser.email,
                 nickname: currentUser.nickname,
+                point: currentUser.point,
                 schedule: {
                     connect: {
                         id: body, // assuming body contains the schedule ID
