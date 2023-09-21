@@ -59,15 +59,9 @@ const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <div
-            className={` flex 
-                flex-col
-                justify-center
-                items-center
-                ${colors.bgColor}
-                w-2/5    
-                mx-auto
-                mt-10
-                ${colors.textColor}`}
+            className={`flex flex-col justify-center items-center ${colors.bgColor} 
+                    w-full  sm:w-1/2 md:w-1/2 lg:w-2/5 
+                    mx-auto mt-10 ${colors.textColor}`}
         >
             <h2
                 className={`${colors.textColor} m-auto mt-10 ${size.titleSize} hidden lg:block`}
