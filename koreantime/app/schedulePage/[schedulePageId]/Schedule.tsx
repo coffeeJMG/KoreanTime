@@ -245,23 +245,48 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     };
 
     useEffect(() => {
-        // 1. 각 유저의 도착지점 까지의 거리를 객체로 생성
-        const distances = membersLocation.map((member) => {
+        // 현재 시간을 기준으로 (제시 시간을 알고 있다면 그것을 기준으로)
+        const currentTime = new Date().getTime();
+
+        // 1. 각 유저의 도착지점까지의 거리 및 도착 시간을 객체로 생성
+        const memberData = membersLocation.map((member) => {
             const distance = getUserDistance(lat, lng, member.lat, member.lng);
+            const arrivalTime = distance <= 50 ? currentTime : null; // 50m 내 도착시 시간 저장, 아니면 null
             return {
                 email: member.memberEmail,
                 distance: distance,
+                arrivalTime: arrivalTime,
             };
         });
 
-        // 2. 해당 배열을 거리 기준으로 오름차순으로 정렬
-        distances.sort((a, b) => a.distance - b.distance);
+        // 2. 도착한 사용자와 도착하지 않은 사용자로 구분
+        const arrivedMembers = memberData.filter(
+            (member) => member.arrivalTime !== null,
+        );
+        const unarrivedMembers = memberData.filter(
+            (member) => member.arrivalTime === null,
+        );
 
-        // 3. 정렬된 배열을 순회하면서 이메일을 키로, 등수를 값으로 하는 객체
-        const rankings: RankingsType = {};
-        distances.forEach((member, index) => {
-            rankings[member.email] = index + 1; // 이메일: 등수 형태로 저장
+        // 3. 도착한 사용자는 도착 시간 순으로, 도착하지 않은 사용자는 거리 순으로 정렬
+
+        arrivedMembers.sort((a, b) => {
+            if (a.arrivalTime === null) return 1; // a가 뒤로 가게 합니다.
+            if (b.arrivalTime === null) return -1; // b가 뒤로 가게 합니다.
+            return a.arrivalTime - b.arrivalTime; // 정상적인 비교
         });
+        unarrivedMembers.sort((a, b) => a.distance - b.distance);
+
+        // 4. 등수 부여
+        const rankings: RankingsType = {};
+
+        arrivedMembers.forEach((member, index) => {
+            rankings[member.email] = index + 1;
+        });
+
+        unarrivedMembers.forEach((member, index) => {
+            rankings[member.email] = index + 1 + arrivedMembers.length;
+        });
+
         setUpdateRanking(rankings);
     }, [membersLocation]);
 
