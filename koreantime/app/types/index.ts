@@ -10,6 +10,7 @@ export type User = {
     hashedPassword?: string | null;
     nickname: string;
     invited: boolean;
+    point: number;
 };
 
 export type SafeUser = Omit<
@@ -99,6 +100,7 @@ export type CombinedType = {
         members: {
             nickname: string;
             email: string;
+            point: number;
         }[];
     };
 };

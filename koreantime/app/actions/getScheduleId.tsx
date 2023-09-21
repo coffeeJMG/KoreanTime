@@ -16,7 +16,8 @@ export const getScheduleId = async (params: IParams) => {
             members: {
                 select: {
                     email: true,
-                    nickname: true, // Add other member properties as needed
+                    nickname: true,
+                    point: true,
                 },
             },
         },

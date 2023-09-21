@@ -52,7 +52,6 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const router = useRouter();
     const { setUpdateRanking, updateRanking } = useRankingStore();
     const currentUserMail = currentUser?.email; // 현재 로그인한 유저
-
     const [mapLoadingForUser, setMapLoadingForUser] = // 유저의 지도 열람여부 관리
         useState<MapLoadingForUserType>({});
 
@@ -334,15 +333,26 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                 ) : null}
 
                                 <div className="flex justify-between p-5">
-                                    <p
-                                        className={`${size.titleSize}`}
-                                        onClick={(e) =>
-                                            handleMapLoading(e, member.email)
-                                        }
-                                    >
-                                        {member.nickname}
-                                    </p>
-                                    <SlLogout size={30} />
+                                    <div>
+                                        <p
+                                            className={`${size.titleSize}`}
+                                            onClick={(e) =>
+                                                handleMapLoading(
+                                                    e,
+                                                    member.email,
+                                                )
+                                            }
+                                        >
+                                            {member.nickname}
+                                        </p>
+                                        <p>{member.point}</p>
+                                    </div>
+
+                                    {(currentUser?.email === member.email ||
+                                        currentUser?.email ===
+                                            schedule.hostUser) && (
+                                        <SlLogout size={30} />
+                                    )}
                                 </div>
 
                                 {!isLastThreeUsers &&

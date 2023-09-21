@@ -29,6 +29,7 @@ export async function POST(request: Request) {
                     {
                         email: currentUser.email,
                         nickname: currentUser.nickname,
+                        point: currentUser.point,
                     },
                 ],
             },
