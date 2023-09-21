@@ -265,6 +265,15 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         setUpdateRanking(rankings);
     }, [membersLocation]);
 
+    const cancelSchedule = async () => {
+        await axios.post("/api/cancelSchedule", {
+            id: currentUser?.email,
+            scheduleId: schedule.id,
+        });
+
+        router.push("/startPage");
+    };
+
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
@@ -351,7 +360,11 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                     {(currentUser?.email === member.email ||
                                         currentUser?.email ===
                                             schedule.hostUser) && (
-                                        <SlLogout size={30} />
+                                        <SlLogout
+                                            size={30}
+                                            onClick={cancelSchedule}
+                                            className="cursor-pointer"
+                                        />
                                     )}
                                 </div>
 
