@@ -35,7 +35,6 @@ export default async function RootLayout({
                     <NewScheduleModal currentUser={currentUser} />
                     <InviteModal />
                     <DeleteScheduleModal />
-
                     <InvitationModal invitationList={invitationList} />
                 </ClientOnly>
                 <Container>{children}</Container>
