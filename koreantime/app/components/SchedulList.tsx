@@ -23,7 +23,7 @@ type userSchedule = ScheduleListProps & currentUserType;
 const customStyles: StylesConfig = {
     container: (provided) => ({
         ...provided,
-        width: "300px",
+        width: "100%",
     }),
     control: (provided) => ({
         ...provided,
@@ -105,7 +105,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                         모임 생성하기
                     </p>
                 </div>
-                <div className="grid grid-cols-3 gap-10 w-2/3 p-10 items-center">
+                <div className="grid xs:grid-cols-1 sm:grid-cols-3 gap-10 p-10 items-center">
                     <Button
                         full
                         onClick={() => {
@@ -131,7 +131,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                             />
                         </div>
                     </form>
-                    <div className="w-1/2 mt-3">
+                    <div className=" mt-3">
                         <Controller
                             render={({ field }) => (
                                 <ReactSelect
@@ -160,7 +160,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 border-2 p-10 mt-10">
+                <div className="grid xs:grid-cols-1 sm:grid-cols-2 gap-10 border-2 p-10 mt-10">
                     {mailFilterdList && mailFilterdList.length > 0 ? (
                         mailFilterdList.map((item) => (
                             <div
@@ -186,7 +186,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                                         시간 : {item.time}
                                     </p>
                                     <p
-                                        className={`hidden xl:block ${size.listSize}`}
+                                        className={`hidden sm:block ${size.listSize}`}
                                     >
                                         장소 : {item.place}
                                     </p>

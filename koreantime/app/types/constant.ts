@@ -10,4 +10,5 @@ export const size = {
     textSize: "text-sm",
     listSize: "text-lg",
     bannerSize: "text-4xl",
+    mobileBanner: "text-2xl",
 };
