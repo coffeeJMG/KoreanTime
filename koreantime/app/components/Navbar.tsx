@@ -25,35 +25,41 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
         <>
             <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-400 border-b-2">
                 <div>
-                    <CgSandClock size={64} />
+                    <CgSandClock size={40} />
                 </div>
 
                 <div className="justify-self-center">
                     <p
-                        className={`${size.mobileBanner} md:${size.bannerSize} cursor-pointer`}
+                        className={`text-2xl md:text-4xl cursor-pointer`}
                         onClick={() => router.push("/startPage")}
                     >
                         일찍 와주길 바래
                     </p>
                 </div>
 
-                <div className="flex justify-end gap-3 items-center">
-                    {currentUser ? <p>{currentUser.name} </p> : null}
-                    <FcInvite
-                        className="cursor-pointer"
-                        size={64}
-                        onClick={invitationModal.onOpen}
-                    />
-                    <AiOutlineHome
-                        className="cursor-pointer pb-1"
-                        onClick={() => router.push("/startPage")}
-                        size={64}
-                    />
-                    <SlLogout
-                        className="cursor-pointer pb-2"
-                        onClick={async () => await signOut()}
-                        size={64}
-                    />
+                <div className="flex justify-end gap-3 items-center flex-col sm:flex-row">
+                    {currentUser ? (
+                        <p className={`${size.titleSize}`}>
+                            {currentUser.name}{" "}
+                        </p>
+                    ) : null}
+                    <div className="flex flex-row gap-1">
+                        <FcInvite
+                            className="cursor-pointer"
+                            size={40}
+                            onClick={invitationModal.onOpen}
+                        />
+                        <AiOutlineHome
+                            className="cursor-pointer pb-1"
+                            onClick={() => router.push("/startPage")}
+                            size={40}
+                        />
+                        <SlLogout
+                            className="cursor-pointer pb-2"
+                            onClick={async () => await signOut()}
+                            size={40}
+                        />
+                    </div>
                 </div>
             </div>
         </>
