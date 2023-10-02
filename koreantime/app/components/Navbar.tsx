@@ -37,7 +37,7 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                     </p>
                 </div>
 
-                <div className="flex justify-end gap-3 items-center flex-col sm:flex-row">
+                <div className="flex justify-end gap-3 items-center flex-col md:flex-row">
                     {currentUser ? (
                         <p className={`${size.titleSize}`}>
                             {currentUser.name}{" "}

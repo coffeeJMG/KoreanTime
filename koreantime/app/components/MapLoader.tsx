@@ -16,7 +16,7 @@ interface MemberLocation {
 interface MapLoaderProps {
     lat: number;
     lng: number;
-    height: string;
+    height: string | undefined;
     id: string;
     membersLocation?: MemberLocation[];
 }
