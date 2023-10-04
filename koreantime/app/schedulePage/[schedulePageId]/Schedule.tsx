@@ -37,6 +37,10 @@ type MemberLocation = {
 };
 type ScheduleProps = CombinedType & currentUserType;
 
+interface OpacityMap {
+    [email: string]: number;
+}
+
 const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const inviteModal = useInviteModal(); // 초대장 모달
     const currentLocation = useGetCurrentLocation(); // 유저의 현재위치
@@ -61,6 +65,8 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [hours, setHours] = useState(initialTimeData.hours); //  시간
     const [minutes, setMinutes] = useState(initialTimeData.minutes); //  분
     const [seconds, setSeconds] = useState(initialTimeData.seconds); //  초
+    const [opacity, setOpacity] = useState<OpacityMap>({});
+    const [openLocation, setOpenLocation] = useState(false);
 
     // 매 초마다 시간 반영
     useEffect(() => {
@@ -188,6 +194,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         if (countDown <= 1800 && countDown > 0 && dDay) {
             setIsLastThirtyMinutes(true);
             setIsButtonDisabled(true);
+            setOpenLocation(true);
         } else {
             setIsLastThirtyMinutes(false);
             setIsButtonDisabled(false);
@@ -244,6 +251,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         });
     };
 
+    const handleOpacityChange = (email: string, newOpacity: number) => {
+        setOpacity((prev) => ({ ...prev, [email]: newOpacity }));
+    };
     useEffect(() => {
         // 현재 시간을 기준으로 (제시 시간을 알고 있다면 그것을 기준으로)
         const currentTime = new Date().getTime();
@@ -301,13 +311,14 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
     const getMapHeight = () => {
         if (typeof window !== "undefined") {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth > 991) {
                 return "780px";
             } else {
                 return "480px";
             }
         }
     };
+
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
@@ -368,27 +379,59 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                     <div className="w-full">
                                         <MapLoader
                                             id={`map-${member.email}`}
-                                            lat={location ? location.lat : 0} // defaultLat은 임의의 디폴트 위도값
-                                            lng={location ? location.lng : 0} // defaultLng은 임의의 디폴트 경도값
+                                            lat={location ? location.lat : 0}
+                                            lng={location ? location.lng : 0}
                                             height="200px"
+                                            opacity={opacity[member.email]}
                                         />
                                     </div>
                                 ) : null}
 
                                 <div className="flex justify-between p-5">
-                                    <div>
-                                        <p
-                                            className={`${size.titleSize}`}
-                                            onClick={(e) =>
-                                                handleMapLoading(
-                                                    e,
-                                                    member.email,
-                                                )
-                                            }
-                                        >
-                                            {member.nickname}
-                                        </p>
-                                        <p>{member.point}</p>
+                                    <div className="flex items-center gap-10">
+                                        <div>
+                                            <p
+                                                className={`${size.titleSize}`}
+                                                onClick={(e) =>
+                                                    handleMapLoading(
+                                                        e,
+                                                        member.email,
+                                                    )
+                                                }
+                                            >
+                                                {member.nickname}
+                                            </p>
+                                            <p>{member.point}</p>
+                                        </div>
+                                        <div>
+                                            {currentUser?.email ===
+                                            member.email ? (
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max={
+                                                        openLocation
+                                                            ? "1"
+                                                            : "0.1"
+                                                    }
+                                                    step={
+                                                        openLocation
+                                                            ? "0.1"
+                                                            : "0.01"
+                                                    }
+                                                    value={
+                                                        opacity[member.email] ||
+                                                        0
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleOpacityChange(
+                                                            member.email,
+                                                            e.target.value,
+                                                        )
+                                                    }
+                                                />
+                                            ) : null}{" "}
+                                        </div>
                                     </div>
 
                                     {(currentUser?.email === member.email ||
@@ -410,6 +453,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                             lat={location ? location.lat : 0}
                                             lng={location ? location.lng : 0}
                                             height="200px"
+                                            opacity={opacity[member.email]}
                                         />
                                     </div>
                                 ) : null}
