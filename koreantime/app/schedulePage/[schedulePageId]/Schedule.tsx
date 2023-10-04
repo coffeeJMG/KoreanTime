@@ -299,6 +299,15 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         router.push("/startPage");
     };
 
+    const getMapHeight = () => {
+        if (typeof window !== "undefined") {
+            if (window.innerWidth >= 768) {
+                return "780px";
+            } else {
+                return "480px";
+            }
+        }
+    };
     return (
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
@@ -329,18 +338,18 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                 </Button>
             </div>
 
-            <div className="flex flex-row w-full gap-10">
-                <div className="w-1/2">
+            <div className="flex flex-col md:flex-row w-full gap-10">
+                <div className="w-full md:w-1/2">
                     <MapLoader
                         lat={lat}
                         lng={lng}
                         membersLocation={membersLocation}
-                        height="780px"
+                        height={getMapHeight()}
                         id={`map-${schedule.id}`}
                     />
                 </div>
 
-                <div className="flex flex-col w-1/2">
+                <div className="flex flex-row md:flex-col w-full md:w-1/2">
                     {memberList.map((member, index) => {
                         // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
                         const location = membersLocation.find(

@@ -59,12 +59,10 @@ const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <div
-            className={`flex flex-col justify-center items-center ${colors.bgColor} 
-                    w-full  sm:w-1/2 md:w-1/2 lg:w-2/5 
-                    mx-auto mt-10 ${colors.textColor}`}
+            className={`flex flex-col justify-center items-center ${colors.bgColor} md:w-2/5 mx-auto mt-10 ${colors.textColor}`}
         >
             <h2
-                className={`${colors.textColor} m-auto mt-10 ${size.titleSize} hidden lg:block`}
+                className={`${colors.textColor} m-auto mt-10 ${size.titleSize} `}
             >
                 환영합니다
             </h2>
@@ -94,7 +92,7 @@ const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
                         {errors?.email?.message}
                     </p>
                 ) : null}
-                <span className={`${colors.textColor}`}>비밀번호</span>
+                <span className={`${colors.textColor} mt-2`}>비밀번호</span>
                 <Input
                     type="password"
                     placeholder={"6글자 이상 입력해주세요"}
@@ -125,7 +123,7 @@ const LoginForm: React.FC<currentUserType> = ({ currentUser }) => {
                     아직 계정이 없으시다면!
                 </span>
                 <span
-                    className={`${colors.textColor} cursor-pointer`}
+                    className={`${colors.textColor} cursor-pointer mb-10 sm:mb-0`}
                     onClick={() => {
                         router.push("/register");
                     }}

@@ -46,7 +46,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 max={max}
                 disabled={disabled}
                 placeholder={placeholder}
-                className={`mt-3 p-4 ${
+                className={`input mt-3 p-4 ${
                     colors.inputColor
                 } hover:outline-none outline-none ${colors.textColor} 
                 ${small ? "w-1/2" : "w-full"}
