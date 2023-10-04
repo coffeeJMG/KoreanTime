@@ -28,7 +28,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
     height,
     membersLocation,
     id,
-    opacity,
+    opacity = 0,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -128,7 +128,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
             });
         };
 
-        mapScript.addEventListener("load", onLoadKakaoMap);
+        mapScript.addEventListener("load", onLoadKakaoMap, { passive: true });
         return () => {
             mapScript.removeEventListener("load", onLoadKakaoMap);
         };

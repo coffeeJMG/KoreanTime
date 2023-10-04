@@ -357,6 +357,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                         membersLocation={membersLocation}
                         height={getMapHeight()}
                         id={`map-${schedule.id}`}
+                        opacity={1}
                     />
                 </div>
 
@@ -426,7 +427,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                                     onChange={(e) =>
                                                         handleOpacityChange(
                                                             member.email,
-                                                            e.target.value,
+                                                            Number(
+                                                                e.target.value,
+                                                            ),
                                                         )
                                                     }
                                                 />
