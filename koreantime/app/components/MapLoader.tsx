@@ -19,6 +19,7 @@ interface MapLoaderProps {
     height: string | undefined;
     id: string;
     membersLocation?: MemberLocation[];
+    opacity?: number;
 }
 
 const MapLoader: React.FC<MapLoaderProps> = ({
@@ -27,6 +28,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
     height,
     membersLocation,
     id,
+    opacity = 0,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -126,7 +128,7 @@ const MapLoader: React.FC<MapLoaderProps> = ({
             });
         };
 
-        mapScript.addEventListener("load", onLoadKakaoMap);
+        mapScript.addEventListener("load", onLoadKakaoMap, { passive: true });
         return () => {
             mapScript.removeEventListener("load", onLoadKakaoMap);
         };
@@ -147,7 +149,14 @@ const MapLoader: React.FC<MapLoaderProps> = ({
                     유저의 최초 접속이 필요합니다
                 </div>
             ) : (
-                <div id={id} style={{ width: "100%", height: height }}></div>
+                <div
+                    id={id}
+                    style={{
+                        width: "100%",
+                        height: height,
+                        opacity: opacity,
+                    }}
+                ></div>
             )}
         </div>
     );
