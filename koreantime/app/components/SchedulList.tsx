@@ -19,7 +19,7 @@ import { Button } from "./Button";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
-const selectStyles: StylesConfig = {
+const scheduleSelectStyles: StylesConfig = {
     container: (provided) => ({
         ...provided,
         width: "100%",
@@ -157,7 +157,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                         <Controller
                             render={({ field }) => (
                                 <ReactSelect
-                                    styles={selectStyles}
+                                    styles={scheduleSelectStyles}
                                     {...field}
                                     options={[
                                         { value: "오늘", label: "오늘" },
