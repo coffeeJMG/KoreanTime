@@ -23,14 +23,14 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-400 border-b-2">
+            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-320 border-b-2">
                 <div>
-                    <CgSandClock size={40} />
+                    <CgSandClock size={32} />
                 </div>
 
                 <div className="justify-self-center">
                     <p
-                        className={`text-2xl md:text-4xl cursor-pointer`}
+                        className={`text-xl md:text-4xl cursor-pointer`}
                         onClick={() => router.push("/startPage")}
                     >
                         일찍 와주길 바래
@@ -46,18 +46,18 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                     <div className="flex flex-row gap-1">
                         <FcInvite
                             className="cursor-pointer"
-                            size={40}
+                            size={32}
                             onClick={invitationModal.onOpen}
                         />
                         <AiOutlineHome
                             className="cursor-pointer pb-1"
                             onClick={() => router.push("/startPage")}
-                            size={40}
+                            size={32}
                         />
                         <SlLogout
                             className="cursor-pointer pb-2"
                             onClick={async () => await signOut()}
-                            size={40}
+                            size={32}
                         />
                     </div>
                 </div>

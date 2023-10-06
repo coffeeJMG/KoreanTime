@@ -67,6 +67,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [seconds, setSeconds] = useState(initialTimeData.seconds); //  초
     const [opacity, setOpacity] = useState<OpacityMap>({});
     const [openLocation, setOpenLocation] = useState(false);
+    const [mobileSize, setMobileSize] = useState(false);
 
     // 매 초마다 시간 반영
     useEffect(() => {
@@ -323,31 +324,56 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         <>
             <div className="w-full flex justify-center gap-10 mb-3 items-stretch">
                 <Button big>
-                    {currentTime}
+                    <p className="text-base xs:text-2xl">{currentTime}</p>
+
                     {dDay && isLastTenMinutes ? (
-                        <p className="blinking">
-                            남은시간 {Math.floor(countDown / 60)} :{" "}
-                            {countDown % 60}
-                        </p>
+                        <div className="flex flex-col">
+                            <p className="blinking text-base xs:text-2xl">
+                                타이머 {Math.floor(countDown / 60)} :{" "}
+                                {countDown % 60}
+                            </p>
+                        </div>
                     ) : null}
                     {dDay && isLastThirtyMinutes ? (
-                        <p>
-                            남은시간 {Math.floor(countDown / 60)} :{" "}
-                            {countDown % 60}
-                        </p>
+                        <div className="flex flex-col">
+                            <p className="blinking text-base xs:text-2xl">
+                                타이머 {Math.floor(countDown / 60)} :{" "}
+                                {countDown % 60}
+                            </p>
+                        </div>
                     ) : null}
                 </Button>
-                <Button
+
+                {window.innerWidth < 575 ? (
+                    <Button
+                        disabled={isButtonDisabled}
+                        onClick={inviteModal.onOpen}
+                        small
+                    >
+                        초대하기
+                    </Button>
+                ) : (
+                    <Button
+                        disabled={isButtonDisabled}
+                        onClick={inviteModal.onOpen}
+                        big
+                    >
+                        초대하기
+                    </Button>
+                )}
+                {/* <Button
                     disabled={isButtonDisabled}
                     onClick={inviteModal.onOpen}
                     big
                 >
                     초대하기
-                    {dDay && isButtonDisabled ? (
-                        <p>초대는 30분 전까지만 가능합니다.</p>
-                    ) : null}
-                </Button>
+                </Button> */}
             </div>
+            {dDay && isButtonDisabled ? (
+                <div className="flex justify-center">
+                    <p>초대는 30분 전까지만 가능합니다.</p>
+                </div>
+            ) : null}
 
             <div className="flex flex-col md:flex-row w-full gap-10">
                 <div className="w-full md:w-1/2">

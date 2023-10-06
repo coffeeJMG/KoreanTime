@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { colors, size } from "../types/constant";
 
@@ -7,6 +9,7 @@ interface ButtonProps {
     full?: boolean;
     disabled?: boolean;
     big?: boolean;
+    small?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -14,6 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
     onClick,
     full,
     big,
+    small,
     disabled,
 }) => {
     return (
@@ -32,7 +36,7 @@ export const Button: React.FC<ButtonProps> = ({
             hover:scale-[0.98]
             transition
             disabled
-            ${big ? `${size.titleSize}` : null}`}
+            ${big ? `${size.titleSize}` : small ? `text-base` : null}`}
             onClick={onClick}
         >
             {children}

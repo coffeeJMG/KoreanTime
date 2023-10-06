@@ -88,7 +88,9 @@ export const Post = forwardRef(({ getAddrData }: addrProps, ref) => {
                         모임 장소
                     </p>
                     <div className="w-full mr-2 justify-end flex">
-                        <Button onClick={handleOpenModal}>주소 찾기</Button>
+                        <Button full onClick={handleOpenModal}>
+                            주소 찾기
+                        </Button>
                     </div>
 
                     {isOpen && (

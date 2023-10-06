@@ -6,7 +6,7 @@ import { Modal } from "./Modal";
 import { useNewSchedule } from "../../hooks/useScheduleModal";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../Input";
-import ReactSelect from "react-select";
+import ReactSelect, { StylesConfig } from "react-select";
 
 import { Post } from "../Post";
 import ReactDatePicker from "react-datepicker";
@@ -14,10 +14,23 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../Button";
 import axios from "axios";
 import { MakingPlan, currentUserType } from "@/app/types";
-import { size } from "@/app/types/constant";
 import { useRouter } from "next/navigation";
 import { isTimeInFuture } from "@/app/actions/getCurrentTime";
 import toast from "react-hot-toast";
+
+const modalSelectStyles: StylesConfig = {
+    container: (provided) => ({
+        ...provided,
+        width: "100%",
+    }),
+    control: (provided) => ({
+        ...provided,
+        width: "200px",
+        padding: "3%",
+        backgroundColor: "rgb(254, 240, 138)",
+        borderRadius: "5px",
+    }),
+};
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
     currentUser,
@@ -49,7 +62,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
         defaultValues: {
             name: "",
             place: "",
-            ReactSelect: { value: "", label: "" },
+            ReactSelect: { value: "", label: "인원 수" },
             time: "",
             lat: 0,
             lng: 0,
@@ -88,7 +101,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
             reset({
                 name: "",
                 place: "",
-                ReactSelect: { value: "", label: "" },
+                ReactSelect: { value: "", label: "인원 수 " },
                 time: "",
                 lat: 0,
                 lng: 0,
@@ -131,73 +144,70 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     )}
                 />
 
-                <div className="flex flex-row items-center">
-                    <p className={`items-center w-1/2 ${size.titleSize}`}>
-                        인원 수
-                    </p>
-                    <div className="w-full flex gap-10">
-                        <div className="w-full">
-                            <Controller
-                                render={({ field }) => (
-                                    <ReactSelect
-                                        {...field}
-                                        options={[
-                                            { value: "1", label: "1" },
-                                            { value: "2", label: "2" },
-                                            { value: "3", label: "3" },
-                                            { value: "4", label: "4" },
-                                            { value: "5", label: "5" },
-                                            { value: "6", label: "6" },
-                                            { value: "7", label: "7" },
-                                            { value: "8", label: "8" },
-                                        ]}
-                                        isClearable
-                                        instanceId="newScheduleId"
+                <div className="flex gap-10 justify-end">
+                    <div>
+                        <Controller
+                            render={({ field }) => (
+                                <ReactSelect
+                                    styles={modalSelectStyles}
+                                    {...field}
+                                    options={[
+                                        { value: "1", label: "1" },
+                                        { value: "2", label: "2" },
+                                        { value: "3", label: "3" },
+                                        { value: "4", label: "4" },
+                                        { value: "5", label: "5" },
+                                        { value: "6", label: "6" },
+                                        { value: "7", label: "7" },
+                                        { value: "8", label: "8" },
+                                    ]}
+                                    isClearable={false}
+                                    instanceId="newScheduleId"
+                                />
+                            )}
+                            name="ReactSelect"
+                            control={control}
+                        />
+                    </div>
+                    <div>
+                        <Controller
+                            control={control}
+                            name="ReactDatepicker"
+                            render={({
+                                field: { onChange, value, ...fieldProps },
+                            }) => {
+                                return (
+                                    <ReactDatePicker
+                                        {...fieldProps}
+                                        className="input"
+                                        placeholderText="날짜 선택"
+                                        minDate={new Date()}
+                                        selected={value}
+                                        showDisabledMonthNavigation
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={30}
+                                        timeCaption="time"
+                                        filterTime={isTimeInFuture}
+                                        dateFormat="yy년 MM월d일 h:mmaa"
+                                        onChange={(date) => {
+                                            onChange(date);
+                                            const selectedHours = String(
+                                                date?.getHours(),
+                                            ).padStart(2, "0");
+                                            const selectedMinutes = String(
+                                                date?.getMinutes(),
+                                            ).padStart(2, "0");
+                                            const formattedTime = `${selectedHours}:${selectedMinutes}`;
+                                            setValue("time", formattedTime);
+                                        }}
                                     />
-                                )}
-                                name="ReactSelect"
-                                control={control}
-                            />
-                        </div>
-                        <div className="w-full">
-                            <Controller
-                                control={control}
-                                name="ReactDatepicker"
-                                render={({
-                                    field: { onChange, value, ...fieldProps },
-                                }) => {
-                                    return (
-                                        <ReactDatePicker
-                                            {...fieldProps}
-                                            className="input"
-                                            placeholderText="날짜 선택"
-                                            minDate={new Date()}
-                                            selected={value}
-                                            showDisabledMonthNavigation
-                                            showTimeSelect
-                                            timeFormat="HH:mm"
-                                            timeIntervals={30}
-                                            timeCaption="time"
-                                            filterTime={isTimeInFuture}
-                                            dateFormat="yy년 MM월d일 h:mmaa"
-                                            onChange={(date) => {
-                                                onChange(date);
-                                                const selectedHours = String(
-                                                    date?.getHours(),
-                                                ).padStart(2, "0");
-                                                const selectedMinutes = String(
-                                                    date?.getMinutes(),
-                                                ).padStart(2, "0");
-                                                const formattedTime = `${selectedHours}:${selectedMinutes}`;
-                                                setValue("time", formattedTime);
-                                            }}
-                                        />
-                                    );
-                                }}
-                            />
-                        </div>
+                                );
+                            }}
+                        />
                     </div>
                 </div>
+
                 <Button full>일정 생성하기</Button>
             </form>
         </>
