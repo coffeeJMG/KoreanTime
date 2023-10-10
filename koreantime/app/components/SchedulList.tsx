@@ -69,7 +69,7 @@ const ScheduleList: React.FC<userSchedule> = ({
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
-    }, [scheduleList]);
+    }, [scheduleList, mailFilterdList]);
 
     const {
         register,

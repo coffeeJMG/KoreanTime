@@ -35,11 +35,11 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         setInvitation(invitationList);
     }, [invitationList]);
 
-    const handleClose = useCallback(() => {
-        setTimeout(() => {
-            invitationModal.onClose();
-        }, 300);
-    }, [invitationModal]);
+    // const handleClose = useCallback(() => {
+    //     setTimeout(() => {
+    //         invitationModal.onClose();
+    //     }, 300);
+    // }, [invitationModal]);
 
     const rejectInvitation = async (data: string | null) => {
         try {
