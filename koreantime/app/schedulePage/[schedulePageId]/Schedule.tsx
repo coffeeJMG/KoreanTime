@@ -344,7 +344,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     ) : null}
                 </Button>
 
-                {window.innerWidth < 575 ? (
+                {typeof window !== "undefined" && window.innerWidth < 575 ? (
                     <Button
                         disabled={isButtonDisabled}
                         onClick={inviteModal.onOpen}
@@ -361,13 +361,6 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                         초대하기
                     </Button>
                 )}
-                {/* <Button
-                    disabled={isButtonDisabled}
-                    onClick={inviteModal.onOpen}
-                    big
-                >
-                    초대하기
-                </Button> */}
             </div>
             {dDay && isButtonDisabled ? (
                 <div className="flex justify-center">

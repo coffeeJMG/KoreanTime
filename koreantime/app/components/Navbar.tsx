@@ -56,7 +56,12 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                         />
                         <SlLogout
                             className="cursor-pointer pb-2"
-                            onClick={async () => await signOut()}
+                            onClick={async () =>
+                                await signOut({
+                                    callbackUrl:
+                                        "https://korean-time.com/login",
+                                })
+                            }
                             size={32}
                         />
                     </div>
