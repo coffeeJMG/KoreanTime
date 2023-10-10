@@ -344,7 +344,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     ) : null}
                 </Button>
 
-                {window.innerWidth < 575 ? (
+                {typeof window !== "undefined" && window.innerWidth < 575 ? (
                     <Button
                         disabled={isButtonDisabled}
                         onClick={inviteModal.onOpen}

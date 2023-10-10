@@ -24,6 +24,18 @@ export async function POST(request: Request) {
         });
     }
 
+    const existingMember = await prisma.member.findFirst({
+        where: {
+            email: email,
+            scheduleId: scheduleId,
+        },
+    });
+
+    if (existingMember) {
+        return new NextResponse(JSON.stringify("이미 참여한 유저입니다"), {
+            status: 400,
+        });
+    }
     await prisma.invitedScheduleList.create({
         data: {
             invitedSchedule: scheduleId,
