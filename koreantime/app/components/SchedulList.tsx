@@ -65,6 +65,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
+
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -222,7 +223,11 @@ const ScheduleList: React.FC<userSchedule> = ({
                             </div>
                         ))
                     ) : (
-                        <div>속해 있는 모임이 없습니다.</div>
+                        <div className="flex justify-center col-span-full">
+                            <p className={`${colors.textColor}`}>
+                                현재 일정이 없습니다.
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>
