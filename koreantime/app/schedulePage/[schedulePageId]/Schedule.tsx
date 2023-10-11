@@ -380,7 +380,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     />
                 </div>
 
-                <div className="flex flex-row md:flex-col w-full md:w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                     {memberList.map((member, index) => {
                         // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
                         const location = membersLocation.find(
@@ -407,9 +407,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                     </div>
                                 ) : null}
 
-                                <div className="flex justify-between p-5">
-                                    <div className="flex items-center gap-10">
-                                        <div>
+                                <div className="flex flex-col p-5">
+                                    <div className="flex w-full flex-col">
+                                        <div className="flex justify-between w-full">
                                             <p
                                                 className={`${size.titleSize}`}
                                                 onClick={(e) =>
@@ -421,50 +421,45 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                             >
                                                 {member.nickname}
                                             </p>
-                                            <p>{member.point}</p>
+
+                                            {(currentUser?.email ===
+                                                member.email ||
+                                                currentUser?.email ===
+                                                    schedule.hostUser) && (
+                                                <SlLogout
+                                                    size={30}
+                                                    onClick={cancelSchedule}
+                                                    className="cursor-pointer"
+                                                />
+                                            )}
                                         </div>
                                         <div>
-                                            {currentUser?.email ===
-                                            member.email ? (
-                                                <input
-                                                    type="range"
-                                                    min="0"
-                                                    max={
-                                                        openLocation
-                                                            ? "1"
-                                                            : "0.1"
-                                                    }
-                                                    step={
-                                                        openLocation
-                                                            ? "0.1"
-                                                            : "0.01"
-                                                    }
-                                                    value={
-                                                        opacity[member.email] ||
-                                                        0
-                                                    }
-                                                    onChange={(e) =>
-                                                        handleOpacityChange(
-                                                            member.email,
-                                                            Number(
-                                                                e.target.value,
-                                                            ),
-                                                        )
-                                                    }
-                                                />
-                                            ) : null}{" "}
+                                            <p>{member.point} Point</p>
                                         </div>
                                     </div>
-
-                                    {(currentUser?.email === member.email ||
-                                        currentUser?.email ===
-                                            schedule.hostUser) && (
-                                        <SlLogout
-                                            size={30}
-                                            onClick={cancelSchedule}
-                                            className="cursor-pointer"
-                                        />
-                                    )}
+                                    <div>
+                                        {currentUser?.email === member.email ? (
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max={openLocation ? "1" : "0.1"}
+                                                step={
+                                                    openLocation
+                                                        ? "0.1"
+                                                        : "0.01"
+                                                }
+                                                value={
+                                                    opacity[member.email] || 0
+                                                }
+                                                onChange={(e) =>
+                                                    handleOpacityChange(
+                                                        member.email,
+                                                        Number(e.target.value),
+                                                    )
+                                                }
+                                            />
+                                        ) : null}{" "}
+                                    </div>
                                 </div>
 
                                 {!isLastThreeUsers &&

@@ -8,6 +8,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useScheduleListStore from "@/app/stores/updateScheduleList";
+import { size } from "@/app/types/constant";
 
 type InvitedSchedule = {
     invitedSchedule: string | null;
@@ -86,6 +87,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
 
                 const resDate = JSON.stringify(res.data.scheduleList);
                 setUpdateScheduleList(resDate);
+                console.log("수락", resDate);
             }
         } catch (error) {
             toast.error("An error occurred while joining the schedule.");
@@ -94,13 +96,14 @@ export const InvitationModal: React.FC<invitationListProps> = ({
 
     const bodyContent = (
         <>
-            <p>초대장 리스트</p>
             {invitation ? (
                 invitation.map((item, i) => {
                     return (
                         <div className="flex flex-col gap-4" key={i}>
                             <div className="flex flex-row items-center justify-between ">
-                                <div className="">{item.title}</div>
+                                <div className={`${size.titleSize}`}>
+                                    모임명 : {item.title}
+                                </div>
                                 <div className="flex w-1/2 gap-4">
                                     <Button
                                         full
@@ -127,7 +130,9 @@ export const InvitationModal: React.FC<invitationListProps> = ({
                 })
             ) : (
                 <>
-                    <p>초대장이 없습니다.</p>
+                    <p className={`${size.titleSize} flex justify-center`}>
+                        초대장이 없습니다.
+                    </p>
                 </>
             )}
         </>

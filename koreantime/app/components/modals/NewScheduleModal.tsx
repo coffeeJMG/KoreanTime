@@ -23,6 +23,20 @@ const modalSelectStyles: StylesConfig = {
         ...provided,
         width: "100%",
     }),
+    option: (styles) => {
+        return {
+            ...styles,
+            color: "#9A3435",
+            background: "rgb(254, 240, 138)",
+            padding: "3%",
+            margin: "3%",
+            width: "90%",
+            borderRadius: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        };
+    },
     control: (provided) => ({
         ...provided,
         width: "200px",
@@ -30,6 +44,15 @@ const modalSelectStyles: StylesConfig = {
         backgroundColor: "rgb(254, 240, 138)",
         borderRadius: "5px",
     }),
+    singleValue: (styles) => {
+        return {
+            ...styles,
+            color: "#9A3435",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        };
+    },
 };
 
 export const NewScheduleModal: React.FC<currentUserType> = ({
@@ -162,6 +185,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                         { value: "8", label: "8" },
                                     ]}
                                     isClearable={false}
+                                    isSearchable={false}
                                     instanceId="newScheduleId"
                                 />
                             )}
