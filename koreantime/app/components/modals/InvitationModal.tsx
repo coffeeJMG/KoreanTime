@@ -23,14 +23,12 @@ export const InvitationModal: React.FC<invitationListProps> = ({
     invitationList,
 }) => {
     const invitationModal = useInvitationModal();
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [invitation, setInvitation] = useState<InvitedSchedule[] | null>(
         invitationList,
     );
 
-    const { updateScheduleList, setUpdateScheduleList } =
-        useScheduleListStore();
+    const { setUpdateScheduleList } = useScheduleListStore();
 
     useEffect(() => {
         setInvitation(invitationList);
@@ -85,7 +83,8 @@ export const InvitationModal: React.FC<invitationListProps> = ({
 
                 toast.success(JSON.stringify(res.data.message));
 
-                const resDate = JSON.stringify(res.data.scheduleList);
+                const resDate = res.data.scheduleList;
+
                 setUpdateScheduleList(resDate);
                 console.log("수락", resDate);
             }

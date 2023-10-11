@@ -9,8 +9,8 @@ export interface ScheduleListStore {
         time: string;
         date: string;
         maximumPeople: number;
-        lat: number | null;
-        lng: number | null;
+        lat: number;
+        lng: number;
         hostUser: string;
     }[];
     setUpdateScheduleList: (text: any) => void;

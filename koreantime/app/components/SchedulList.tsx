@@ -16,6 +16,7 @@ import ReactSelect, { StylesConfig } from "react-select";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./Button";
+import useScheduleListStore from "../stores/updateScheduleList";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
@@ -65,7 +66,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
-
+    const { updateScheduleList } = useScheduleListStore();
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -76,8 +77,11 @@ const ScheduleList: React.FC<userSchedule> = ({
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
-    }, [scheduleList, mailFilterdList]);
+    }, [scheduleList, updateScheduleList]);
 
+    useEffect(() => {
+        setMailFilterdList(updateScheduleList);
+    }, [updateScheduleList]);
     const {
         register,
         handleSubmit,
