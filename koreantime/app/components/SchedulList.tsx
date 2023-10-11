@@ -33,19 +33,25 @@ const scheduleSelectStyles: StylesConfig = {
     option: (styles) => {
         return {
             ...styles,
-            color: "#f59e0b",
+            color: "#9A3435",
             background: "rgb(254, 240, 138)",
             padding: "3%",
             margin: "3%",
             width: "90%",
             borderRadius: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
         };
     },
 
     singleValue: (styles) => {
         return {
             ...styles,
-            color: "#f59e0b",
+            color: "#9A3435",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
         };
     },
     placeholder: (styles) => ({ ...styles }),
@@ -169,6 +175,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                                     ]}
                                     isClearable={false}
                                     instanceId="filterId"
+                                    isSearchable={false}
                                     onChange={(value) => {
                                         field.onChange(value); // 필요한 경우 기존의 onChange 로직을 유지
                                         handleSubmit(onSubmit)(); // 옵션을 선택할 때마다 폼 제출
