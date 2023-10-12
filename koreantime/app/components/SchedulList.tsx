@@ -16,6 +16,7 @@ import ReactSelect, { StylesConfig } from "react-select";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./Button";
+import useScheduleListStore from "../stores/updateScheduleList";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
@@ -65,7 +66,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
-
+    const { updateScheduleList } = useScheduleListStore();
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -76,8 +77,11 @@ const ScheduleList: React.FC<userSchedule> = ({
 
     useEffect(() => {
         setMailFilterdList(scheduleList);
-    }, [scheduleList, mailFilterdList]);
+    }, [scheduleList, updateScheduleList]);
 
+    useEffect(() => {
+        setMailFilterdList(updateScheduleList);
+    }, [updateScheduleList]);
     const {
         register,
         handleSubmit,
@@ -105,10 +109,10 @@ const ScheduleList: React.FC<userSchedule> = ({
                 const message = String(response.data);
                 toast.error(message);
             }
-
+            console.log(data);
             reset({
-                ReactSelect: { value: "", label: "조회기간" },
                 mail: "",
+                ReactSelect: data.ReactSelect,
             });
         } catch (error) {
             const axiosError = error as AxiosError;
@@ -179,7 +183,8 @@ const ScheduleList: React.FC<userSchedule> = ({
                                     isSearchable={false}
                                     onChange={(value) => {
                                         field.onChange(value); // 필요한 경우 기존의 onChange 로직을 유지
-                                        handleSubmit(onSubmit)(); // 옵션을 선택할 때마다 폼 제출
+                                        handleSubmit(onSubmit)();
+                                        // 옵션을 선택할 때마다 폼 제출
                                     }}
                                 />
                             )}
