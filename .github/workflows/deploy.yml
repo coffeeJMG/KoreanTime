@@ -19,19 +19,19 @@ jobs:
                   node-version: "16.x"
 
             - name: Check Node version
-              working-directory: ./koreanTime
+              working-directory: koreanTime
               run: node -v
 
             - name: Install Dependencies
-              working-directory: ./koreanTime
+              working-directory: koreanTime
               run: yarn install --frozen-lockfile
 
             - name: Build
-              working-directory: ./koreanTime
+              working-directory: koreanTime
               run: yarn build
 
             - name: Zip create
-              working-directory: ./koreanTime
+              working-directory: koreanTime
               run: zip -qq -r ./build.zip .
 
             - name: Configure AWS credentials
@@ -43,7 +43,7 @@ jobs:
 
             - name: Upload to S3
               run: |
-                  aws s3 cp --region ap-northeast-2 ./koreanTime/build.zip s3://koreantime-bucket/build.zip
+                  aws s3 cp --region ap-northeast-2 koreanTime/build.zip s3://koreantime-bucket/build.zip
 
             - name: Deploy
               run: |
