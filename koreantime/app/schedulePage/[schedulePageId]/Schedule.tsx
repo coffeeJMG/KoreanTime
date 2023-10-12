@@ -66,9 +66,8 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [minutes, setMinutes] = useState(initialTimeData.minutes); //  분
     const [seconds, setSeconds] = useState(initialTimeData.seconds); //  초
     const [opacity, setOpacity] = useState<OpacityMap>({});
-    const [openLocation, setOpenLocation] = useState(false);
-    const [mobileSize, setMobileSize] = useState(false);
-
+    const [limitedOpenLocation, setLimitedOpenLocation] = useState(false);
+    const [checkOtherLocation, setCheckOtherLocation] = useState(false);
     // 매 초마다 시간 반영
     useEffect(() => {
         const interval = setInterval(() => {
@@ -195,7 +194,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         if (countDown <= 1800 && countDown > 0 && dDay) {
             setIsLastThirtyMinutes(true);
             setIsButtonDisabled(true);
-            setOpenLocation(true);
+            setLimitedOpenLocation(true);
         } else {
             setIsLastThirtyMinutes(false);
             setIsButtonDisabled(false);
@@ -205,6 +204,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         if (countDown <= 600 && countDown > 0 && dDay) {
             setIsLastTenMinutes(true);
             setIsLastThirtyMinutes(false);
+            setCheckOtherLocation(true);
         } else {
             setIsLastTenMinutes(false);
         }
@@ -438,13 +438,18 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                         </div>
                                     </div>
                                     <div>
-                                        {currentUser?.email === member.email ? (
+                                        {checkOtherLocation ||
+                                        currentUser?.email === member.email ? (
                                             <input
                                                 type="range"
                                                 min="0"
-                                                max={openLocation ? "1" : "0.1"}
+                                                max={
+                                                    limitedOpenLocation
+                                                        ? "1"
+                                                        : "0.1"
+                                                }
                                                 step={
-                                                    openLocation
+                                                    limitedOpenLocation
                                                         ? "0.1"
                                                         : "0.01"
                                                 }
@@ -458,7 +463,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                                                     )
                                                 }
                                             />
-                                        ) : null}{" "}
+                                        ) : null}
                                     </div>
                                 </div>
 

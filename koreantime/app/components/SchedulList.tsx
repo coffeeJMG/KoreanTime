@@ -109,10 +109,10 @@ const ScheduleList: React.FC<userSchedule> = ({
                 const message = String(response.data);
                 toast.error(message);
             }
-
+            console.log(data);
             reset({
-                ReactSelect: { value: "", label: "조회기간" },
                 mail: "",
+                ReactSelect: data.ReactSelect,
             });
         } catch (error) {
             const axiosError = error as AxiosError;
@@ -183,7 +183,8 @@ const ScheduleList: React.FC<userSchedule> = ({
                                     isSearchable={false}
                                     onChange={(value) => {
                                         field.onChange(value); // 필요한 경우 기존의 onChange 로직을 유지
-                                        handleSubmit(onSubmit)(); // 옵션을 선택할 때마다 폼 제출
+                                        handleSubmit(onSubmit)();
+                                        // 옵션을 선택할 때마다 폼 제출
                                     }}
                                 />
                             )}
