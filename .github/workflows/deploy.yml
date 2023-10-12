@@ -1,35 +1,50 @@
 name: Deploy
+
 on:
     push:
         branches:
             - dev
+
 jobs:
     build:
         runs-on: ubuntu-20.04
         steps:
-            - name: Checkout source code.
+            - name: Checkout source code
               uses: actions/checkout@v2
-            - name: Check Node v
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16.x"
+
+            - name: Check Node version
               run: node -v
+
             - name: Install Dependencies
               run: yarn install --frozen-lockfile
+
             - name: Build
               run: yarn build
-            - name: zip create
+
+            - name: Create ZIP archive
               run: zip -qq -r ./build.zip .
               shell: bash
+
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
               with:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ${{ secrets.AWS_REGION }}
+
             - name: Upload to S3
               run: |
-                  aws s3 cp --region ap-northeast-2 ./build.zip s3://koreantime-bucket/build.zip
+                  aws s3 cp ./build.zip s3://koreantime-bucket/build.zip --region ap-northeast-2
+
             - name: Deploy
-              run: aws deploy create-deployment
-                  --application-name koreantime-codeDeploy
-                  --deployment-config-name CodeDeployDefault.AllAtOnce
-                  --deployment-group-name koreantime-codeDeploy-group
-                  --s3-location bucket=koreantime-bucket,bundleType=zip,key=build.zip
+              run: |
+                  aws deploy create-deployment 
+                    --application-name koreantime-codeDeploy 
+                    --deployment-config-name CodeDeployDefault.AllAtOnce 
+                    --deployment-group-name koreantime-codeDeploy-group 
+                    --s3-location bucket=koreantime-bucket,bundleType=zip,key=build.zip
