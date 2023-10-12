@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Modal } from "./Modal";
 import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useRankingStore } from "@/app/stores/ranking";
+import { size } from "@/app/types/constant";
 
 export const DeleteScheduleModal = () => {
     const deleteScheduleModal = useDeleteSchedule();
@@ -16,7 +17,9 @@ export const DeleteScheduleModal = () => {
             .sort(([, rankA], [, rankB]) => rankA - rankB)
             .map(([email, rank], index) => (
                 <li key={index}>
-                    {email}: {rank}등
+                    <p className={`${size.titleSize} mb-2`}>
+                        {email}: {rank}등
+                    </p>
                 </li>
             ));
 
