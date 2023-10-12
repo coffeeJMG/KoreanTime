@@ -8,27 +8,31 @@ on:
 jobs:
     build:
         runs-on: ubuntu-20.04
+
         steps:
             - name: Checkout source code
               uses: actions/checkout@v2
 
-            - name: Setup Node.js environment
+            - name: Set up Node.js
               uses: actions/setup-node@v3
               with:
                   node-version: "16.x"
 
             - name: Check Node version
+              working-directory: ./koreanTime
               run: node -v
 
             - name: Install Dependencies
+              working-directory: ./koreanTime
               run: yarn install --frozen-lockfile
 
             - name: Build
+              working-directory: ./koreanTime
               run: yarn build
 
-            - name: Create ZIP archive
+            - name: Zip create
+              working-directory: ./koreanTime
               run: zip -qq -r ./build.zip .
-              shell: bash
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
@@ -39,12 +43,8 @@ jobs:
 
             - name: Upload to S3
               run: |
-                  aws s3 cp ./build.zip s3://koreantime-bucket/build.zip --region ap-northeast-2
+                  aws s3 cp --region ap-northeast-2 ./koreanTime/build.zip s3://koreantime-bucket/build.zip
 
             - name: Deploy
               run: |
-                  aws deploy create-deployment 
-                    --application-name koreantime-codeDeploy 
-                    --deployment-config-name CodeDeployDefault.AllAtOnce 
-                    --deployment-group-name koreantime-codeDeploy-group 
-                    --s3-location bucket=koreantime-bucket,bundleType=zip,key=build.zip
+                  aws deploy create-deployment --application-name koreantime-codeDeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name koreantime-codeDeploy-group --s3-location bucket=koreantime-bucket,bundleType=zip,key=build.zip
