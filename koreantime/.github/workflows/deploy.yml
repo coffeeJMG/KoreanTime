@@ -2,7 +2,7 @@ name: Deploy
 on:
     push:
         branches:
-            - dev #어디로 푸시했을 때 감지할 건지
+            - main #어디로 푸시했을 때 감지할 건지
 jobs:
     build:
         runs-on: ubuntu-20.04 #우분투 버전 체크
@@ -29,7 +29,7 @@ jobs:
                   aws s3 cp --region ap-northeast-2 ./build.zip s3://mytamra-bucket/build.zip #본인 버킷 이름으로 수정
             - name: Deploy
               run: aws deploy create-deployment
-                  --application-name myTamra-codeDeploy
+                  --application-name koreantime-codeDeploy
                   --deployment-config-name CodeDeployDefault.AllAtOnce
-                  --deployment-group-name myTamra-codeDeploy-group
-                  --s3-location bucket=mytamra-bucket,bundleType=zip,key=build.zip
+                  --deployment-group-name koreantime-codeDeploy-group
+                  --s3-location bucket=koreantime-bucket,bundleType=zip,key=build.zip
