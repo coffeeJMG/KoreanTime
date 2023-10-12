@@ -2,10 +2,10 @@ name: Deploy
 on:
     push:
         branches:
-            - main #어디로 푸시했을 때 감지할 건지
+            - main
 jobs:
     build:
-        runs-on: ubuntu-20.04 #우분투 버전 체크
+        runs-on: ubuntu-20.04
         steps:
             - name: Checkout source code.
               uses: actions/checkout@v2
