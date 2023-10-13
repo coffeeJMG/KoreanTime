@@ -33,7 +33,7 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
                         className={`text-xl md:text-4xl cursor-pointer`}
                         onClick={() => router.push("/startPage")}
                     >
-                        CI/CD 테스트
+                        일찍 와주길 바
                     </p>
                 </div>
 
