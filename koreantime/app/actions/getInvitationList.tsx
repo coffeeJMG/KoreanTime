@@ -9,7 +9,7 @@ export default async function getinvitationList() {
     }
 
     try {
-        const invitationList = await prisma.user.findMany({
+        const invitation = await prisma.user.findFirst({
             where: {
                 invitedScheduleList: {
                     some: {
@@ -27,12 +27,11 @@ export default async function getinvitationList() {
             },
         });
 
-        if (!invitationList.length || !invitationList[0].invitedScheduleList) {
+        if (!invitation?.invitedScheduleList) {
             return null;
         }
 
-        const invitation = invitationList[0].invitedScheduleList;
-        return invitation;
+        return invitation.invitedScheduleList;
     } catch (error) {
         console.error(error);
         return null;

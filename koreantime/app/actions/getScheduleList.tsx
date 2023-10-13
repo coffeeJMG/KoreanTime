@@ -15,6 +15,7 @@ export default async function getScheduleList() {
 
     try {
         const scheduleList = await prisma.schedule.findMany({
+            // currentUser.email 와 일치하는 값을 schedule 의 members 필드에 email과 일치하는 값들을 찾는다
             where: {
                 members: {
                     some: {
@@ -25,6 +26,8 @@ export default async function getScheduleList() {
             orderBy: {
                 date: "asc", // 오름차순으로 정렬
             },
+
+            // 포함하는 정보
             include: {
                 members: {
                     select: {
@@ -34,25 +37,25 @@ export default async function getScheduleList() {
             },
         });
 
-        // Extract member emails from the array of objects
         const formattedScheduleList = scheduleList.map((schedule) => ({
             ...schedule,
-            members: schedule.members.map((member) => member.email),
-            formattedTime: Number(schedule.time.replace(":", "")),
+
+            members: schedule.members.map((member) => member.email), // 이메일만 반환
+            formattedTime: Number(schedule.time.replace(":", "")), // : 없애고 숫자형으로 반환
             formattedDate: Number(
-                schedule.date.slice(4) + schedule.date.slice(0, 4),
+                schedule.date.slice(4) + schedule.date.slice(0, 4), // YYYYMMDD 형식으로 반환
             ),
         }));
 
-        // Filter schedules based on current time and today's date
-        const upcomingSchedules = formattedScheduleList.filter(
+        const filteredSchedules = formattedScheduleList.filter(
             (schedule) =>
+                // 오늘 및 현재시간 이후의 스케쥴 필터링
                 schedule.formattedDate > today ||
                 (schedule.formattedDate === today &&
                     schedule.formattedTime > currentTime),
         );
 
-        return upcomingSchedules;
+        return filteredSchedules;
     } catch (error) {
         console.error(error);
         return null;
