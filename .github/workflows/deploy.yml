@@ -25,9 +25,6 @@ jobs:
               working-directory: koreantime
               run: yarn build
 
-            - name: Copy script
-              run: cp ./koreantime/script/*.sh ./deploy
-
             - name: Zip create
               working-directory: koreantime
               run: zip -qq -r ./build.zip .
