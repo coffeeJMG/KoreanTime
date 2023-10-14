@@ -18,7 +18,8 @@ import { useRouter } from "next/navigation";
 import { isTimeInFuture } from "@/app/actions/getCurrentTime";
 import toast from "react-hot-toast";
 
-const modalSelectStyles: StylesConfig = {
+// react-select 라이브러리 커스텀
+const personnelSelectStyles: StylesConfig = {
     container: (provided) => ({
         ...provided,
         width: "100%",
@@ -60,7 +61,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
 }) => {
     const newSchedule = useNewSchedule();
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
@@ -92,6 +92,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
         },
     });
 
+    // 시간 비교를 위한 시간 포매팅
     function formatDateToCustomString(dateString: string) {
         const date = new Date(dateString);
         const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -172,7 +173,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                         <Controller
                             render={({ field }) => (
                                 <ReactSelect
-                                    styles={modalSelectStyles}
+                                    styles={personnelSelectStyles}
                                     {...field}
                                     options={[
                                         { value: "1", label: "1" },
@@ -240,7 +241,6 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     return (
         <>
             <Modal
-                disabled={isLoading}
                 isOpen={newSchedule.isOpen}
                 title="일정 만들기"
                 onClose={newSchedule.onClose}

@@ -8,11 +8,12 @@ import { size } from "@/app/types/constant";
 
 export const DeleteScheduleModal = () => {
     const deleteScheduleModal = useDeleteSchedule();
-    const { updateRanking } = useRankingStore();
+    const { updateRanking } = useRankingStore(); // 유저들의 등수를 전역상태관리
 
     const [bodyContent, setBodyContent] = useState(<></>); // 상태 변수로 변경
 
     useEffect(() => {
+        // 1등부터 순서대로 반환
         const rankingList = Object.entries(updateRanking)
             .sort(([, rankA], [, rankB]) => rankA - rankB)
             .map(([email, rank], index) => (
@@ -31,10 +32,6 @@ export const DeleteScheduleModal = () => {
 
         setBodyContent(newBodyContent); // 상태 업데이트 함수 사용
     }, [updateRanking]);
-
-    const handleClose = useCallback(() => {
-        deleteScheduleModal.onClose();
-    }, [deleteScheduleModal]);
 
     return (
         <>
