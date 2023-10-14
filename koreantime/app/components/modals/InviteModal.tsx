@@ -1,13 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Modal } from "./Modal";
-import {
-    Controller,
-    FieldValues,
-    SubmitHandler,
-    useForm,
-} from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import axios, { AxiosError } from "axios";
@@ -20,22 +15,20 @@ import { toast } from "react-hot-toast";
 export const InviteModal = () => {
     const inviteModal = useInviteModal();
     const { scheduleId, maximumPeople, memberLegnth, title } =
-        useShceduleIdStore();
-
-    const [isLoading, setIsLoading] = useState(false);
+        useShceduleIdStore(); // 일정 관련 정보를 전역상태관리
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
-        control,
     } = useForm<FieldValues>({
         defaultValues: {
             mail: "",
         },
     });
 
+    // modal close를 위한 함수
     const handleClose = useCallback(() => {
         setTimeout(() => {
             inviteModal.onClose();
@@ -51,6 +44,7 @@ export const InviteModal = () => {
                 title: title,
             };
 
+            // 최대 인원 이상 초대금지
             if (memberLegnth >= maximumPeople) {
                 toast.error(`최대 인원은 ${maximumPeople}입니다.`);
             } else {
@@ -60,6 +54,7 @@ export const InviteModal = () => {
                     mail: "",
                 });
 
+                // 유저 초대 후 modal close 함수 호출
                 handleClose();
             }
         } catch (error) {
@@ -93,7 +88,6 @@ export const InviteModal = () => {
     return (
         <>
             <Modal
-                disabled={isLoading}
                 isOpen={inviteModal.isOpen}
                 title="초대하기"
                 onClose={inviteModal.onClose}

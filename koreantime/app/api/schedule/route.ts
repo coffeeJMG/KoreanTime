@@ -14,6 +14,7 @@ export async function POST(request: Request) {
         return null;
     }
 
+    // 새로운 일정 생성
     const schedule = await prisma.schedule.create({
         data: {
             title,

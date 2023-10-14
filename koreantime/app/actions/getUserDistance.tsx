@@ -1,3 +1,5 @@
+// 위도,경도 값으로 거리 구하는 함수
+
 export default function getUserDistance(
     scheduleLat: number,
     scheduleLng: number,

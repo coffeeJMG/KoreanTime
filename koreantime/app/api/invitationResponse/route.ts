@@ -11,6 +11,7 @@ export async function DELETE(request: Request) {
     }
 
     try {
+        // 초대를 거절하며 초대받은 리스트에서 해당 스케쥴 삭제
         await prisma.invitedScheduleList.deleteMany({
             where: {
                 invitedUser: currentUser.email,
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
         const body = JSON.parse(data);
 
         await prisma.member.create({
+            // member에 data를 담아 새로운 member 데이터 생성
             data: {
                 email: currentUser.email,
                 nickname: currentUser.nickname,
@@ -49,6 +51,7 @@ export async function POST(request: Request) {
         });
 
         await prisma.invitedScheduleList.deleteMany({
+            // 멤버를 새로 추가한 후 초대 리스트에서는 해당 초대장 삭제
             where: {
                 invitedUser: currentUser.email,
                 invitedSchedule: body,
@@ -56,6 +59,7 @@ export async function POST(request: Request) {
         });
 
         const scheduleList = await prisma.schedule.findMany({
+            // 추가된 멤버를 기반으로 새로운 스케쥴리스트 반환
             where: {
                 members: {
                     some: {

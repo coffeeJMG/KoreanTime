@@ -15,16 +15,19 @@ export async function POST(request: Request) {
 
     try {
         const location = await prisma.membersLocation.upsert({
+            // email과 scheduleId로 필드 검색
             where: {
                 memberEmail_scheduleId: {
                     memberEmail: email,
                     scheduleId: scheduleId,
                 },
             },
+            // lat,lng 값 갱신
             update: {
                 lat: lat,
                 lng: lng,
             },
+            // 찾지 못할 경우 새로 생성
             create: {
                 memberEmail: email,
                 lat: lat,

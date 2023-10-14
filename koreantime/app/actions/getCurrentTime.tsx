@@ -9,16 +9,16 @@ export const getCurrentTime = () => {
 
     const today = `${month}${day}${year}`; // 오늘 날짜
 
-    const comparisonToday = `${year}${month}${day}`;
+    const comparisonToday = `${year}${month}${day}`; // 모임날짜와 비교를 위한 변수
 
     let currentTime; // 렌더링을 위한 현재시간 변수
     const comparisonTime = `${hours}${minutes}`; // 계산을 위한 현재시간 변수
 
     if (Number(hours) >= 13) {
         const formattedHours = String(Number(hours) - 12).padStart(2, "0");
-        currentTime = `${formattedHours}:${minutes} PM`;
+        currentTime = `${formattedHours}:${minutes} PM`; // 12시~23시 PM 표기
     } else {
-        currentTime = `${hours}:${minutes} AM`;
+        currentTime = `${hours}:${minutes} AM`; // 00시~11시 AM 표기
     }
 
     return {
@@ -43,7 +43,6 @@ export const isTimeInFuture = (time: Date) => {
     const timeDate = `${year}${month}${day}`;
     const timeValue = `${hours}${minutes}`;
 
-    // If the selected date is today, check if the time is in the future
     if (timeDate === comparisonToday) {
         return timeValue >= comparisonTime;
     }

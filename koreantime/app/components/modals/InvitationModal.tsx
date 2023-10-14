@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "./Modal";
 import { useInvitationModal } from "@/app/hooks/useInvitationModal";
 import { Button } from "../Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import useScheduleListStore from "@/app/stores/updateScheduleList";
 import { size } from "@/app/types/constant";
 
@@ -22,24 +21,19 @@ type invitationListProps = {
 export const InvitationModal: React.FC<invitationListProps> = ({
     invitationList,
 }) => {
-    const invitationModal = useInvitationModal();
-    const [isLoading, setIsLoading] = useState(false);
+    const invitationModal = useInvitationModal(); // 초대 modal open,close 함수
     const [invitation, setInvitation] = useState<InvitedSchedule[] | null>(
         invitationList,
     );
 
-    const { setUpdateScheduleList } = useScheduleListStore();
+    const { setUpdateScheduleList } = useScheduleListStore(); // 모임 리스트를 전역상태관리
 
+    // 유저가 가진 초대 리스트를 상태저장
     useEffect(() => {
         setInvitation(invitationList);
     }, [invitationList]);
 
-    // const handleClose = useCallback(() => {
-    //     setTimeout(() => {
-    //         invitationModal.onClose();
-    //     }, 300);
-    // }, [invitationModal]);
-
+    // 초대 거절
     const rejectInvitation = async (data: string | null) => {
         try {
             const res = await axios.delete("/api/invitationResponse", {
@@ -47,6 +41,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
             });
 
             if (res.status === 200) {
+                // 초대장에서 선택된 스케쥴 제외
                 setInvitation((prev) =>
                     prev
                         ? prev.filter(
@@ -62,6 +57,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         }
     };
 
+    //초대수락
     const joinSchedule = async (data: string | null) => {
         try {
             const res = await axios.post(
@@ -73,6 +69,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
             );
 
             if (res.status === 200) {
+                // 초대장 리스트에서 수락한 스케쥴 제외
                 setInvitation((prev) =>
                     prev
                         ? prev.filter(
@@ -85,7 +82,7 @@ export const InvitationModal: React.FC<invitationListProps> = ({
 
                 const resDate = res.data.scheduleList;
 
-                setUpdateScheduleList(resDate);
+                setUpdateScheduleList(resDate); // 수락된 스케쥴 리스트를 전역상태에 저장
                 console.log("수락", resDate);
             }
         } catch (error) {
@@ -139,7 +136,6 @@ export const InvitationModal: React.FC<invitationListProps> = ({
     return (
         <>
             <Modal
-                disabled={isLoading}
                 isOpen={invitationModal.isOpen}
                 title="초대장 리스트"
                 onClose={invitationModal.onClose}
