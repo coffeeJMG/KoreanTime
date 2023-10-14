@@ -50,7 +50,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [isLastTenMinutes, setIsLastTenMinutes] = useState(false); // 남은 시간이 5분인지 판단
     const [isButtonDisabled, setIsButtonDisabled] = useState(false); // 버튼 비활성화 상태
     const deleteScheduleModal = useDeleteSchedule(); // 모임시간 도달 시 모달창 오픈
-    const [membersLocation, setMembersLocation] = useState<MemberLocation[]>(
+    const [membersLocation, setMembersLocation] = useState<MemberLocation[]>( // 유저들의 위치 상태관리
         [],
     );
     const router = useRouter();
@@ -65,9 +65,9 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [hours, setHours] = useState(initialTimeData.hours); //  시간
     const [minutes, setMinutes] = useState(initialTimeData.minutes); //  분
     const [seconds, setSeconds] = useState(initialTimeData.seconds); //  초
-    const [opacity, setOpacity] = useState<OpacityMap>({});
-    const [limitedOpenLocation, setLimitedOpenLocation] = useState(false);
-    const [checkOtherLocation, setCheckOtherLocation] = useState(false);
+    const [opacity, setOpacity] = useState<OpacityMap>({}); // 지도의 투명도
+    const [limitedOpenLocation, setLimitedOpenLocation] = useState(false); // 30분 부터 변경 된 지도 공개범위 상태 관리
+    const [checkOtherLocation, setCheckOtherLocation] = useState(false); // 다른 사람들의 지도 권한 상태 관리
     // 매 초마다 시간 반영
     useEffect(() => {
         const interval = setInterval(() => {
@@ -104,7 +104,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
 
     // 유저의 위치 정보를 모임 멤버들의 위치를 담은 db에 저장 및 모임 유저들의 위치를 받아오는 함수
     useEffect(() => {
-        const saveAndFetchLocations = async () => {
+        const FetchLocations = async () => {
             try {
                 const response = await axios.post("/api/userLocation", {
                     email: currentUserMail,
@@ -123,8 +123,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                         },
                     );
 
-                    // 여기에서 memberLocationsResponse.data를 사용하여 원하는 동작을 수행하실 수 있습니다.
-
+                    // 서버로 받아온 유저의 위치정보 저장
                     setMembersLocation(memberLocationsResponse.data);
                 } else {
                     console.log("위치 정보 저장에 실패하였습니다.");
@@ -137,7 +136,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             }
         };
 
-        saveAndFetchLocations();
+        FetchLocations();
     }, [userLat, userLng, schedule.id]);
 
     const memberList = schedule.members; // 현재 모임에 속한 인원
@@ -252,6 +251,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         });
     };
 
+    // 선택된 유저의 지도 투명도 범위 조절
     const handleOpacityChange = (email: string, newOpacity: number) => {
         setOpacity((prev) => ({ ...prev, [email]: newOpacity }));
     };
@@ -301,6 +301,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         setUpdateRanking(rankings);
     }, [membersLocation]);
 
+    // 일정에서 나가는 api요청
     const cancelSchedule = async () => {
         await axios.post("/api/cancelSchedule", {
             id: currentUser?.email,
@@ -310,6 +311,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
         router.push("/startPage");
     };
 
+    // 브라우저 크기에 따른 반응형 지도 높이
     const getMapHeight = () => {
         if (typeof window !== "undefined") {
             if (window.innerWidth > 991) {

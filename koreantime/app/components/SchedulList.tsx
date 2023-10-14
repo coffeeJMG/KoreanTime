@@ -20,6 +20,7 @@ import useScheduleListStore from "../stores/updateScheduleList";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
+// react-select 라이브러리 커스텀 스타일
 const scheduleSelectStyles: StylesConfig = {
     container: (provided) => ({
         ...provided,
@@ -65,7 +66,7 @@ const ScheduleList: React.FC<userSchedule> = ({
 }) => {
     const newSchedule = useNewSchedule(); // 스케쥴 정보
     const router = useRouter();
-    const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]);
+    const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]); // 전체 일정에서 특정 조건으로 필터링 된 일정
     const { updateScheduleList } = useScheduleListStore();
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
@@ -75,10 +76,12 @@ const ScheduleList: React.FC<userSchedule> = ({
         router.refresh();
     }, []);
 
+    // 현재 컴포넌트 스케쥴 리스트에 변화가 생기면 재렌더링
     useEffect(() => {
         setMailFilterdList(scheduleList);
     }, [scheduleList, updateScheduleList]);
 
+    // 전역 상태관리 되고있는 스케쥴 리스트에 변화가 생기면 재렌더링
     useEffect(() => {
         setMailFilterdList(updateScheduleList);
     }, [updateScheduleList]);
@@ -98,6 +101,7 @@ const ScheduleList: React.FC<userSchedule> = ({
         },
     });
 
+    // 조건들에 따른 스케쥴 리스트 api요청
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
             data.user = currentUser?.email;
