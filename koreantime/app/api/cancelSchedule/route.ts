@@ -8,6 +8,8 @@ export async function POST(request: Request) {
     console.log(scheduleId);
 
     console.log(typeof id, typeof scheduleId);
+
+    // member 에서 scheduleId와 email과 일치하는 데이터 검색
     const targetMembers = await prisma.member.findMany({
         where: {
             scheduleId: scheduleId,
@@ -15,6 +17,7 @@ export async function POST(request: Request) {
         },
     });
 
+    // 해당 멤버의 아이디 삭제
     for (const member of targetMembers) {
         await prisma.member.delete({
             where: {

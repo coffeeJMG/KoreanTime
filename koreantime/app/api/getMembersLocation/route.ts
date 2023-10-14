@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     const { scheduleId } = body;
 
     try {
+        // 요청에서 온 scheduleId 와 일치하는 유저의 위치정보 반환
         const membersLocation = await prisma.membersLocation.findMany({
             where: {
                 scheduleId: scheduleId,
