@@ -5,6 +5,7 @@ import { useNewSchedule } from "../hooks/useScheduleModal";
 import { colors, size } from "@/app/types/constant";
 import { ScheduleItem, ScheduleListProps, currentUserType } from "../types";
 import { useEffect, useState } from "react";
+import { CiEdit } from "react-icons/ci";
 import {
     Controller,
     FieldValues,
@@ -17,6 +18,8 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Button } from "./Button";
 import useScheduleListStore from "../stores/updateScheduleList";
+import { useEditSchedule } from "../hooks/useEditScheduleModal";
+import { editShceduleIdStore } from "../stores/editscheduleId";
 
 type userSchedule = ScheduleListProps & currentUserType;
 
@@ -64,10 +67,13 @@ const ScheduleList: React.FC<userSchedule> = ({
     scheduleList,
     currentUser,
 }) => {
-    const newSchedule = useNewSchedule(); // 스케쥴 정보
+    const newSchedule = useNewSchedule(); // 일정 생성 모달 함수
+    const editSchedule = useEditSchedule(); // 일정 변경 모달 함수
+    const { setEditScheduleId } = editShceduleIdStore();
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]); // 전체 일정에서 특정 조건으로 필터링 된 일정
     const { updateScheduleList } = useScheduleListStore();
+
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
         if (!currentUser) {
@@ -208,12 +214,22 @@ const ScheduleList: React.FC<userSchedule> = ({
                                 key={item.id}
                                 className={`flex flex-col gap-4 md:w-full lg:w-full ${colors.bgColor} p-5 rounded-2xl ${colors.textColor} hover:scale-[0.98] transition cursor-pointer`}
                             >
-                                <div>
+                                <div className="flex">
                                     <p
                                         className={`font-medium ${size.titleSize}`}
                                     >
                                         {item.title}
                                     </p>
+                                    {item.hostUser == currentUser?.email ? (
+                                        <CiEdit
+                                            size={32}
+                                            onClick={(e: MouseEvent) => {
+                                                e.stopPropagation();
+                                                setEditScheduleId(item.id);
+                                                editSchedule.onOpen();
+                                            }}
+                                        />
+                                    ) : null}
                                 </div>
 
                                 <div className="flex flex-col gap-1">
