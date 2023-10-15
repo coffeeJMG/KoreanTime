@@ -72,7 +72,8 @@ const ScheduleList: React.FC<userSchedule> = ({
     const { setEditScheduleId } = editShceduleIdStore();
     const router = useRouter();
     const [mailFilterdList, setMailFilterdList] = useState<ScheduleItem[]>([]); // 전체 일정에서 특정 조건으로 필터링 된 일정
-    const { updateScheduleList } = useScheduleListStore();
+    const { updateScheduleList, setUpdateScheduleList } =
+        useScheduleListStore();
 
     // 로그인이 안되어있을 시 로그인 페이지 이동
     useEffect(() => {
@@ -91,6 +92,12 @@ const ScheduleList: React.FC<userSchedule> = ({
     useEffect(() => {
         setMailFilterdList(updateScheduleList);
     }, [updateScheduleList]);
+
+    useEffect(() => {
+        return () => {
+            useScheduleListStore.getState().setUpdateScheduleList([]);
+        };
+    }, []);
     const {
         register,
         handleSubmit,
