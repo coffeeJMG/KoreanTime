@@ -32,7 +32,9 @@ export const getCurrentTime = () => {
     };
 };
 
-export const isTimeInFuture = (time: Date) => {
+// 모임 생성 및 수정시 오늘 이후의 날짜예약을 위한 변수
+
+export const isPossibleDate = (time: Date) => {
     const { comparisonToday, comparisonTime } = getCurrentTime();
     const year = time.getFullYear();
     const month = String(time.getMonth() + 1).padStart(2, "0");
@@ -47,5 +49,5 @@ export const isTimeInFuture = (time: Date) => {
         return timeValue >= comparisonTime;
     }
 
-    return true; // Allow selection for other dates
+    return true;
 };
