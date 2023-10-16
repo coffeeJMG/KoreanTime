@@ -14,7 +14,7 @@ import { Button } from "../Button";
 import axios from "axios";
 import { MakingPlan, currentUserType } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { isTimeInFuture } from "@/app/actions/getCurrentTime";
+import { isPossibleDate } from "@/app/actions/getCurrentTime";
 import toast from "react-hot-toast";
 import { useEditSchedule } from "@/app/hooks/useEditScheduleModal";
 import { editShceduleIdStore } from "@/app/stores/editscheduleId";
@@ -216,7 +216,7 @@ export const EditScheduleModal: React.FC<currentUserType> = ({
                                         timeFormat="HH:mm"
                                         timeIntervals={30}
                                         timeCaption="time"
-                                        filterTime={isTimeInFuture}
+                                        filterTime={isPossibleDate}
                                         dateFormat="yy년 MM월d일 h:mmaa"
                                         onChange={(date) => {
                                             onChange(date);
