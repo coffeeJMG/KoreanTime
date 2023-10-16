@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Modal } from "./Modal";
 
-import { useNewSchedule } from "../../hooks/useScheduleModal";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../Input";
 import ReactSelect, { StylesConfig } from "react-select";
@@ -15,8 +14,10 @@ import { Button } from "../Button";
 import axios from "axios";
 import { MakingPlan, currentUserType } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { isPossibleDate } from "@/app/actions/getCurrentTime";
+import { isTimeInFuture } from "@/app/actions/getCurrentTime";
 import toast from "react-hot-toast";
+import { useEditSchedule } from "@/app/hooks/useEditScheduleModal";
+import { editShceduleIdStore } from "@/app/stores/editscheduleId";
 
 // react-select 라이브러리 커스텀
 const personnelSelectStyles: StylesConfig = {
@@ -56,14 +57,15 @@ const personnelSelectStyles: StylesConfig = {
     },
 };
 
-export const NewScheduleModal: React.FC<currentUserType> = ({
+export const EditScheduleModal: React.FC<currentUserType> = ({
     currentUser,
 }) => {
-    const newSchedule = useNewSchedule();
+    const editSchedule = useEditSchedule();
     const router = useRouter();
     const [lat, setLat] = useState<number | null>(0); // 위도
     const [lng, setLng] = useState<number | null>(0); // 경도
     const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
+    const { editScheduleId } = editShceduleIdStore();
 
     const getAddrData = (
         lat: number | null,
@@ -118,9 +120,10 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 hostUser: currentUser?.email,
                 lat: lat,
                 lng: lng,
+                editId: editScheduleId,
             };
 
-            await axios.post("/api/schedule", scheduleData);
+            await axios.post("/api/editSchedule", scheduleData);
 
             reset({
                 name: "",
@@ -131,7 +134,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 lng: 0,
             });
 
-            newSchedule.onClose();
+            editSchedule.onClose();
             router.refresh();
         } catch (erros) {
             const message = String(errors);
@@ -213,7 +216,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                         timeFormat="HH:mm"
                                         timeIntervals={30}
                                         timeCaption="time"
-                                        filterTime={isPossibleDate}
+                                        filterTime={isTimeInFuture}
                                         dateFormat="yy년 MM월d일 h:mmaa"
                                         onChange={(date) => {
                                             onChange(date);
@@ -233,7 +236,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     </div>
                 </div>
 
-                <Button full>일정 생성하기</Button>
+                <Button full>일정 변경하기</Button>
             </form>
         </>
     );
@@ -241,9 +244,9 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
     return (
         <>
             <Modal
-                isOpen={newSchedule.isOpen}
-                title="일정 만들기"
-                onClose={newSchedule.onClose}
+                isOpen={editSchedule.isOpen}
+                title="일정 변경하기"
+                onClose={editSchedule.onClose}
                 body={bodyContent}
             />
         </>

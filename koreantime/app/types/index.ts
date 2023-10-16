@@ -44,6 +44,7 @@ export interface MakingPlan {
     lng: number;
     userLat: number;
     userLng: number;
+    editId: string;
 }
 
 // POST  컴포넌트 타입
