@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const withPWA = require("next-pwa");
+
+const config = {
     experimental: {
         appDir: true,
     },
@@ -12,4 +15,9 @@ const nextConfig = {
     },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA({
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    runtimeCaching: require("next-pwa/cache"),
+})(config);
