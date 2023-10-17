@@ -32,7 +32,7 @@ const personnelSelectStyles: StylesConfig = {
             background: "rgb(254, 240, 138)",
             padding: "3%",
             margin: "3%",
-            width: "90%",
+            width: "100%",
             borderRadius: "10px",
             display: "flex",
             justifyContent: "center",
@@ -41,7 +41,7 @@ const personnelSelectStyles: StylesConfig = {
     },
     control: (provided) => ({
         ...provided,
-        width: "200px",
+        width: "120px",
         padding: "3%",
         backgroundColor: "rgb(254, 240, 138)",
         borderRadius: "5px",
@@ -171,7 +171,7 @@ export const EditScheduleModal: React.FC<currentUserType> = ({
                     )}
                 />
 
-                <div className="flex gap-10 justify-end">
+                <div className="flex gap-5 justify-end">
                     <div>
                         <Controller
                             render={({ field }) => (
