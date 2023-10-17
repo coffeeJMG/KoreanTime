@@ -168,7 +168,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     )}
                 />
 
-                <div className="flex gap-10 justify-end">
+                <div className="flex gap-5 justify-center">
                     <div>
                         <Controller
                             render={({ field }) => (
