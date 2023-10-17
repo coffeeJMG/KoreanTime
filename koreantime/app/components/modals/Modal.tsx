@@ -58,7 +58,8 @@ export const Modal: React.FC<ModalProps> = ({
             <div
                 className="
             relative
-            w-[30rem]
+            w-5/6
+            xs:w-[40rem]
             my-6
             mx-auto
             h-auto
@@ -121,7 +122,7 @@ export const Modal: React.FC<ModalProps> = ({
                             <div className="text-lg font-semibold">{title}</div>
                         </div>
 
-                        <div className="relative p-6 flex-auto">{body}</div>
+                        <div className="relative p-4 flex-auto">{body}</div>
                     </div>
                 </div>
             </div>
