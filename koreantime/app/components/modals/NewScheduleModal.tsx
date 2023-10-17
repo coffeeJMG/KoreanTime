@@ -9,7 +9,7 @@ import { Input } from "../Input";
 import ReactSelect, { StylesConfig } from "react-select";
 
 import { Post } from "../Post";
-import ReactDatePicker from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../Button";
 import axios from "axios";
@@ -31,7 +31,7 @@ const personnelSelectStyles: StylesConfig = {
             background: "rgb(254, 240, 138)",
             padding: "3%",
             margin: "3%",
-            width: "100%",
+            width: "90%",
             borderRadius: "10px",
             display: "flex",
             justifyContent: "center",
@@ -168,7 +168,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                     )}
                 />
 
-                <div className="flex gap-5 justify-end">
+                <div className="flex gap-5 justify-end w-full">
                     <div>
                         <Controller
                             render={({ field }) => (
@@ -202,7 +202,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                                 field: { onChange, value, ...fieldProps },
                             }) => {
                                 return (
-                                    <ReactDatePicker
+                                    <DatePicker
                                         {...fieldProps}
                                         className="input"
                                         placeholderText="날짜 선택"
