@@ -58,9 +58,11 @@
 
 </details>
 
+## 웹 사이트 이용
 
-
-
+- https://korean-time.com/login
+- test@1~8.com / 비밀번호 111111
+- 편하게 이용해보시고 피드백 해주시면 감사하겠습니다!
 
 
 
