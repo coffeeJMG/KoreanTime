@@ -146,7 +146,7 @@ export const NewScheduleModal: React.FC<currentUserType> = ({
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <div className="flex flex-row items-center gap-10">
-                    <p className="text-2xl w-48">모임 이름</p>
+                    <p className="text-xl w-48">모임 이름</p>
                     <Input
                         type="text"
                         {...register("name", {
