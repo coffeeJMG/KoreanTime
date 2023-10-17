@@ -42,5 +42,19 @@ body,
 }
 
 .input::placeholder {
-    color: #9a3435; /* 원하는 색상으로 변경 */
+    color: #9a3435;
+    /* 원하는 색상으로 변경 */
+}
+
+.react-datepicker__input-container input {
+    width: 120px;
+    height: 45px;
+    padding: 5px 10px;
+    background: #fde68a;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    color: #9a3435;
 }
