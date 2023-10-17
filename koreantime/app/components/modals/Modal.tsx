@@ -58,11 +58,7 @@ export const Modal: React.FC<ModalProps> = ({
             <div
                 className="
             relative
-            w-[40rem]
-            s:3/5
-            md : w-4/6
-            lg : w-3/6
-            xl : w-2/5
+            w-[30rem]
             my-6
             mx-auto
             h-auto
