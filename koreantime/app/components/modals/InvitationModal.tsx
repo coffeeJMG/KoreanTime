@@ -18,9 +18,7 @@ type invitationListProps = {
     invitationList: InvitedSchedule[] | null;
 };
 
-export const InvitationModal: React.FC<invitationListProps> = ({
-    invitationList,
-}) => {
+const InvitationModal: React.FC<invitationListProps> = ({ invitationList }) => {
     const invitationModal = useInvitationModal(); // 초대 modal open,close 함수
     const [invitation, setInvitation] = useState<InvitedSchedule[] | null>(
         invitationList,
@@ -144,3 +142,5 @@ export const InvitationModal: React.FC<invitationListProps> = ({
         </>
     );
 };
+
+export default InvitationModal;

@@ -12,7 +12,7 @@ import { size } from "@/app/types/constant";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { toast } from "react-hot-toast";
 
-export const InviteModal = () => {
+const InviteModal = () => {
     const inviteModal = useInviteModal();
     const { scheduleId, maximumPeople, memberLegnth, title } =
         useShceduleIdStore(); // 일정 관련 정보를 전역상태관리
@@ -96,3 +96,5 @@ export const InviteModal = () => {
         </>
     );
 };
+
+export default InviteModal;

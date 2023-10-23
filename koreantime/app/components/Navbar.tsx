@@ -23,7 +23,7 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-320 border-b-2">
+            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-2">
                 <div>
                     <CgSandClock size={32} />
                 </div>

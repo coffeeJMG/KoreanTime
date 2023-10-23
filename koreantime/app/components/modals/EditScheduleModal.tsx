@@ -57,9 +57,7 @@ const personnelSelectStyles: StylesConfig = {
     },
 };
 
-export const EditScheduleModal: React.FC<currentUserType> = ({
-    currentUser,
-}) => {
+const EditScheduleModal: React.FC<currentUserType> = ({ currentUser }) => {
     const editSchedule = useEditSchedule();
     const router = useRouter();
     const [lat, setLat] = useState<number | null>(0); // 위도
@@ -252,3 +250,5 @@ export const EditScheduleModal: React.FC<currentUserType> = ({
         </>
     );
 };
+
+export default EditScheduleModal;
