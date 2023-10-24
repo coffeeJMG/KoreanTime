@@ -71,7 +71,6 @@ const InviteModal = () => {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <div className="flex flex-row items-center gap-10">
-                    <p className={`${size.titleSize} w-48`}>이메일</p>
                     <Input
                         type="text"
                         {...register("mail", {

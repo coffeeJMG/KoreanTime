@@ -54,6 +54,7 @@ export const Modal: React.FC<ModalProps> = ({
             focus:outline-none
             bg-neutral-800/70
         "
+            onClick={handleClose}
         >
             <div
                 className="
@@ -65,6 +66,7 @@ export const Modal: React.FC<ModalProps> = ({
             h-auto
            
         "
+                onClick={(e) => e.stopPropagation()}
             >
                 <div
                     className={`
@@ -74,6 +76,7 @@ export const Modal: React.FC<ModalProps> = ({
                     ${showModal ? "translate-y-0" : "translate-y-full"}
                     ${showModal ? "opacity-100" : "opacity-0"}
                 `}
+                    onClick={(e) => e.stopPropagation()}
                 >
                     <div
                         className="
@@ -105,6 +108,7 @@ export const Modal: React.FC<ModalProps> = ({
                         border-b-[1px]
                     "
                         >
+                            <div className="text-lg font-semibold">{title}</div>
                             <button
                                 onClick={handleClose}
                                 className="
@@ -113,13 +117,11 @@ export const Modal: React.FC<ModalProps> = ({
                                 hover:opactiy-7
                                 transition
                                 absolute
-                                left-8
+                                right-8
                                 "
                             >
                                 <IoMdClose size={15} />
                             </button>
-
-                            <div className="text-lg font-semibold">{title}</div>
                         </div>
 
                         <div className="relative p-4 flex-auto">{body}</div>
