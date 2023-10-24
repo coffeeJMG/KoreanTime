@@ -64,6 +64,9 @@ const MapLoader: React.FC<MapLoaderProps> = ({
 
                 // 각 유저 지도가 아닌 전체 지도
                 if (membersLocation) {
+                    map.setDraggable(false);
+                    //줌 막기
+                    map.setZoomable(false);
                     const schedulePosition = new window.kakao.maps.LatLng(
                         lat,
                         lng,

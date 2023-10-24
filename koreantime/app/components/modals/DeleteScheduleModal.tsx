@@ -6,7 +6,7 @@ import { useDeleteSchedule } from "@/app/hooks/useDeleteScheduleModal";
 import { useRankingStore } from "@/app/stores/ranking";
 import { size } from "@/app/types/constant";
 
-export const DeleteScheduleModal = () => {
+const DeleteScheduleModal = () => {
     const deleteScheduleModal = useDeleteSchedule();
     const { updateRanking } = useRankingStore(); // 유저들의 등수를 전역상태관리
 
@@ -44,3 +44,5 @@ export const DeleteScheduleModal = () => {
         </>
     );
 };
+
+export default DeleteScheduleModal;

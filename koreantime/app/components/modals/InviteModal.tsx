@@ -12,7 +12,7 @@ import { size } from "@/app/types/constant";
 import { useShceduleIdStore } from "@/app/stores/scheduleIdStore";
 import { toast } from "react-hot-toast";
 
-export const InviteModal = () => {
+const InviteModal = () => {
     const inviteModal = useInviteModal();
     const { scheduleId, maximumPeople, memberLegnth, title } =
         useShceduleIdStore(); // 일정 관련 정보를 전역상태관리
@@ -71,7 +71,6 @@ export const InviteModal = () => {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <div className="flex flex-row items-center gap-10">
-                    <p className={`${size.titleSize} w-48`}>이메일</p>
                     <Input
                         type="text"
                         {...register("mail", {
@@ -96,3 +95,5 @@ export const InviteModal = () => {
         </>
     );
 };
+
+export default InviteModal;

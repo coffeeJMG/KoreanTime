@@ -23,14 +23,14 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="grid grid-cols-3 items-center gap-3 p-5 mt-3 relative border-b-orange-320 border-b-2">
+            <div className="grid grid-cols-[1fr,3fr,1fr] items-center gap-3 p-0 md:p-5 mt-3 relative border-b-2">
                 <div>
                     <CgSandClock size={32} />
                 </div>
 
                 <div className="justify-self-center">
                     <p
-                        className={`text-xl md:text-4xl cursor-pointer`}
+                        className={`text-xl md:text-2xl cursor-pointer`}
                         onClick={() => router.push("/startPage")}
                     >
                         일찍 와주길 바래
@@ -39,7 +39,7 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
                 <div className="flex justify-end gap-3 items-center flex-col md:flex-row">
                     {currentUser ? (
-                        <p className={`${size.titleSize}`}>
+                        <p className="text-sm md:text-xl">
                             {currentUser.name}{" "}
                         </p>
                     ) : null}

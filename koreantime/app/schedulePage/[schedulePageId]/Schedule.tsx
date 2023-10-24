@@ -68,6 +68,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
     const [opacity, setOpacity] = useState<OpacityMap>({}); // 지도의 투명도
     const [limitedOpenLocation, setLimitedOpenLocation] = useState(false); // 30분 부터 변경 된 지도 공개범위 상태 관리
     const [checkOtherLocation, setCheckOtherLocation] = useState(false); // 다른 사람들의 지도 권한 상태 관리
+
     // 매 초마다 시간 반영
     useEffect(() => {
         const interval = setInterval(() => {
@@ -317,7 +318,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             if (window.innerWidth > 991) {
                 return "780px";
             } else {
-                return "480px";
+                return "400px";
             }
         }
     };
@@ -371,7 +372,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
             ) : null}
 
             <div className="flex flex-col md:flex-row w-full gap-10">
-                <div className="w-full md:w-1/2">
+                <div className="w-4/6 md:w-1/2 mx-auto">
                     <MapLoader
                         lat={lat}
                         lng={lng}
@@ -382,7 +383,7 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, currentUser }) => {
                     />
                 </div>
 
-                <div className="flex flex-col w-full md:w-1/2">
+                <div className="flex flex-col w-4/6 mx-auto md:w-1/2">
                     {memberList.map((member, index) => {
                         // 해당 멤버의 위치 정보를 membersLocation에서 찾는다.
                         const location = membersLocation.find(
