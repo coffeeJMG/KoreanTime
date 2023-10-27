@@ -86,7 +86,7 @@ const ScheduleList: React.FC<userSchedule> = ({
     // 현재 컴포넌트 스케쥴 리스트에 변화가 생기면 재렌더링
     useEffect(() => {
         setMailFilterdList(scheduleList);
-    }, [scheduleList, updateScheduleList]);
+    }, [scheduleList]);
 
     // 전역 상태관리 되고있는 스케쥴 리스트에 변화가 생기면 재렌더링
     useEffect(() => {
