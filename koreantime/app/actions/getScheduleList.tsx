@@ -47,13 +47,21 @@ export default async function getScheduleList() {
             ),
         }));
 
-        const filteredSchedules = formattedScheduleList.filter(
-            (schedule) =>
-                // 오늘 및 현재시간 이후의 스케쥴 필터링
-                schedule.formattedDate > today ||
-                (schedule.formattedDate === today &&
-                    schedule.formattedTime > currentTime),
-        );
+        const isAfterCurrentTime = (schedule: {
+            formattedDate: number;
+            formattedTime: number;
+        }) => {
+            if (schedule.formattedDate > today) return true;
+            if (
+                schedule.formattedDate === today &&
+                schedule.formattedTime > currentTime
+            )
+                return true;
+            return false;
+        };
+
+        const filteredSchedules =
+            formattedScheduleList.filter(isAfterCurrentTime);
 
         return filteredSchedules;
     } catch (error) {
