@@ -26,7 +26,7 @@ export const Button: React.FC<ButtonProps> = ({
             ${full ? "w-full" : "w-1/3"}
             mt-3
             h-5/4
-            ${colors.inputColor}
+            ${colors.btnColor}
             ${colors.textColor}
             p-4
             relative

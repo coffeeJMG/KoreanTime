@@ -23,14 +23,14 @@ export const Navbar: React.FC<currentUserType> = ({ currentUser }) => {
 
     return (
         <>
-            <div className="grid grid-cols-[1fr,3fr,1fr] items-center gap-3 p-0 md:p-5 mt-3 relative border-b-2">
+            <div className="grid grid-cols-[1fr,3fr,1fr] items-center gap-3 p-10 md:p-15 mt-3 relative border-b-2">
                 <div>
                     <CgSandClock size={32} />
                 </div>
 
                 <div className="justify-self-center">
                     <p
-                        className={`text-xl md:text-2xl cursor-pointer`}
+                        className={`text-xl md:text-3xl cursor-pointer`}
                         onClick={() => router.push("/startPage")}
                     >
                         일찍 와주길 바래

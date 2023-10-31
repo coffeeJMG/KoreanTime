@@ -2,7 +2,8 @@ export const colors = {
     textColor: "text-orange-800",
     bgColor: "bg-yellow-100",
     errorColor: "text-rose-700",
-    inputColor: "bg-yellow-200",
+    inputColor: "bg-yellow-50",
+    btnColor: "bg-yellow-200",
 };
 
 export const size = {
