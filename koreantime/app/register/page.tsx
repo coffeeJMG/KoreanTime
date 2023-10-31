@@ -55,11 +55,6 @@ const RegisterForm = () => {
             <div
                 className={`flex flex-col justify-center items-center ${colors.bgColor} md:w-2/5 mx-auto mt-10 ${colors.textColor}`}
             >
-                <h2
-                    className={`${colors.textColor} m-auto mt-10 ${size.titleSize} `}
-                >
-                    환영합니다
-                </h2>
                 <p className={`${colors.textColor} ${size.titleSize} mt-10`}>
                     회원가입
                 </p>

@@ -167,6 +167,7 @@ const ScheduleList: React.FC<userSchedule> = ({
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-col items-start">
                             <Input
+                                form
                                 type="text"
                                 radius
                                 {...register("mail")}
